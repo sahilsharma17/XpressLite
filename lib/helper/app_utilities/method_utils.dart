@@ -4,6 +4,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../main.dart';
@@ -70,6 +71,31 @@ class MethodUtils {
     return includeMillisecond
         ? "${now.day}${now.month}${now.year}${now.hour}${now.minute}${now.second}${now.millisecond}"
         : "${now.day}${now.month}${now.year}${now.hour}${now.minute}${now.second}";
+  }
+
+  static String getFormattedCustomDate(
+      String date,
+      String inputDateFormat,
+      String outputDateFormat,
+      ) {
+    /// Remove leading/trailing whitespace before parsing (prevents format errors)
+    date = date.trim();
+
+    try {
+      /// Parse the date string using DateTime.parse()
+      var inputFormat = DateFormat(inputDateFormat);
+      var inputDate = inputFormat.parse(date);
+
+      /// Format the date using DateFormat()
+      var outputFormat = DateFormat(outputDateFormat);
+      var outputDate = outputFormat.format(inputDate);
+
+      return outputDate;
+    } on FormatException catch (e) {
+      // Handle parsing errors gracefully (e.g., log the error or return a default value)
+      print("Error parsing date: $e");
+      return ""; // Or return a default date string or widget
+    }
   }
 
   // static void showSnackBar(BuildContext ctx, msgToDisplay) {

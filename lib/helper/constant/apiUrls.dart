@@ -13,7 +13,9 @@ class ApiUrls {
 
   static String upcomingEvent = baseUrl('EventBanner/GetEventBannerList');
 
+  static String idWiseNewsDetails = baseUrl('NewsDetails/GetNewsDetailById');
 
+  static String getNewsCommentDetails = baseUrl('NewsDetails/GetNewsDetailById');
 
 
   //=====================Tasks=============//

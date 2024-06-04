@@ -2,17 +2,16 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xpresslite/Widget/customWidget/custom_card.dart';
-import 'package:xpresslite/constants/images.dart';
-import 'package:xpresslite/constants/strings.dart';
 import 'package:xpresslite/helper/custom_widgets/app_circular_loader.dart';
-import 'package:xpresslite/screens/home/eventBanner/cubit/eventBanner_cubit.dart';
+import 'package:xpresslite/screens/home/cubit/home_cubit.dart';
+import 'package:xpresslite/screens/home/cubit/home_state.dart';
+import 'package:xpresslite/screens/newsDetails/news_details_screen.dart';
 
 import '../../helper/app_utilities/method_utils.dart';
 import '../../helper/custom_widgets/accessDenied/accessDenied.dart';
 import '../../helper/dxWidget/drawer.dart';
 import '../../model/UpcomingEventBannerModel.dart';
 import '../../model/categorised_news_detail_model.dart';
-import 'eventDetails/cubit/getCategoryWiseNewsDetails_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,51 +22,51 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
-  late GetCategoryWiseNewsDetailsCubit _cubitNewsDetails;
+
+  late HomeCubit _cubit;
+
   List<CategorisedNewsDetailsModel> newsDetailsModel = [];
 
-  late EventBannerCubit _cubitEventBanner;
-  late EventBannerModel eventBannerModel;
+  List<EventBannerModel> eventBannerModel = [];
 
   @override
   void initState() {
-    _cubitNewsDetails = BlocProvider.of<GetCategoryWiseNewsDetailsCubit>(context);
-    _cubitNewsDetails.getCategoryWiseNewsDetails();
+    _cubit = BlocProvider.of<HomeCubit>(context);
+    _cubit.getCategoryWiseNewsDetails();
+    _cubit.getEventBanner();
 
-    _cubitEventBanner = BlocProvider.of<EventBannerCubit>(context);
-    _cubitEventBanner.getEventBanner();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<GetCategoryWiseNewsDetailsCubit,
-            GetCategoryWiseNewsDetailsState>(
+    return BlocConsumer<HomeCubit, HomeState>(
         builder: (BuildContext context, state) {
-      if (state is GetCategoryWiseNewsDetailsLoaded) {
+      if (state is HomeLoaded) {
         newsDetailsModel = state.newsDetailsModel ?? [];
         return body();
-      }
-      else if (state is GetCategoryWiseNewsDetailsInitial) {
+      } else if (state is EventBannerLoaded) {
+        eventBannerModel = state.eventModel ?? [];
+      } else if (state is HomeInitial) {
         return body();
-      } else if (state is GetCategoryWiseNewsDetailsLoading) {
+      } else if (state is HomeLoading) {
         return Stack(
           children: [body(), const AppLoaderProgress()],
         );
-      } else if (state is GetCategoryWiseNewsDetailsError) {
+      } else if (state is HomeError) {
         return body();
       }
       return AccessDeniedScreen(
         onPressed: () {
-          _cubitNewsDetails.refresh();
+          _cubit.refresh();
         },
       );
     }, listener: (BuildContext context, state) {
-      if (state is GetCategoryWiseNewsDetailsError) {
+      if (state is HomeError) {
         if (state.error.isNotEmpty) {
           MethodUtils.toast(state.error);
         }
-      } else if (state is GetCategoryWiseNewsDetailsLoaded) {}
+      } else if (state is HomeLoaded) {}
     });
   }
 
@@ -87,20 +86,20 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 debugPrint("Help");
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.notifications_active_outlined,
                 color: Colors.orange,
               ))
         ],
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             Stack(
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.only(top: 10),
                   color: Colors.grey.withOpacity(0.2),
                   child: Column(
                     children: [
@@ -108,40 +107,48 @@ class _HomeScreenState extends State<HomeScreen> {
                         items: newsDetailsModel.map((model) {
                           return Builder(
                             builder: (BuildContext context) {
-                              return Stack(
-                                children: [
-                                  ClipRRect(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      child: Image.network(
-                                        model.imageFileNames.toString(),
-                                        fit: BoxFit.cover,
-                                        height: 200.0,
-                                        width: double.infinity,
-                                      )),
-                                  Positioned(
-                                    bottom: 0,
-                                    left: 0,
-                                    right: 0,
-                                    child: Container(
-                                      padding: EdgeInsets.all(8.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white.withOpacity(0.5),
-                                        borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(15.0),
-                                            bottomRight: Radius.circular(15.0)),
-                                      ),
-                                      child: Text(
-                                        model.title.toString(),
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.black.withOpacity(0.5),
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold,
+                              return GestureDetector(
+                                onTap: () {
+                                  debugPrint("Show Details");
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => NewsDetailsScreen(newsId: model.id.toString() ,)));
+                                },
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                        borderRadius: BorderRadius.circular(20.0),
+                                        child: Image.network(
+                                          model.imageFileNames.toString(),
+                                          fit: BoxFit.cover,
+                                          height: 200.0,
+                                          width: double.infinity,
+                                        )),
+                                    Positioned(
+                                      bottom: 0,
+                                      left: 0,
+                                      right: 0,
+                                      child: Container(
+                                        padding: EdgeInsets.all(8.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withOpacity(0.5),
+                                          borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(15.0),
+                                              bottomRight: Radius.circular(15.0)),
+                                        ),
+                                        child: Text(
+                                          model.title.toString(),
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: Colors.black.withOpacity(0.5),
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               );
                             },
                           );
@@ -163,8 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: newsDetailsModel.map((model) {
                           int index = newsDetailsModel.indexOf(model);
-                          return
-                            Container(
+                          return Container(
                             width: 8.0,
                             height: 8.0,
                             margin: EdgeInsets.symmetric(
@@ -195,14 +201,47 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Text('Upcoming Events'),
             SizedBox(height: 10),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 5),
-              //height: 200,
-              color: Colors.black,
-              child: Image(
-                image: AssetImage('assets/bg_event.png'),
+            Stack(children: [
+              Container(
+                child: Image(image: AssetImage('assets/bg_event.png')),
               ),
-            ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: CarouselSlider(
+                  items: eventBannerModel.map((model) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(100)),
+                              ),
+                              child: Image.network(
+                                model.imageFileName.toString(),
+                                fit: BoxFit.fill,
+                              )),
+                        );
+                      },
+                    );
+                  }).toList(),
+                  options: CarouselOptions(
+                    autoPlay: true,
+                    animateToClosest: true,
+                    height: 170,
+                    aspectRatio: 1 / 1,
+                    //viewportFraction: 0.8,
+                    enlargeCenterPage: true,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _currentIndex = index;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ]),
+
           ],
         ),
       ),

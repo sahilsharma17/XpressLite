@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 
 abstract class AppImages {
-  static String imageExt(String path) => "assets/images/$path";
+  static String imageExt(String path) => "assets/$path";
   static String get applogo => imageExt("appLogo.png");
   static String get loader => imageExt("Loader.gif");
   static String get background => imageExt("background1.jpg");
@@ -13,7 +13,7 @@ abstract class AppImages {
   static String get report => imageExt("report1.png");
   static String get location => imageExt("location.gif");
   static String get locationRefresh => imageExt("locationRefresh.png");
-  static String get accessDenied => imageExt("serverDown.png");
+  static String get accessDenied => imageExt("analysis.png");
   static String get dashboard => imageExt("dashboard.jpg");
   static String get dashboard1 => imageExt("dashboard1.png");
   static String get cameraRemark => imageExt("camera.png");
