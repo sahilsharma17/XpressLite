@@ -35,7 +35,7 @@ class _AccessDeniedScreenState extends State<AccessDeniedScreen> {
               width: SizeConfig.screenWidth,
               child: ElevatedButton(
                 onPressed: widget.onPressed,
-                child: DxTextWhite(
+                child: DxTextBlack(
                   "Retry",
                   mBold: true,
                   mSize: 18,

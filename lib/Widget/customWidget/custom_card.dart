@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:xpresslite/helper/app_utilities/method_utils.dart';
 import 'package:xpresslite/model/categorised_news_detail_model.dart';
 
 class CustomCard extends StatefulWidget {
@@ -48,13 +49,13 @@ class _CustomCardState extends State<CustomCard> {
                     ),
                   ),
                   SizedBox(height: 4),
-                  // Text(
-                  //   getFormattedCoustomDate(widget.eventValue.eventShowDate.toString(), 'yyyy-mm-ddTHH:MM:SS', 'MMMM dd, yyyy'),
-                  //   style: TextStyle(
-                  //     color: Colors.grey,
-                  //     fontSize: 14,
-                  //   ),
-                  // ),
+                  Text(
+                    MethodUtils.getFormattedCustomDate("2024-05-21T10:48:00", 'yyyy-MM-ddTHH:mm:ss', 'dd MMMM, yyyy'),
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                    ),
+                  ),
                   Text(
                     "2 weeks ago",
                     style: TextStyle(
@@ -82,21 +83,5 @@ class _CustomCardState extends State<CustomCard> {
     );
   }
 
-  static String getFormattedCoustomDate(
-      String date, String inputDateFormat, String outputDateFormat) {
-    /// Convert into local date format.
-    var localDate = date;
 
-    /// inputFormat - format getting from api or other func.
-    /// e.g If 2021-05-27 9:34:12.781341 then format must be yyyy-MM-dd HH:mm
-    /// If 27/05/2021 9:34:12.781341 then format must be dd/MM/yyyy HH:mm
-    var inputFormat = DateFormat(inputDateFormat);
-    var inputDate = inputFormat.parse(localDate.toString());
-
-    /// outputFormat - convert into format you want to show.
-    var outputFormat = DateFormat(outputDateFormat);
-    var outputDate = outputFormat.format(inputDate);
-
-    return outputDate.toString();
-  }
 }

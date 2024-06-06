@@ -1,13 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_cubit.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_state.dart';
 
 import '../../helper/app_utilities/method_utils.dart';
 import '../../helper/custom_widgets/accessDenied/accessDenied.dart';
 import '../../helper/custom_widgets/app_circular_loader.dart';
+import '../../model/newsCommentsModel.dart';
 import '../../model/newsDetailsByIdModel.dart';
 
 class NewsDetailsScreen extends StatefulWidget {
@@ -22,36 +22,44 @@ class NewsDetailsScreen extends StatefulWidget {
 class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   int _currentIndex = 0;
 
-  late NewsDetailCubit _cubit;
+  late NewsDetailScreenCubit _cubit;
 
   NewsDetailsByIdModel? detailsById;
 
+  List<NewsCommentsModel>? newsComments;
+
   @override
   void initState() {
-    _cubit = BlocProvider.of<NewsDetailCubit>(context);
+    _cubit = BlocProvider.of<NewsDetailScreenCubit>(context);
     _cubit.getIdWiseNewsDetails(widget.newsId);
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<NewsDetailCubit, NewsDetailScreenState>(
+    return BlocConsumer<NewsDetailScreenCubit, NewsDetailScreenState>(
         builder: (BuildContext context, state) {
-      if (state is NewsDetailsLoaded) {
+     if (state is NewsCommentsLoaded) {
+
         detailsById = state.newsDetailByIdModel;
-        return body();
+        newsComments = state.newsCommentsModel ?? [];
+        // if (newsComments!.length > 0) {
+          return body();
+        // }
       } else if (state is DetailsScreenInitial) {
-        return body();
+        return AppLoaderProgress();
       } else if (state is DetailsScreenLoading) {
         return Stack(
-          children: [body(), const AppLoaderProgress()],
+          children: [const AppLoaderProgress()],
         );
       } else if (state is DetailsScreenError) {
         return body();
       }
       return AccessDeniedScreen(
         onPressed: () {
-          _cubit.refresh();
+          _cubit.getIdWiseNewsDetails(widget.newsId);
+
         },
       );
     }, listener: (BuildContext context, state) {
@@ -159,8 +167,8 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                       Text(
                         MethodUtils.getFormattedCustomDate(
                             detailsById?.happeningDate.toString() ?? '',
-                            'yyyy-mm-ddTHH:MM:SS',
-                            'MMMM dd, yyyy'),
+                            'yyyy-MM-ddTHH:mm:ss',
+                            'dd MMMM, yyyy'),
                       ),
                       Spacer(),
                       Row(
@@ -188,19 +196,37 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                   Wrap(
                     spacing: 0,
                     children: List.generate(5, (index) {
+                      int n = detailsById?.calculatedRating != null
+                          ? int.parse(
+                              detailsById!.calculatedRating!.split('.').first)
+                          : 0;
+                      final isGolden = index < n;
                       return IconButton(
                         padding: EdgeInsets.zero,
                         constraints: BoxConstraints(),
                         icon: Icon(
                           Icons.star,
-                          color: Colors.grey,
+                          color: isGolden ? Colors.amber : Colors.grey,
                         ),
                         onPressed: () {},
                       );
                     }),
                   ),
+                  // ListView.builder(
+                  //   shrinkWrap: true,
+                  //     itemCount: detailsById!.newsHashtagsOnNews?.length,
+                  //     itemBuilder: (context, i) {
+                  //       return Text(
+                  //             detailsById!.newsHashtagsOnNews?[i].hashtag.toString() ?? '',
+                  //             style: TextStyle(color: Colors.orange),
+                  //           );
+                  //     }),
+
                   Text(
-                    "##########",
+                    detailsById!.newsHashtagsOnNews
+                            ?.map((e) => e.hashtag)
+                            .join(' ') ??
+                        '',
                     style: TextStyle(color: Colors.orange),
                   ),
                   Text(
@@ -229,7 +255,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                 Icons.comment,
                                 color: Colors.blue,
                               )),
-                          Text('0'),
+                          Text(newsComments!.isEmpty?"0":newsComments!.length.toString()),
                         ],
                       ),
                       Column(
@@ -266,7 +292,61 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                         ],
                       ),
                     ],
-                  )
+                  ),
+                  // if (newsComments!.isNotEmpty || newsComments != null)
+                  //   ListView.builder(
+                  //     shrinkWrap: true,
+                  //     itemCount: newsComments?.length,
+                  //     itemBuilder: (context, i) {
+                  //       return
+                  //         Padding(
+                  //         padding: EdgeInsets.symmetric(
+                  //             horizontal: 10, vertical: 20),
+                  //         child: Row(
+                  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //           children: [
+                  //             CircleAvatar(
+                  //               radius: 20.0,
+                  //               backgroundImage: NetworkImage(newsComments?[i]
+                  //                       .profileImage
+                  //                       ?.toString() ??
+                  //                   ''),
+                  //               backgroundColor: Colors.transparent,
+                  //             ),
+                  //             SizedBox(
+                  //               width: 10,
+                  //             ),
+                  //             Expanded(
+                  //                 child: Container(
+                  //               // height: 50,
+                  //               decoration: BoxDecoration(
+                  //                   color: Colors.white,
+                  //                   borderRadius: BorderRadius.circular(20)),
+                  //               child: Padding(
+                  //                 padding: const EdgeInsets.all(8.0),
+                  //                 child: Column(
+                  //                   crossAxisAlignment:
+                  //                       CrossAxisAlignment.start,
+                  //                   children: [
+                  //                     Text(
+                  //                       newsComments?[i].name?.toString() ??
+                  //                           '',
+                  //                       style: TextStyle(
+                  //                           fontWeight: FontWeight.bold),
+                  //                     ),
+                  //                     Text(
+                  //                       newsComments?[i].comment?.toString() ??
+                  //                           '',
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               ),
+                  //             ))
+                  //           ],
+                  //         ),
+                  //       );
+                  //     },
+                  //   )
                 ],
               ),
             ),

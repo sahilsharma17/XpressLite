@@ -25,7 +25,7 @@ class NewsDetailsByIdModel {
   bool? saveAsDraft;
   List<String>? imageFileNames;
   Null? isFavourite;
-  double? calculatedRating;
+  String? calculatedRating;
   Null? rating;
   List<NewsHashtagsOnNews>? newsHashtagsOnNews;
   bool? isActive;
@@ -99,7 +99,7 @@ class NewsDetailsByIdModel {
     saveAsDraft = json['saveAsDraft'];
     imageFileNames = json['imageFileNames'].cast<String>();
     isFavourite = json['isFavourite'];
-    calculatedRating = json['calculatedRating'];
+    calculatedRating = json['calculatedRating']?.toString() ?? '0';
     rating = json['rating'];
     if (json['newsHashtagsOnNews'] != null) {
       newsHashtagsOnNews = <NewsHashtagsOnNews>[];

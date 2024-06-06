@@ -6,6 +6,7 @@ import 'package:xpresslite/helper/custom_widgets/app_circular_loader.dart';
 import 'package:xpresslite/screens/home/cubit/home_cubit.dart';
 import 'package:xpresslite/screens/home/cubit/home_state.dart';
 import 'package:xpresslite/screens/newsDetails/news_details_screen.dart';
+import 'package:xpresslite/screens/view_image/view_image_screen.dart';
 
 import '../../helper/app_utilities/method_utils.dart';
 import '../../helper/custom_widgets/accessDenied/accessDenied.dart';
@@ -156,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         options: CarouselOptions(
                           height: 200.0,
                           enlargeCenterPage: true,
-                          autoPlay: true,
+                          // autoPlay: true,
                           aspectRatio: 16 / 9,
                           viewportFraction: 0.8,
                           onPageChanged: (index, reason) {
@@ -206,27 +207,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Image(image: AssetImage('assets/bg_event.png')),
               ),
               Container(
-                padding: EdgeInsets.symmetric(vertical: 5),
+                padding: const EdgeInsets.symmetric(vertical: 5),
                 child: CarouselSlider(
                   items: eventBannerModel.map((model) {
                     return Builder(
                       builder: (BuildContext context) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(100)),
-                              ),
-                              child: Image.network(
-                                model.imageFileName.toString(),
-                                fit: BoxFit.fill,
-                              )),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ViewImageScreen(imgUrl: model.imageFileName.toString())));
+                            },
+                            child: Image.network(
+                              model.imageFileName.toString(),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
                         );
                       },
                     );
                   }).toList(),
                   options: CarouselOptions(
-                    autoPlay: true,
+                    // autoPlay: true,
                     animateToClosest: true,
                     height: 170,
                     aspectRatio: 1 / 1,

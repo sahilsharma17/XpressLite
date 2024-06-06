@@ -11,6 +11,6 @@ class BlocManager {
   static List<SingleChildWidget> get blocProviders => [
     BlocProvider(create: (context) => LoginCubit()),
     BlocProvider(create: (context) => HomeCubit()),
-    BlocProvider(create: (context) => NewsDetailCubit()),
+    BlocProvider(create: (context) => NewsDetailScreenCubit()),
   ];
 }

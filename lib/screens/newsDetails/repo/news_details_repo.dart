@@ -1,19 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:xpresslite/helper/constant/apiUrls.dart';
+import 'package:xpresslite/model/newsCommentsModel.dart';
 import 'package:xpresslite/model/newsDetailsByIdModel.dart';
 import 'package:xpresslite/network_configs/networkRequest.dart';
 
 import '../../../model/reposeCallBack.dart';
 
-abstract class NewsDetailsRepoAbstract {
+abstract class NewsDetailScreenRepoAbstract {
   Future<ApiResponse<NewsDetailsByIdModel>> getNewsDetailsById(
+      {required String newsId});
+
+  Future<ApiResponse<List<NewsCommentsModel>>> getNewsComments(
       {required String newsId});
 }
 
-class NewsDetailsRepo implements NewsDetailsRepoAbstract {
+class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
   NetworkRequest networkRequest;
 
-  NewsDetailsRepo({required this.networkRequest});
+  NewsDetailScreenRepo({required this.networkRequest});
 
   @override
   Future<ApiResponse<NewsDetailsByIdModel>> getNewsDetailsById(
@@ -29,7 +33,7 @@ class NewsDetailsRepo implements NewsDetailsRepoAbstract {
     NewsDetailsByIdModel? _newsDetailsbyId;
 
     if (resp["status"] == true) {
-      Map<String, dynamic> data = resp['data'] as Map<String, dynamic>;
+      Map<String, dynamic> data = resp['data'] ;
       if (data != null) {
         _newsDetailsbyId = NewsDetailsByIdModel.fromJson(data);
       }
@@ -43,6 +47,45 @@ class NewsDetailsRepo implements NewsDetailsRepoAbstract {
         isSuccess: false,
         errorCause: resp["message"],
         resObject: resp["message"],
+      );
+    }
+  }
+
+  @override
+  Future<ApiResponse<List<NewsCommentsModel>>> getNewsComments(
+      {required String newsId}) async {
+    Map<String, String> newsIdMap = {
+      "NewsDetailsId": newsId,
+      "createdBy": "00500877"
+    };
+
+    debugPrint("News Id Data Param is $newsIdMap");
+
+    final resp = await networkRequest.networkCallPostMap2(
+        ApiUrls.getNewsCommentDetails, newsIdMap);
+    debugPrint(resp.toString());
+
+    List<NewsCommentsModel>? _newsComments = [];
+
+    if (resp["status"] == true) {
+      List<dynamic> data = resp['data'];
+      if (data != null) {
+        _newsComments = List.generate(
+            data.length, (index) => NewsCommentsModel.fromJson(data[index]));
+      }else{
+
+      }
+
+      return ApiResponse(
+        isSuccess: resp["status"],
+        errorCause: resp["message"],
+        resObject: _newsComments,
+      );
+    } else {
+      return ApiResponse(
+        isSuccess: true,
+        errorCause: resp["message"],
+        resObject:  _newsComments,
       );
     }
   }

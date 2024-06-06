@@ -15,7 +15,7 @@ class ApiUrls {
 
   static String idWiseNewsDetails = baseUrl('NewsDetails/GetNewsDetailById');
 
-  static String getNewsCommentDetails = baseUrl('NewsDetails/GetNewsDetailById');
+  static String getNewsCommentDetails = baseUrl('NewsDetails/GetNewsCommentDetails');
 
 
   //=====================Tasks=============//
