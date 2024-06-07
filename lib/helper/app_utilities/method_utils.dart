@@ -13,18 +13,25 @@ import '../localStorage/preference_handler.dart';
 import 'app_theme.dart';
 
 class MethodUtils {
-
   static void hideKeyboard(BuildContext context) {
     FocusScope.of(context).requestFocus(new FocusNode());
   }
 
-  static void toast( String name) {
-    Fluttertoast.showToast(msg: name, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, backgroundColor: Colors.white, textColor: Colors.black, fontSize: 16.0);
+  static void toast(String name) {
+    Fluttertoast.showToast(
+        msg: name,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.white,
+        textColor: Colors.black,
+        fontSize: 16.0);
   }
 
-  static Future<String> datePicker(DateTime firstDate, DateTime lastDate,) async{
-
-    final  picked = await showDatePicker(
+  static Future<String> datePicker(
+    DateTime firstDate,
+    DateTime lastDate,
+  ) async {
+    final picked = await showDatePicker(
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -41,18 +48,19 @@ class MethodUtils {
           ),
           child: child!,
         );
-      }, context: navigatorKey.currentContext!, firstDate: firstDate, lastDate: lastDate,
+      },
+      context: navigatorKey.currentContext!,
+      firstDate: firstDate,
+      lastDate: lastDate,
     );
 
-    if(picked !=null){
+    if (picked != null) {
       return picked.toString();
     }
 
     print("date and time $picked");
     return "";
   }
-
-
 
   static String generateOTPInRange() {
     int min = 100000;
@@ -74,10 +82,10 @@ class MethodUtils {
   }
 
   static String getFormattedCustomDate(
-      String date,
-      String inputDateFormat,
-      String outputDateFormat,
-      ) {
+    String date,
+    String inputDateFormat,
+    String outputDateFormat,
+  ) {
     /// Remove leading/trailing whitespace before parsing (prevents format errors)
     date = date.trim();
 
@@ -133,15 +141,19 @@ class MethodUtils {
     return wText;
   }
 
-  static ButtonStyle raisedButtonStyle(Color color,{double radius = 6.0}) => ElevatedButton.styleFrom(
-        foregroundColor: color, backgroundColor: color,
+  static ButtonStyle raisedButtonStyle(Color color, {double radius = 6.0}) =>
+      ElevatedButton.styleFrom(
+        foregroundColor: color,
+        backgroundColor: color,
         padding: EdgeInsets.symmetric(horizontal: 16),
-        shape:  RoundedRectangleBorder(
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(radius)),
         ),
       );
 
-  static void showAlertDialog(BuildContext context, String mTitle, String mContent, {Function()? callback}) {
+  static void showAlertDialog(
+      BuildContext context, String mTitle, String mContent,
+      {Function()? callback}) {
     // flutter defined function
     showDialog(
       context: context,
@@ -153,7 +165,8 @@ class MethodUtils {
             mBold: true,
             textAlign: TextAlign.center,
           ),
-          content: new DxTextBlack(mContent, maxLine: 3, textAlign: TextAlign.center,mSize: 20),
+          content: new DxTextBlack(mContent,
+              maxLine: 3, textAlign: TextAlign.center, mSize: 20),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             // Row(
@@ -195,31 +208,35 @@ class MethodUtils {
                     "Ok",
                     mBold: true,
                   ),
-                  onPressed:(){
+                  onPressed: () {
                     Navigator.pop(context);
                   },
                 ),
               ),
             ),
-
           ],
         );
       },
     );
   }
 
-  static void showCommonDialog(BuildContext context, String mTitle, String mContent, {Function()? callback}) {
+  static void showCommonDialog(
+      BuildContext context, String mTitle, String mContent,
+      {Function()? callback}) {
     // flutter defined function
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
           //this right here
           child: Container(
             height: 160,
             width: 250,
-            decoration: BoxDecoration(border: Border.all(color: materialPrimaryColor), borderRadius: BorderRadius.circular(12.0)),
+            decoration: BoxDecoration(
+                border: Border.all(color: materialPrimaryColor),
+                borderRadius: BorderRadius.circular(12.0)),
             padding: EdgeInsets.all(15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -288,17 +305,22 @@ class MethodUtils {
     );
   }
 
-  static void showCommonDialo(BuildContext context, String mTitle, String mContent, {Function()? callback}) {
+  static void showCommonDialog2(
+      BuildContext context, String mTitle, String mContent,
+      {Function()? callback}) {
     // flutter defined function
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
           //this right here
           child: Container(
             width: 350,
-            decoration: BoxDecoration(border: Border.all(color: materialPrimaryColor), borderRadius: BorderRadius.circular(12.0)),
+            decoration: BoxDecoration(
+                border: Border.all(color: materialPrimaryColor),
+                borderRadius: BorderRadius.circular(12.0)),
             padding: EdgeInsets.all(15),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -328,12 +350,11 @@ class MethodUtils {
                 SizedBox(
                     width: 250,
                     child: ElevatedButton(
-                        onPressed:callback,
+                        onPressed: callback,
                         child: DxTextWhite(
                           "Upload",
                           mSize: 18,
                           mBold: true,
-
                         ))),
 
                 const SizedBox(
@@ -377,7 +398,8 @@ class MethodUtils {
     );
   }
 
-  static void showConfirmDialog(BuildContext context, String mTitle, String mContent, Function callback(bool)) {
+  static void showConfirmDialog(BuildContext context, String mTitle,
+      String mContent, Function callback(bool)) {
     // flutter defined function
     showDialog(
       context: context,
@@ -408,7 +430,8 @@ class MethodUtils {
     );
   }
 
-  static void showAlertDialogCupertino(BuildContext context, String mTitle, String mContent, Function callback) {
+  static void showAlertDialogCupertino(
+      BuildContext context, String mTitle, String mContent, Function callback) {
     showDialog(
       context: context,
       builder: (BuildContext ctx) => new CupertinoAlertDialog(
@@ -433,7 +456,8 @@ class MethodUtils {
     );
   }
 
-  static void showAlertDialogWithParameter(BuildContext context, String mTitle, var mVarData, Function callback) {
+  static void showAlertDialogWithParameter(
+      BuildContext context, String mTitle, var mVarData, Function callback) {
     // flutter defined function
     showDialog(
       context: context,
@@ -500,22 +524,18 @@ class MethodUtils {
       ].request();
     } on SocketException catch (_) {
       //print('not connected');
-
     }
   }
 
   static Future<void> askLocationPermission() async {
     try {
       Map<Permission, PermissionStatus> statuses = await [
-      Permission.location,
-
+        Permission.location,
       ].request();
     } on SocketException catch (_) {
       //print('not connected');
-
     }
   }
-
 
   static void showSessionTimeoutDialog(BuildContext context) {
     showDialog(
@@ -525,11 +545,22 @@ class MethodUtils {
         return WillPopScope(
           onWillPop: () async => false,
           child: AlertDialog(
-            title: DxTextBlack('Session Timeout',mSize: 18,mBold: true,),
-            content: DxTextBlack('Your session has timed out. Please log in again.',maxLine: 4,),
+            title: DxTextBlack(
+              'Session Timeout',
+              mSize: 18,
+              mBold: true,
+            ),
+            content: DxTextBlack(
+              'Your session has timed out. Please log in again.',
+              maxLine: 4,
+            ),
             actions: [
               ElevatedButton(
-                child: DxTextWhite('Ok',mSize: 18,mBold: true,),
+                child: DxTextWhite(
+                  'Ok',
+                  mSize: 18,
+                  mBold: true,
+                ),
                 onPressed: () {
                   // Navigate to the login page or perform other actions
                   PreferenceHandler.logout(context);
@@ -541,7 +572,4 @@ class MethodUtils {
       },
     );
   }
-
-
-
 }

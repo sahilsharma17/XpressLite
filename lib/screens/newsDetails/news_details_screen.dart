@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,12 +41,11 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<NewsDetailScreenCubit, NewsDetailScreenState>(
         builder: (BuildContext context, state) {
-     if (state is NewsCommentsLoaded) {
-
+      if (state is NewsCommentsLoaded) {
         detailsById = state.newsDetailByIdModel;
         newsComments = state.newsCommentsModel ?? [];
         // if (newsComments!.length > 0) {
-          return body();
+        return body();
         // }
       } else if (state is DetailsScreenInitial) {
         return AppLoaderProgress();
@@ -59,7 +59,6 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
       return AccessDeniedScreen(
         onPressed: () {
           _cubit.getIdWiseNewsDetails(widget.newsId);
-
         },
       );
     }, listener: (BuildContext context, state) {
@@ -135,11 +134,16 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                 },
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.circular(20.0),
-                                    child: Image.network(
-                                      model.toString(),
+                                    child: CachedNetworkImage(
+                                      imageUrl: model.toString(),
                                       fit: BoxFit.cover,
                                       height: 200.0,
                                       width: double.infinity,
+                                      placeholder: (context, url) => Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.orange,
+                                        ),
+                                      ),
                                     )),
                               );
                             },
@@ -212,15 +216,6 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                       );
                     }),
                   ),
-                  // ListView.builder(
-                  //   shrinkWrap: true,
-                  //     itemCount: detailsById!.newsHashtagsOnNews?.length,
-                  //     itemBuilder: (context, i) {
-                  //       return Text(
-                  //             detailsById!.newsHashtagsOnNews?[i].hashtag.toString() ?? '',
-                  //             style: TextStyle(color: Colors.orange),
-                  //           );
-                  //     }),
 
                   Text(
                     detailsById!.newsHashtagsOnNews
@@ -255,7 +250,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                 Icons.comment,
                                 color: Colors.blue,
                               )),
-                          Text(newsComments!.isEmpty?"0":newsComments!.length.toString()),
+                          Text(newsComments!.isEmpty
+                              ? "0"
+                              : newsComments!.length.toString()),
                         ],
                       ),
                       Column(
@@ -293,60 +290,127 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                       ),
                     ],
                   ),
-                  // if (newsComments!.isNotEmpty || newsComments != null)
-                  //   ListView.builder(
-                  //     shrinkWrap: true,
-                  //     itemCount: newsComments?.length,
-                  //     itemBuilder: (context, i) {
-                  //       return
-                  //         Padding(
-                  //         padding: EdgeInsets.symmetric(
-                  //             horizontal: 10, vertical: 20),
-                  //         child: Row(
-                  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //           children: [
-                  //             CircleAvatar(
-                  //               radius: 20.0,
-                  //               backgroundImage: NetworkImage(newsComments?[i]
-                  //                       .profileImage
-                  //                       ?.toString() ??
-                  //                   ''),
-                  //               backgroundColor: Colors.transparent,
-                  //             ),
-                  //             SizedBox(
-                  //               width: 10,
-                  //             ),
-                  //             Expanded(
-                  //                 child: Container(
-                  //               // height: 50,
-                  //               decoration: BoxDecoration(
-                  //                   color: Colors.white,
-                  //                   borderRadius: BorderRadius.circular(20)),
-                  //               child: Padding(
-                  //                 padding: const EdgeInsets.all(8.0),
-                  //                 child: Column(
-                  //                   crossAxisAlignment:
-                  //                       CrossAxisAlignment.start,
-                  //                   children: [
-                  //                     Text(
-                  //                       newsComments?[i].name?.toString() ??
-                  //                           '',
-                  //                       style: TextStyle(
-                  //                           fontWeight: FontWeight.bold),
-                  //                     ),
-                  //                     Text(
-                  //                       newsComments?[i].comment?.toString() ??
-                  //                           '',
-                  //                     ),
-                  //                   ],
-                  //                 ),
-                  //               ),
-                  //             ))
-                  //           ],
-                  //         ),
-                  //       );
-                  //     },
-                  //   )
+                  if (newsComments!.isNotEmpty || newsComments != null)
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: newsComments?.length,
+                      itemBuilder: (context, i) {
+                        return Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 20),
+                            child: Column(children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 20.0,
+                                    backgroundImage: NetworkImage(
+                                        newsComments?[i]
+                                                .profileImage
+                                                ?.toString() ??
+                                            ''),
+                                    backgroundColor: Colors.transparent,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Container(
+                                    width: screenWidth * 0.7,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            newsComments?[i].name?.toString() ??
+                                                '',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            newsComments?[i]
+                                                    .comment
+                                                    ?.toString() ??
+                                                '',
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              if (newsComments![i].replies!.isNotEmpty ||
+                                  newsComments![i].replies != null)
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: newsComments?[i].replies?.length,
+                                  itemBuilder: (BuildContext context, int j) {
+                                    return Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 40, top: 10),
+                                      child: Row(
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 18.0,
+                                            backgroundImage: NetworkImage(
+                                                newsComments![i]
+                                                        .replies?[j]
+                                                        .profileImage
+                                                        ?.toString() ??
+                                                    ''),
+                                            backgroundColor: Colors.transparent,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                            width: screenWidth * 0.65,
+                                            decoration: BoxDecoration(
+                                                color: Colors.transparent,
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    newsComments![i]
+                                                            .replies?[j]
+                                                            .name
+                                                            ?.toString() ??
+                                                        '',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  Text(
+                                                    newsComments![i]
+                                                            .replies?[j]
+                                                            .commentsReply
+                                                            ?.toString() ??
+                                                        '',
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                            ]));
+                      },
+                    )
                 ],
               ),
             ),

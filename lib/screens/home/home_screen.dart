@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return body();
       } else if (state is HomeLoading) {
         return Stack(
-          children: [body(), const AppLoaderProgress()],
+          children: [const AppLoaderProgress()],
         );
       } else if (state is HomeError) {
         return body();
@@ -113,17 +114,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                   debugPrint("Show Details");
                                   Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => NewsDetailsScreen(newsId: model.id.toString() ,)));
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              NewsDetailsScreen(
+                                                newsId: model.id.toString(),
+                                              )));
                                 },
                                 child: Stack(
                                   children: [
                                     ClipRRect(
-                                        borderRadius: BorderRadius.circular(20.0),
-                                        child: Image.network(
-                                          model.imageFileNames.toString(),
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              model.imageFileNames.toString(),
                                           fit: BoxFit.cover,
                                           height: 200.0,
                                           width: double.infinity,
+                                          placeholder: (context, url) =>
+                                              Center(child: CircularProgressIndicator(),),
                                         )),
                                     Positioned(
                                       bottom: 0,
@@ -135,13 +144,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                           color: Colors.white.withOpacity(0.5),
                                           borderRadius: BorderRadius.only(
                                               bottomLeft: Radius.circular(15.0),
-                                              bottomRight: Radius.circular(15.0)),
+                                              bottomRight:
+                                                  Radius.circular(15.0)),
                                         ),
                                         child: Text(
                                           model.title.toString(),
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                            color: Colors.black.withOpacity(0.5),
+                                            color:
+                                                Colors.black.withOpacity(0.5),
                                             fontSize: 12.0,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -197,14 +208,29 @@ class _HomeScreenState extends State<HomeScreen> {
               physics: NeverScrollableScrollPhysics(),
               itemCount: newsDetailsModel.length,
               itemBuilder: (context, index) {
-                return CustomCard(eventValue: newsDetailsModel[index]);
+                return Container(
+                  color: Colors.grey.withOpacity(0.2),
+                  child: Column(
+                    children: [
+                      CustomCard(eventValue: newsDetailsModel[index]),
+                    ],
+                  ),
+                );
               },
             ),
             Text('Upcoming Events'),
             SizedBox(height: 10),
             Stack(children: [
               Container(
-                child: Image(image: AssetImage('assets/bg_event.png')),
+                child: Container(
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                          color: Colors.black,
+                          offset: Offset(0.2, 0.2),
+                          blurRadius: 0.2,
+                          spreadRadius: 0.2)
+                    ]),
+                    child: Image(image: AssetImage('assets/bg_event.png'))),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 5),
@@ -218,12 +244,25 @@ class _HomeScreenState extends State<HomeScreen> {
                             onTap: () {
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => ViewImageScreen(imgUrl: model.imageFileName.toString())));
+                                  MaterialPageRoute(
+                                      builder: (context) => ViewImageScreen(
+                                          imgUrl:
+                                              model.imageFileName.toString())));
                             },
-                            child: Image.network(
-                              model.imageFileName.toString(),
-                              fit: BoxFit.fill,
-                            ),
+                            child: Container(
+                                decoration: BoxDecoration(boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black,
+                                      offset: Offset(0.2, 0.2),
+                                      blurRadius: 0.2,
+                                      spreadRadius: 0.2)
+                                ]),
+                                child: CachedNetworkImage(
+                                  imageUrl: model.imageFileName.toString(),
+                                  fit: BoxFit.fill,
+                                  placeholder: (context, url) =>
+                                  Center(child: CircularProgressIndicator(),),
+                                )),
                           ),
                         );
                       },
@@ -233,7 +272,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     // autoPlay: true,
                     animateToClosest: true,
                     height: 170,
-                    aspectRatio: 1 / 1,
+                    // aspectRatio: 1 / 1,
                     //viewportFraction: 0.8,
                     enlargeCenterPage: true,
                     onPageChanged: (index, reason) {
@@ -245,7 +284,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ]),
-
           ],
         ),
       ),

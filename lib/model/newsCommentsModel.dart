@@ -85,10 +85,10 @@ class Replies {
   String? replyLikeType;
   bool? isActive;
   String? createdDate;
-  Null? createdBy;
-  Null? modifiedDate;
-  Null? modifiedBy;
-  Null? ip;
+  String? createdBy;
+  String? modifiedDate;
+  String? modifiedBy;
+  String? ip;
 
   Replies(
       {this.name,
