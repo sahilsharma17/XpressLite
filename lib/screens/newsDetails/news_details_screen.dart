@@ -24,6 +24,8 @@ class NewsDetailsScreen extends StatefulWidget {
 class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   int _currentIndex = 0;
 
+  bool showComment = false;
+
   late NewsDetailScreenCubit _cubit;
 
   NewsDetailsByIdModel? detailsById;
@@ -115,12 +117,6 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                             fontWeight: FontWeight.bold,
                             color: Colors.black),
                       )),
-                  // ClipRRect(
-                  //   borderRadius: BorderRadius.circular(20.0),
-                  //   child: Image(
-                  //     image: AssetImage('assets/img1.jpg'),
-                  //   ),
-                  // ),
                   Column(
                     children: [
                       CarouselSlider(
@@ -167,7 +163,6 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                       ),
                     ],
                   ),
-
                   Row(
                     children: [
                       Text(
@@ -218,7 +213,6 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                       );
                     }),
                   ),
-
                   Text(
                     detailsById!.newsHashtagsOnNews
                             ?.map((e) => e.hashtag)
@@ -252,8 +246,8 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                 Icons.comment,
                                 color: Colors.blue,
                               )),
-                          Text(newsFeaturesModel?.totalComments.toString() ?? "0")
-
+                          Text(newsFeaturesModel?.totalComments.toString() ??
+                              "0")
                         ],
                       ),
                       Column(
@@ -265,7 +259,6 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                 color: Colors.blue,
                               )),
                           Text(newsFeaturesModel?.totalViews.toString() ?? "0")
-
                         ],
                       ),
                       Column(
@@ -292,77 +285,43 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                       ),
                     ],
                   ),
-                  if (newsComments!.isNotEmpty || newsComments != null)
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: newsComments?.length,
-                      itemBuilder: (context, i) {
-                        return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 20),
-                            child: Column(children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  CircleAvatar(
-                                    radius: 20.0,
-                                    backgroundImage: NetworkImage(
-                                        newsComments?[i]
-                                                .profileImage
-                                                ?.toString() ??
-                                            ''),
-                                    backgroundColor: Colors.transparent,
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Container(
-                                    width: screenWidth * 0.7,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            newsComments?[i].name?.toString() ??
-                                                '',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            newsComments?[i]
-                                                    .comment
-                                                    ?.toString() ??
-                                                '',
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              if (newsComments![i].replies!.isNotEmpty ||
-                                  newsComments![i].replies != null)
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: newsComments?[i].replies?.length,
-                                  itemBuilder: (BuildContext context, int j) {
-                                    return Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 40, top: 10),
-                                      child: Row(
+                  SizedBox(height: 10,),
+                  if (newsComments!.isNotEmpty)
+                    Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              showComment = !showComment;
+                            });
+                          },
+                          child: Text(
+                            textAlign: TextAlign.right,
+                            'Comments',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Visibility(
+                          visible: showComment,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: newsComments?.length,
+                              itemBuilder: (context, i) {
+                                return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 10),
+                                    child: Column(children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           CircleAvatar(
-                                            radius: 18.0,
+                                            radius: 20.0,
                                             backgroundImage: NetworkImage(
-                                                newsComments![i]
-                                                        .replies?[j]
+                                                newsComments?[i]
                                                         .profileImage
                                                         ?.toString() ??
                                                     ''),
@@ -372,9 +331,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                             width: 10,
                                           ),
                                           Container(
-                                            width: screenWidth * 0.65,
+                                            width: screenWidth * 0.7,
                                             decoration: BoxDecoration(
-                                                color: Colors.transparent,
+                                                color: Colors.white,
                                                 borderRadius:
                                                     BorderRadius.circular(20)),
                                             child: Padding(
@@ -385,8 +344,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    newsComments![i]
-                                                            .replies?[j]
+                                                    newsComments?[i]
                                                             .name
                                                             ?.toString() ??
                                                         '',
@@ -395,9 +353,8 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                                             FontWeight.bold),
                                                   ),
                                                   Text(
-                                                    newsComments![i]
-                                                            .replies?[j]
-                                                            .commentsReply
+                                                    newsComments?[i]
+                                                            .comment
                                                             ?.toString() ??
                                                         '',
                                                   ),
@@ -407,11 +364,85 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                           )
                                         ],
                                       ),
-                                    );
-                                  },
-                                ),
-                            ]));
-                      },
+                                      if (newsComments![i]
+                                              .replies!
+                                              .isNotEmpty ||
+                                          newsComments![i].replies != null)
+                                        ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount:
+                                              newsComments?[i].replies?.length,
+                                          itemBuilder:
+                                              (BuildContext context, int j) {
+                                            return Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 40, top: 10),
+                                              child: Row(
+                                                children: [
+                                                  CircleAvatar(
+                                                    radius: 18.0,
+                                                    backgroundImage: NetworkImage(
+                                                        newsComments![i]
+                                                                .replies?[j]
+                                                                .profileImage
+                                                                ?.toString() ??
+                                                            ''),
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Container(
+                                                    width: screenWidth * 0.65,
+                                                    decoration: BoxDecoration(
+                                                        color:
+                                                            Colors.transparent,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20)),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            newsComments![i]
+                                                                    .replies?[j]
+                                                                    .name
+                                                                    ?.toString() ??
+                                                                '',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          Text(
+                                                            newsComments![i]
+                                                                    .replies?[j]
+                                                                    .commentsReply
+                                                                    ?.toString() ??
+                                                                '',
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                    ]));
+                              },
+                            ),
+                          ),
+                        )
+                      ],
                     )
                 ],
               ),

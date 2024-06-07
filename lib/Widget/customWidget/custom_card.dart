@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:xpresslite/helper/app_utilities/method_utils.dart';
-import 'package:xpresslite/model/categorised_news_detail_model.dart';
 
+import '../../model/PaginatedNewsModel .dart';
 import '../../screens/newsDetails/news_details_screen.dart';
 
 class CustomCard extends StatefulWidget {
-  CategorisedNewsDetailsModel eventValue;
+  PaginatedNewsModel eventValue;
 
   CustomCard({Key? key, required this.eventValue}) : super(key: key);
 
@@ -46,7 +46,7 @@ class _CustomCardState extends State<CustomCard> {
                     borderRadius: BorderRadius.circular(20.0),
                     image: DecorationImage(
                       image: NetworkImage(
-                          widget.eventValue.imageFileNames.toString()),
+                          widget.eventValue.imageFileNames![0].toString()),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -66,7 +66,7 @@ class _CustomCardState extends State<CustomCard> {
                       SizedBox(height: 4),
                       Text(
                         MethodUtils.getFormattedCustomDate(
-                            "2024-05-21T10:48:00",
+                            widget.eventValue.happeningDate.toString(),
                             'yyyy-MM-ddTHH:mm:ss',
                             'dd MMMM, yyyy'),
                         style: TextStyle(
@@ -74,27 +74,27 @@ class _CustomCardState extends State<CustomCard> {
                           fontSize: 12,
                         ),
                       ),
-                      Text(
-                        "2 weeks ago",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),
-                      ),
+                      // Text(
+                      //   "2 weeks ago",
+                      //   style: TextStyle(
+                      //     color: Colors.grey,
+                      //     fontSize: 12,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
-                // IconButton(
-                //   onPressed: () {
-                //     setState(() {
-                //       widget.eventValue.isLiked = widget.eventValue.isLiked == false? true : false;
-                //     });
-                //   },
-                //   icon: widget.eventValue.isLiked!
-                //       ? Icon(Icons.favorite, color: Colors.orange)
-                //       : Icon(Icons.favorite_border_outlined, color: Colors.orange),
-                //   iconSize: 30,
-                // )
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      widget.eventValue.isFavourite = widget.eventValue.isFavourite == false? true : false;
+                    });
+                  },
+                  icon: widget.eventValue.isFavourite!
+                      ? Icon(Icons.favorite, color: Colors.orange)
+                      : Icon(Icons.favorite_border_outlined, color: Colors.orange),
+                  iconSize: 30,
+                )
               ],
             ),
           ],

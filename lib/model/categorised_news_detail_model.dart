@@ -1,12 +1,12 @@
-class CategorisedNewsDetailsModel {
+class NewsBannerModel {
   int? id;
   String? title;
   String? imageFileNames;
   int? categoryId;
 
-  CategorisedNewsDetailsModel({this.id, this.title, this.imageFileNames, this.categoryId});
+  NewsBannerModel({this.id, this.title, this.imageFileNames, this.categoryId});
 
-  CategorisedNewsDetailsModel.fromJson(Map<String, dynamic> json) {
+  NewsBannerModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     imageFileNames = json['imageFileNames'];

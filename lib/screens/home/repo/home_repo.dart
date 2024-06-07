@@ -1,19 +1,21 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:xpresslite/network_configs/networkRequest.dart';
 
 import '../../../helper/constant/apiUrls.dart';
+import '../../../model/PaginatedNewsModel .dart';
 import '../../../model/UpcomingEventBannerModel.dart';
 import '../../../model/categorised_news_detail_model.dart';
 import '../../../model/reposeCallBack.dart';
 
 abstract class HomeRepoAbstract {
-
   Future<ApiResponse<List<EventBannerModel>>> getEventBanner();
 
-  Future<ApiResponse<List<CategorisedNewsDetailsModel>>>
-  getCategoryWiseNewsDetails();
+  Future<ApiResponse<List<NewsBannerModel>>>
+      getNewsBanner();
+
+  Future<ApiResponse<List<PaginatedNewsModel>>> getHappening();
+
+  Future<ApiResponse<List<PaginatedNewsModel>>> getAwardRecog();
 }
 
 class HomeRepo implements HomeRepoAbstract {
@@ -22,19 +24,20 @@ class HomeRepo implements HomeRepoAbstract {
   HomeRepo({required this.networkRequest});
 
   @override
-  Future<ApiResponse<List<CategorisedNewsDetailsModel>>> getCategoryWiseNewsDetails() async {
+  Future<ApiResponse<List<NewsBannerModel>>>
+      getNewsBanner() async {
     Map<String, dynamic> resp = await networkRequest
         .networkCallGetMap(ApiUrls.getCategoryWiseNewsDetails);
 
     debugPrint(resp.toString());
 
-    List<CategorisedNewsDetailsModel>? _categorisedNewsDetailsModel;
+    List<NewsBannerModel>? _categorisedNewsDetailsModel;
 
     if (resp["status"] == true) {
       List<dynamic> data = resp['data'] as List<dynamic>;
       if (data != null) {
         _categorisedNewsDetailsModel = List.generate(data.length,
-                (index) => CategorisedNewsDetailsModel.fromJson(data[index]));
+            (index) => NewsBannerModel.fromJson(data[index]));
       }
       return ApiResponse(
           isSuccess: resp['status'],
@@ -49,11 +52,10 @@ class HomeRepo implements HomeRepoAbstract {
     }
   }
 
-
   @override
   Future<ApiResponse<List<EventBannerModel>>> getEventBanner() async {
     Map<String, dynamic> resp =
-    await networkRequest.networkCallGetMap(ApiUrls.upcomingEvent);
+        await networkRequest.networkCallGetMap(ApiUrls.upcomingEvent);
 
     List<EventBannerModel>? _eventsModel;
     debugPrint(resp.toString());
@@ -61,8 +63,8 @@ class HomeRepo implements HomeRepoAbstract {
     if (resp["status"] == true) {
       List<dynamic> data = resp['data'];
       if (data != null) {
-        _eventsModel = List.generate(data.length,
-                (index) => EventBannerModel.fromJson(data[index]));
+        _eventsModel = List.generate(
+            data.length, (index) => EventBannerModel.fromJson(data[index]));
       }
       return ApiResponse(
           isSuccess: resp['status'],
@@ -77,6 +79,71 @@ class HomeRepo implements HomeRepoAbstract {
     }
   }
 
+  @override
+  Future<ApiResponse<List<PaginatedNewsModel>>> getHappening() async {
+    Map<String, dynamic> pNewsMap = {
+      "pageNumber": 1,
+      "pageSize": 5,
+      "categoryId": 4,
+      "createdBy": "00500877"
+    };
 
+    Map<String, dynamic> resp = await networkRequest.networkCallPostMap2(
+        ApiUrls.getNewsPaginated, pNewsMap);
 
+    List<PaginatedNewsModel>? _pNewsBanner;
+    debugPrint(resp.toString());
+
+    if (resp["status"] == true) {
+      List<dynamic> data = resp['data'];
+      if (data != null) {
+        _pNewsBanner = List.generate(data.length,
+            (index) => PaginatedNewsModel.fromJson(data[index]));
+      }
+      return ApiResponse(
+          isSuccess: resp['status'],
+          errorCause: resp['message'],
+          resObject: _pNewsBanner);
+    } else {
+      return ApiResponse(
+        isSuccess: resp['status'],
+        errorCause: resp['message'],
+        resObject: null,
+      );
+    }
+  }
+
+  @override
+  Future<ApiResponse<List<PaginatedNewsModel>>> getAwardRecog() async {
+    Map<String, dynamic> pAwardRecogMap = {
+      "pageNumber": 1,
+      "pageSize": 5,
+      "categoryId": 5,
+      "createdBy": "00500877"
+    };
+
+    Map<String, dynamic> resp = await networkRequest.networkCallPostMap2(
+        ApiUrls.getNewsPaginated, pAwardRecogMap);
+
+    List<PaginatedNewsModel>? _pAwardRecog;
+    debugPrint(resp.toString());
+
+    if (resp["status"] == true) {
+      List<dynamic> data = resp['data'];
+      if (data != null) {
+        _pAwardRecog = List.generate(data.length,
+                (index) => PaginatedNewsModel.fromJson(data[index]));
+      }
+      return ApiResponse(
+          isSuccess: resp['status'],
+          errorCause: resp['message'],
+          resObject: _pAwardRecog);
+    } else {
+      return ApiResponse(
+        isSuccess: resp['status'],
+        errorCause: resp['message'],
+        resObject: null,
+      );
+    }
+  }
 }

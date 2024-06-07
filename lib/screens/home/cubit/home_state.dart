@@ -1,5 +1,6 @@
 
 
+import '../../../model/PaginatedNewsModel .dart';
 import '../../../model/UpcomingEventBannerModel.dart';
 import '../../../model/categorised_news_detail_model.dart';
 
@@ -16,14 +17,11 @@ class HomeError extends HomeState {
 
 class HomeLoaded extends HomeState {
   String msg;
-  List<CategorisedNewsDetailsModel>? newsDetailsModel;
-
-  HomeLoaded({required this.msg, this.newsDetailsModel, });
-}
-
-class EventBannerLoaded extends HomeState {
-  String msg;
   List<EventBannerModel>? eventModel;
+  List<NewsBannerModel>? newsBannerModel;
+  List<PaginatedNewsModel>? pHappeningModel;
+  List<PaginatedNewsModel>? pAwardRecoModel;
 
-  EventBannerLoaded({required this.msg, this.eventModel});
+  HomeLoaded({required this.msg, this.eventModel, this.newsBannerModel, this.pHappeningModel, this.pAwardRecoModel});
 }
+

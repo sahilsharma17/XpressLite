@@ -19,6 +19,10 @@ class ApiUrls {
 
   static String getNewsFeatures = baseUrl('NewsDetails/GetNewsFeatures');
 
+  static String getNewsPaginated = baseUrl('NewsDetails/GetNewsDetails');
+
+
+
 
   //=====================Tasks=============//
 

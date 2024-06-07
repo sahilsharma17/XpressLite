@@ -12,6 +12,7 @@ import 'package:xpresslite/screens/view_image/view_image_screen.dart';
 import '../../helper/app_utilities/method_utils.dart';
 import '../../helper/custom_widgets/accessDenied/accessDenied.dart';
 import '../../helper/dxWidget/drawer.dart';
+import '../../model/PaginatedNewsModel .dart';
 import '../../model/UpcomingEventBannerModel.dart';
 import '../../model/categorised_news_detail_model.dart';
 
@@ -23,19 +24,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   int _currentIndex = 0;
+
 
   late HomeCubit _cubit;
 
-  List<CategorisedNewsDetailsModel> newsDetailsModel = [];
+  List<NewsBannerModel> newsBannersModel = [];
 
   List<EventBannerModel> eventBannerModel = [];
+
+  List<PaginatedNewsModel>? pageNewsModel = [];
+
+  List<PaginatedNewsModel>? pageAwardsRecoModel = [];
 
   @override
   void initState() {
     _cubit = BlocProvider.of<HomeCubit>(context);
-    _cubit.getCategoryWiseNewsDetails();
-    _cubit.getEventBanner();
+    _cubit.getNewsBanner();
 
     super.initState();
   }
@@ -45,10 +51,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocConsumer<HomeCubit, HomeState>(
         builder: (BuildContext context, state) {
       if (state is HomeLoaded) {
-        newsDetailsModel = state.newsDetailsModel ?? [];
-        return body();
-      } else if (state is EventBannerLoaded) {
+        newsBannersModel = state.newsBannerModel ?? [];
+        pageNewsModel = state.pHappeningModel ?? [];
         eventBannerModel = state.eventModel ?? [];
+        pageAwardsRecoModel = state.pAwardRecoModel ?? [];
+
+        return body();
       } else if (state is HomeInitial) {
         return body();
       } else if (state is HomeLoading) {
@@ -106,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: [
                       CarouselSlider(
-                        items: newsDetailsModel.map((model) {
+                        items: newsBannersModel.map((model) {
                           return Builder(
                             builder: (BuildContext context) {
                               return GestureDetector(
@@ -131,8 +139,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           fit: BoxFit.cover,
                                           height: 200.0,
                                           width: double.infinity,
-                                          placeholder: (context, url) =>
-                                              Center(child: CircularProgressIndicator(),),
+                                          placeholder: (context, url) => Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
                                         )),
                                     Positioned(
                                       bottom: 0,
@@ -180,8 +189,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: newsDetailsModel.map((model) {
-                          int index = newsDetailsModel.indexOf(model);
+                        children: newsBannersModel.map((model) {
+                          int index = newsBannersModel.indexOf(model);
                           return Container(
                             width: 8.0,
                             height: 8.0,
@@ -202,24 +211,22 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             Text('Latest Happenings'),
-            SizedBox(height: 10),
             ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              itemCount: newsDetailsModel.length,
+              itemCount: pageNewsModel?.length,
               itemBuilder: (context, index) {
                 return Container(
                   color: Colors.grey.withOpacity(0.2),
                   child: Column(
                     children: [
-                      CustomCard(eventValue: newsDetailsModel[index]),
+                      CustomCard(eventValue: pageNewsModel![index]),
                     ],
                   ),
                 );
               },
             ),
             Text('Upcoming Events'),
-            SizedBox(height: 10),
             Stack(children: [
               Container(
                 child: Container(
@@ -260,8 +267,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: CachedNetworkImage(
                                   imageUrl: model.imageFileName.toString(),
                                   fit: BoxFit.fill,
-                                  placeholder: (context, url) =>
-                                  Center(child: CircularProgressIndicator(),),
+                                  placeholder: (context, url) => Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
                                 )),
                           ),
                         );
@@ -284,6 +292,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ]),
+            Text('Awards & Recognitions'),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: pageAwardsRecoModel?.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  color: Colors.grey.withOpacity(0.2),
+                  child: Column(
+                    children: [
+                      CustomCard(eventValue: pageAwardsRecoModel![index]),
+                    ],
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
