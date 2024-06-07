@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:xpresslite/helper/app_utilities/method_utils.dart';
 import 'package:xpresslite/helper/constant/apiUrls.dart';
 import 'package:xpresslite/model/newsCommentsModel.dart';
 import 'package:xpresslite/model/newsDetailsByIdModel.dart';
+import 'package:xpresslite/model/newsFeaturesModel.dart';
 import 'package:xpresslite/network_configs/networkRequest.dart';
 
+import '../../../helper/app_utilities/date_utils.dart';
 import '../../../model/reposeCallBack.dart';
 
 abstract class NewsDetailScreenRepoAbstract {
@@ -11,6 +14,9 @@ abstract class NewsDetailScreenRepoAbstract {
       {required String newsId});
 
   Future<ApiResponse<List<NewsCommentsModel>>> getNewsComments(
+      {required String newsId});
+
+  Future<ApiResponse<NewsFeaturesModel>> getNewsFeatures(
       {required String newsId});
 }
 
@@ -33,7 +39,7 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
     NewsDetailsByIdModel? _newsDetailsbyId;
 
     if (resp["status"] == true) {
-      Map<String, dynamic> data = resp['data'] ;
+      Map<String, dynamic> data = resp['data'];
       if (data != null) {
         _newsDetailsbyId = NewsDetailsByIdModel.fromJson(data);
       }
@@ -41,6 +47,42 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
         isSuccess: resp["status"],
         errorCause: resp["message"],
         resObject: _newsDetailsbyId,
+      );
+    } else {
+      return ApiResponse(
+        isSuccess: false,
+        errorCause: resp["message"],
+        resObject: resp["message"],
+      );
+    }
+  }
+
+  @override
+  Future<ApiResponse<NewsFeaturesModel>> getNewsFeatures(
+      {required String newsId}) async {
+    Map<String, String> newsIdMap = {
+      "NewsDetailsId": newsId,
+      "createdBy": "00500877",
+      "createdDate": AppDateUtils.getFormattedDateWithTime().toString()
+    };
+
+    debugPrint("News Id Data Param is $newsIdMap");
+
+    final resp = await networkRequest.networkCallPostMap2(
+        ApiUrls.getNewsFeatures, newsIdMap);
+    debugPrint(resp.toString());
+
+    NewsFeaturesModel? _newsFeatures;
+
+    if (resp["status"] == true) {
+      Map<String, dynamic> data = resp['data'];
+      if (data != null) {
+        _newsFeatures = NewsFeaturesModel.fromJson(data);
+      }
+      return ApiResponse(
+        isSuccess: resp["status"],
+        errorCause: resp["message"],
+        resObject: _newsFeatures,
       );
     } else {
       return ApiResponse(
@@ -72,9 +114,7 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
       if (data != null) {
         _newsComments = List.generate(
             data.length, (index) => NewsCommentsModel.fromJson(data[index]));
-      }else{
-
-      }
+      } else {}
 
       return ApiResponse(
         isSuccess: resp["status"],
@@ -85,8 +125,10 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
       return ApiResponse(
         isSuccess: true,
         errorCause: resp["message"],
-        resObject:  _newsComments,
+        resObject: _newsComments,
       );
     }
   }
+
+
 }

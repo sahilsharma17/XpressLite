@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:xpresslite/model/newsFeaturesModel.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_cubit.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_state.dart';
 
@@ -27,6 +28,8 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
 
   NewsDetailsByIdModel? detailsById;
 
+  NewsFeaturesModel? newsFeaturesModel;
+
   List<NewsCommentsModel>? newsComments;
 
   @override
@@ -44,9 +47,8 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
       if (state is NewsCommentsLoaded) {
         detailsById = state.newsDetailByIdModel;
         newsComments = state.newsCommentsModel ?? [];
-        // if (newsComments!.length > 0) {
+        newsFeaturesModel = state.newsFeaturesModel;
         return body();
-        // }
       } else if (state is DetailsScreenInitial) {
         return AppLoaderProgress();
       } else if (state is DetailsScreenLoading) {
@@ -239,7 +241,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                 Icons.thumb_up,
                                 color: Colors.orange,
                               )),
-                          Text('0')
+                          Text(newsFeaturesModel?.totalLikes.toString() ?? "0")
                         ],
                       ),
                       Column(
@@ -250,9 +252,8 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                 Icons.comment,
                                 color: Colors.blue,
                               )),
-                          Text(newsComments!.isEmpty
-                              ? "0"
-                              : newsComments!.length.toString()),
+                          Text(newsFeaturesModel?.totalComments.toString() ?? "0")
+
                         ],
                       ),
                       Column(
@@ -263,7 +264,8 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                 Icons.remove_red_eye,
                                 color: Colors.blue,
                               )),
-                          Text('0')
+                          Text(newsFeaturesModel?.totalViews.toString() ?? "0")
+
                         ],
                       ),
                       Column(

@@ -2,6 +2,7 @@
 import 'package:xpresslite/model/newsCommentsModel.dart';
 
 import '../../../model/newsDetailsByIdModel.dart';
+import '../../../model/newsFeaturesModel.dart';
 
 abstract class NewsDetailScreenState {}
 
@@ -20,8 +21,8 @@ class NewsCommentsLoaded extends NewsDetailScreenState {
   String msg;
   List<NewsCommentsModel>? newsCommentsModel;
   NewsDetailsByIdModel? newsDetailByIdModel;
-
-  NewsCommentsLoaded({required this.msg, this.newsCommentsModel,this.newsDetailByIdModel});
+  NewsFeaturesModel? newsFeaturesModel;
+  NewsCommentsLoaded({required this.msg, this.newsCommentsModel,this.newsDetailByIdModel, this.newsFeaturesModel});
 }
 
 class DetailsScreenError extends NewsDetailScreenState {

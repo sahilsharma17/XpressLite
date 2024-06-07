@@ -17,6 +17,8 @@ class ApiUrls {
 
   static String getNewsCommentDetails = baseUrl('NewsDetails/GetNewsCommentDetails');
 
+  static String getNewsFeatures = baseUrl('NewsDetails/GetNewsFeatures');
+
 
   //=====================Tasks=============//
 
