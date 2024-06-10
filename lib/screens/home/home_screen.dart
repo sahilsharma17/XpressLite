@@ -9,6 +9,7 @@ import 'package:xpresslite/screens/home/cubit/home_state.dart';
 import 'package:xpresslite/screens/newsDetails/news_details_screen.dart';
 import 'package:xpresslite/screens/view_image/view_image_screen.dart';
 
+import '../../Widget/customWidget/custom_card2.dart';
 import '../../helper/app_utilities/method_utils.dart';
 import '../../helper/custom_widgets/accessDenied/accessDenied.dart';
 import '../../helper/dxWidget/drawer.dart';
@@ -24,9 +25,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   int _currentIndex = 0;
-
 
   late HomeCubit _cubit;
 
@@ -256,21 +255,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                           imgUrl:
                                               model.imageFileName.toString())));
                             },
-                            child: Container(
-                                decoration: BoxDecoration(boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black,
-                                      offset: Offset(0.2, 0.2),
-                                      blurRadius: 0.2,
-                                      spreadRadius: 0.2)
-                                ]),
-                                child: CachedNetworkImage(
-                                  imageUrl: model.imageFileName.toString(),
-                                  fit: BoxFit.fill,
-                                  placeholder: (context, url) => Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                )),
+                            child: CachedNetworkImage(
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                height: 170,
+                                width: 170,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black,
+                                        offset: Offset(0.2, 0.2),
+                                        blurRadius: 0.2,
+                                        spreadRadius: 0.2)
+                                  ],
+                                  image: DecorationImage(
+                                      image: imageProvider, fit: BoxFit.fill),
+                                ),
+                              ),
+                              imageUrl: model.imageFileName.toString(),
+                              placeholder: (context, url) => Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.orange,
+                                ),
+                              ),
+                            ),
                           ),
                         );
                       },
@@ -293,20 +303,24 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ]),
             Text('Awards & Recognitions'),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: pageAwardsRecoModel?.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  color: Colors.grey.withOpacity(0.2),
-                  child: Column(
+            SizedBox(
+              height: 220,
+              child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                physics: AlwaysScrollableScrollPhysics(),
+                itemCount: pageAwardsRecoModel?.length,
+                itemBuilder: (context, index) {
+                  return Row(
                     children: [
-                      CustomCard(eventValue: pageAwardsRecoModel![index]),
+                      Container(
+                        color: Colors.grey.withOpacity(0.2),
+                        child: CustomCard2(eventValue: pageAwardsRecoModel![index]),
+                      ),
                     ],
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ],
         ),
