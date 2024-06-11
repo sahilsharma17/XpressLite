@@ -1,122 +1,92 @@
-
 import 'package:flutter/material.dart';
-import '../app_utilities/app_theme.dart';
-import '../dxWidget/dx_text.dart';
 
-class BottomSheetUtils {
-  openDescriptionSheets(BuildContext context) {
-    return showModalBottomSheet(
-        context: context,
-        isDismissible: false,
-        backgroundColor: Colors.transparent,
-        isScrollControlled: true,
-        builder: (context) {
-          return Padding(
-            padding: EdgeInsets.only(
-                top: 20, bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: bottom(context),
-          );
-        });
-  }
 
-  bottom(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 4),
-      // height: 300,
-      decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(20),
-            topLeft: Radius.circular(20),
-          )),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-              decoration:  BoxDecoration(
-                  color: materialAccentColor,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(20),
-                    topLeft: Radius.circular(20),
-                  )),
-              width: MediaQuery.of(context).size.width,
-              height: 40,
-              child: Center(
-                child: DxTextWhite(
-                  "Description",
-                  mBold: true,
-                  mSize: 20,
-                ),
-              )),
-          const SizedBox(
-            height: 10,
-          ),
-          Container(
-            height: 130,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 25, right: 25),
-              child: TextField(
-                maxLines: 7,
+class MyBottomSheet extends StatelessWidget {
+  MyBottomSheet({super.key});
 
-                // controller: Description,
-                //inputFormatters: [LengthLimitingTextInputFormatter(50)],
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  hintText: "Enter your Reason",
-                  hintStyle: TextStyle(color: Colors.black),
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+  TextEditingController commentController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    return Padding(
+      padding: MediaQuery.of(context).viewInsets,
+      child: Container(
+        color: Colors.white,
+        width: screenWidth,
+        height: screenHeight * 0.3,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
             children: [
-              Container(
-                width: 100,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    //openScreenAfterLogin(context, HomeScreen(dashboardListType: 4));
-                  },
-                  child: DxText(
-                    "Cancel",
-                    mSize: 16,
-                    mBold: true,
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(30.0),
-                    ),
-                    backgroundColor: materialTitlesColor,
-                  ),
+              Text(
+                "Edit Comment",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
                 ),
               ),
-              Container(
-                width: 100,
-                child: ElevatedButton(
-                  onPressed: () {
-
-                  },
-                  child: DxTextWhite(
-                    "Ok",
-                    mSize: 16,
-                    mBold: true,
-                  ),
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(30.0),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: screenHeight * 0.15,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: commentController,
+                      maxLines: 4,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
                       ),
-                      backgroundColor: materialAccentColor),
+                    ),
+                  ),
                 ),
               ),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            WidgetStateProperty.resolveWith<Color>((states) {
+                          return Colors.orange;
+                        }),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text(
+                        "Update",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            WidgetStateProperty.resolveWith<Color>((states) {
+                          return Colors.grey.shade700;
+                        }),
+                      ),
+                    ),
+                  ],
+                ),
+              )
             ],
-          )
-        ],
+          ),
+        ),
       ),
     );
   }

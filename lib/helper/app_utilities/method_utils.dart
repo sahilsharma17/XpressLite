@@ -521,6 +521,7 @@ class MethodUtils {
       Map<Permission, PermissionStatus> statuses = await [
         Permission.location,
         Permission.camera,
+        Permission.manageExternalStorage
       ].request();
     } on SocketException catch (_) {
       //print('not connected');

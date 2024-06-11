@@ -125,6 +125,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           builder: (context) =>
                                               NewsDetailsScreen(
                                                 newsId: model.id.toString(),
+                                                catId:
+                                                    model.categoryId.toString(),
                                               )));
                                 },
                                 child: Stack(
@@ -238,67 +240,65 @@ class _HomeScreenState extends State<HomeScreen> {
                     ]),
                     child: Image(image: AssetImage('assets/bg_event.png'))),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: CarouselSlider(
-                  items: eventBannerModel.map((model) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ViewImageScreen(
-                                          imgUrl:
-                                              model.imageFileName.toString())));
-                            },
-                            child: CachedNetworkImage(
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
-                                height: 170,
-                                width: 170,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.black,
-                                        offset: Offset(0.2, 0.2),
-                                        blurRadius: 0.2,
-                                        spreadRadius: 0.2)
-                                  ],
-                                  image: DecorationImage(
-                                      image: imageProvider, fit: BoxFit.fill),
-                                ),
+              CarouselSlider(
+                items: eventBannerModel.map((model) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ViewImageScreen(
+                                        imgUrl:
+                                            model.imageFileName.toString())));
+                          },
+                          child: CachedNetworkImage(
+                            imageBuilder: (context, imageProvider) =>
+                                Container(
+                              height: 170,
+                              width: 170,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.circular(10.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black,
+                                      offset: Offset(0.2, 0.2),
+                                      blurRadius: 0.2,
+                                      spreadRadius: 0.2)
+                                ],
+                                image: DecorationImage(
+                                    image: imageProvider, fit: BoxFit.fill),
                               ),
-                              imageUrl: model.imageFileName.toString(),
-                              placeholder: (context, url) => Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.orange,
-                                ),
+                            ),
+                            imageUrl: model.imageFileName.toString(),
+                            placeholder: (context, url) => Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.orange,
                               ),
                             ),
                           ),
-                        );
-                      },
-                    );
-                  }).toList(),
-                  options: CarouselOptions(
-                    // autoPlay: true,
-                    animateToClosest: true,
-                    height: 170,
-                    // aspectRatio: 1 / 1,
-                    //viewportFraction: 0.8,
-                    enlargeCenterPage: true,
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        _currentIndex = index;
-                      });
+                        ),
+                      );
                     },
-                  ),
+                  );
+                }).toList(),
+                options: CarouselOptions(
+                  // autoPlay: true,
+
+                  animateToClosest: true,
+                  height: 170,
+                  // aspectRatio: 1 / 1,
+                  //viewportFraction: 0.8,
+                  enlargeCenterPage: true,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _currentIndex = index;
+                    });
+                  },
                 ),
               ),
             ]),
@@ -315,7 +315,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Container(
                         color: Colors.grey.withOpacity(0.2),
-                        child: CustomCard2(eventValue: pageAwardsRecoModel![index]),
+                        child: CustomCard2(
+                            eventValue: pageAwardsRecoModel![index]),
                       ),
                     ],
                   );

@@ -26,6 +26,7 @@ class _CustomCard2State extends State<CustomCard2> {
             MaterialPageRoute(
                 builder: (context) => NewsDetailsScreen(
                       newsId: widget.eventValue.id.toString(),
+                      catId: widget.eventValue.categoryId.toString(),
                     )));
       },
       child: Padding(

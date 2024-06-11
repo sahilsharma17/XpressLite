@@ -2,26 +2,33 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:xpresslite/Widget/customWidget/commentBarWidget.dart';
+import 'package:xpresslite/helper/bottomsheet/bottomsheet.dart';
 import 'package:xpresslite/model/newsFeaturesModel.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_cubit.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_state.dart';
 
+import '../../Widget/customWidget/custom_card.dart';
 import '../../helper/app_utilities/method_utils.dart';
 import '../../helper/custom_widgets/accessDenied/accessDenied.dart';
 import '../../helper/custom_widgets/app_circular_loader.dart';
+import '../../model/PaginatedNewsModel .dart';
 import '../../model/newsCommentsModel.dart';
 import '../../model/newsDetailsByIdModel.dart';
 
 class NewsDetailsScreen extends StatefulWidget {
   final String newsId;
+  final String catId;
 
-  const NewsDetailsScreen({super.key, required this.newsId});
+  const NewsDetailsScreen(
+      {super.key, required this.newsId, required this.catId});
 
   @override
   State<NewsDetailsScreen> createState() => _NewsDetailsScreenState();
 }
 
 class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
+  TextEditingController commentController = TextEditingController();
   int _currentIndex = 0;
 
   bool showComment = false;
@@ -34,10 +41,14 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
 
   List<NewsCommentsModel>? newsComments;
 
+  List<PaginatedNewsModel>? relatedHappeningModel = [];
+
+  List? pc;
+
   @override
   void initState() {
     _cubit = BlocProvider.of<NewsDetailScreenCubit>(context);
-    _cubit.getIdWiseNewsDetails(widget.newsId);
+    _cubit.getIdWiseNewsDetails(widget.newsId, widget.catId);
 
     super.initState();
   }
@@ -50,6 +61,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
         detailsById = state.newsDetailByIdModel;
         newsComments = state.newsCommentsModel ?? [];
         newsFeaturesModel = state.newsFeaturesModel;
+        relatedHappeningModel = state.relatedHappeningModel ?? [];
+        pc = state.pComment ?? [];
+
         return body();
       } else if (state is DetailsScreenInitial) {
         return AppLoaderProgress();
@@ -62,7 +76,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
       }
       return AccessDeniedScreen(
         onPressed: () {
-          _cubit.getIdWiseNewsDetails(widget.newsId);
+          _cubit.getIdWiseNewsDetails(widget.newsId, widget.catId);
         },
       );
     }, listener: (BuildContext context, state) {
@@ -253,7 +267,14 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                       Column(
                         children: [
                           IconButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                await showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return MyBottomSheet();
+                                  },
+                                );
+                              },
                               icon: Icon(
                                 Icons.remove_red_eye,
                                 color: Colors.blue,
@@ -285,7 +306,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   if (newsComments!.isNotEmpty)
                     Column(
                       children: [
@@ -330,37 +353,175 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                           SizedBox(
                                             width: 10,
                                           ),
-                                          Container(
-                                            width: screenWidth * 0.7,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(20)),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    newsComments?[i]
-                                                            .name
-                                                            ?.toString() ??
-                                                        '',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold),
+                                          Column(
+                                            children: [
+                                              Container(
+                                                width: screenWidth * 0.7,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20)),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        newsComments?[i]
+                                                                .name
+                                                                ?.toString() ??
+                                                            '',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      Text(
+                                                        newsComments?[i]
+                                                                .comment
+                                                                ?.toString() ??
+                                                            '',
+                                                      ),
+                                                    ],
                                                   ),
-                                                  Text(
-                                                    newsComments?[i]
-                                                            .comment
-                                                            ?.toString() ??
-                                                        '',
-                                                  ),
-                                                ],
+                                                ),
                                               ),
-                                            ),
+                                              Container(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        'time ago',
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                      GestureDetector(
+                                                          onTap: () {},
+                                                          child: Text('Like',
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .black87))),
+                                                      SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                      GestureDetector(
+                                                          onTap: () {},
+                                                          child: Text('Reply',
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .black87))),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            showModalBottomSheet(
+                                                              context: context,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return MyBottomSheet();
+                                                              },
+                                                            );
+                                                          },
+                                                          icon: Icon(
+                                                            Icons.edit_outlined,
+                                                            size: 20,
+                                                          )),
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                                  return Dialog(
+                                                                    child:
+                                                                        Container(
+                                                                      width:
+                                                                          100,
+                                                                      height:
+                                                                          150,
+                                                                      decoration: BoxDecoration(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(10)),
+                                                                      child:
+                                                                          Center(
+                                                                        child:
+                                                                            Padding(
+                                                                          padding:
+                                                                              EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              Column(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.spaceBetween,
+                                                                            children: [
+                                                                              Text(
+                                                                                'XpressLite',
+                                                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                                                              ),
+                                                                              Text(
+                                                                                textAlign: TextAlign.center,
+                                                                                'Are you Sure? You want to delete this comment.',
+                                                                                style: TextStyle(fontWeight: FontWeight.normal),
+                                                                              ),
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                                                  children: [
+                                                                                    GestureDetector(
+                                                                                        onTap: () {
+                                                                                          print('No');
+                                                                                        },
+                                                                                        child: Text('No', style: TextStyle(fontSize: 12, color: Colors.black87, fontWeight: FontWeight.bold))),
+                                                                                    GestureDetector(
+                                                                                        onTap: () {
+                                                                                          print('Yes');
+                                                                                        },
+                                                                                        child: Text('Yes', style: TextStyle(fontSize: 12, color: Colors.orange, fontWeight: FontWeight.bold))),
+                                                                                  ],
+                                                                                ),
+                                                                              )
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                });
+                                                          },
+                                                          icon: Icon(
+                                                            Icons
+                                                                .delete_forever_outlined,
+                                                            size: 20,
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           )
                                         ],
                                       ),
@@ -451,18 +612,48 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
               width: screenWidth,
               color: Colors.white,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                child: Text(
-                  "RELATED HAPPENINGS",
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold),
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: Column(
+                  children: [
+                    Text(
+                      "RELATED HAPPENINGS",
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: relatedHappeningModel?.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          color: Colors.grey.withOpacity(0.2),
+                          child: Column(
+                            children: [
+                              CustomCard(
+                                  eventValue: relatedHappeningModel![index]),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
-            )
+            ),
           ],
         ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: MediaQuery.of(context).viewInsets,
+        child: CommentBottomBar(
+            controller: commentController,
+            onSend: () {
+              _cubit.postComment(
+                  widget.newsId, commentController.text, widget.catId);
+              commentController.text = '';
+            }),
       ),
     );
   }

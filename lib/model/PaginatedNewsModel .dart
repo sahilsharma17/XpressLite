@@ -25,13 +25,13 @@ class PaginatedNewsModel {
   bool? saveAsDraft;
   List<String>? imageFileNames;
   bool? isFavourite;
-  Null? calculatedRating;
-  Null? rating;
-  Null? newsHashtagsOnNews;
+  double? calculatedRating;
+  double? rating;
+  String? newsHashtagsOnNews;
   bool? isActive;
   String? createdDate;
   String? createdBy;
-  Null? modifiedDate;
+  String? modifiedDate;
   String? modifiedBy;
   String? ip;
 
@@ -98,7 +98,7 @@ class PaginatedNewsModel {
     sendNotification = json['sendNotification'];
     saveAsDraft = json['saveAsDraft'];
     imageFileNames = json['imageFileNames'].cast<String>();
-    isFavourite = json['isFavourite'];
+    isFavourite = json['isFavourite'] ?? false;
     calculatedRating = json['calculatedRating'];
     rating = json['rating'];
     newsHashtagsOnNews = json['newsHashtagsOnNews'];

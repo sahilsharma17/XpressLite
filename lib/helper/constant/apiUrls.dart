@@ -21,6 +21,8 @@ class ApiUrls {
 
   static String getNewsPaginated = baseUrl('NewsDetails/GetNewsDetails');
 
+  static String postComment = baseUrl('NewsDetails/CreateNewsComment');
+
 
 
 
