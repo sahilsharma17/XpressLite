@@ -198,4 +198,41 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
       );
     }
   }
+
+  @override
+  Future<ApiResponse<List>> delComment(
+      {required int nComId, required String nComReplyId}) async {
+    Map<String, dynamic> delcommentMap;
+    if (nComReplyId == '') {
+      delcommentMap = {
+        "NewsCommentsId": nComId,
+
+      };
+    } else {
+      delcommentMap = {
+        "CommentsReplyId": nComReplyId,
+
+      };
+    }
+
+    debugPrint("Comment Data Param is $delcommentMap");
+
+    final resp = await networkRequest.networkCallPostMap2(
+        ApiUrls.delComment, delcommentMap);
+    debugPrint(resp.toString());
+
+    if (resp["status"] == true) {
+      return ApiResponse(
+        isSuccess: resp["status"],
+        errorCause: resp["message"],
+        resObject: resp['data'],
+      );
+    } else {
+      return ApiResponse(
+        isSuccess: true,
+        errorCause: resp["message"],
+        resObject: null,
+      );
+    }
+  }
 }

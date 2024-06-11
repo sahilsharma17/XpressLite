@@ -44,6 +44,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   List<PaginatedNewsModel>? relatedHappeningModel = [];
 
   List? pc;
+  List? delCom;
 
   @override
   void initState() {
@@ -63,6 +64,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
         newsFeaturesModel = state.newsFeaturesModel;
         relatedHappeningModel = state.relatedHappeningModel ?? [];
         pc = state.pComment ?? [];
+        delCom = state.delComment ?? [];
 
         return body();
       } else if (state is DetailsScreenInitial) {
@@ -495,12 +497,14 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                                                                         onTap: () {
                                                                                           print('No');
                                                                                         },
-                                                                                        child: Text('No', style: TextStyle(fontSize: 12, color: Colors.black87, fontWeight: FontWeight.bold))),
+                                                                                        child: Container(height: 30, width: 100, child: Text(textAlign: TextAlign.center, 'No', style: TextStyle(fontSize: 12, color: Colors.black87, fontWeight: FontWeight.bold)))),
                                                                                     GestureDetector(
                                                                                         onTap: () {
                                                                                           print('Yes');
+                                                                                          Navigator.pop(context, true);
+                                                                                          _cubit.deleteComment(widget.newsId, widget.catId, newsComments?[i].commentId ?? 0, '');
                                                                                         },
-                                                                                        child: Text('Yes', style: TextStyle(fontSize: 12, color: Colors.orange, fontWeight: FontWeight.bold))),
+                                                                                        child: Container(height: 30, width: 100, child: Text(textAlign: TextAlign.center, 'Yes', style: TextStyle(fontSize: 12, color: Colors.orange, fontWeight: FontWeight.bold)))),
                                                                                   ],
                                                                                 ),
                                                                               )
@@ -530,6 +534,8 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                               .isNotEmpty ||
                                           newsComments![i].replies != null)
                                         ListView.builder(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
                                           itemCount:
                                               newsComments?[i].replies?.length,
@@ -588,6 +594,128 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                                                     .commentsReply
                                                                     ?.toString() ??
                                                                 '',
+                                                          ),
+                                                          Container(
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      left: 10),
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceAround,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  GestureDetector(
+                                                                      onTap:
+                                                                          () {},
+                                                                      child: Text(
+                                                                          'Like',
+                                                                          style: TextStyle(
+                                                                              fontSize: 12,
+                                                                              color: Colors.black87))),
+                                                                  SizedBox(
+                                                                    width: 20,
+                                                                  ),
+                                                                  GestureDetector(
+                                                                      onTap:
+                                                                          () {},
+                                                                      child: Text(
+                                                                          'Reply',
+                                                                          style: TextStyle(
+                                                                              fontSize: 12,
+                                                                              color: Colors.black87))),
+                                                                  SizedBox(
+                                                                    width: 10,
+                                                                  ),
+                                                                  IconButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        showModalBottomSheet(
+                                                                          context:
+                                                                              context,
+                                                                          builder:
+                                                                              (BuildContext context) {
+                                                                            return MyBottomSheet();
+                                                                          },
+                                                                        );
+                                                                      },
+                                                                      icon:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .edit_outlined,
+                                                                        size:
+                                                                            20,
+                                                                      )),
+                                                                  IconButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        showDialog(
+                                                                            context:
+                                                                                context,
+                                                                            builder:
+                                                                                (BuildContext context) {
+                                                                              return Dialog(
+                                                                                child: Container(
+                                                                                  width: 100,
+                                                                                  height: 150,
+                                                                                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                                                                                  child: Center(
+                                                                                    child: Padding(
+                                                                                      padding: EdgeInsets.all(8.0),
+                                                                                      child: Column(
+                                                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                        children: [
+                                                                                          Text(
+                                                                                            'XpressLite',
+                                                                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                                                                          ),
+                                                                                          Text(
+                                                                                            textAlign: TextAlign.center,
+                                                                                            'Are you Sure? You want to delete this comment.',
+                                                                                            style: TextStyle(fontWeight: FontWeight.normal),
+                                                                                          ),
+                                                                                          Padding(
+                                                                                            padding: const EdgeInsets.all(8.0),
+                                                                                            child: Row(
+                                                                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                                                              children: [
+                                                                                                GestureDetector(
+                                                                                                    onTap: () {
+                                                                                                      print('No');
+                                                                                                    },
+                                                                                                    child: Container(height: 30, width: 100, child: Text(textAlign: TextAlign.center, 'No', style: TextStyle(fontSize: 12, color: Colors.black87, fontWeight: FontWeight.bold)))),
+                                                                                                GestureDetector(
+                                                                                                    onTap: () {
+                                                                                                      print('Yes');
+                                                                                                      Navigator.pop(context, true);
+                                                                                                      _cubit.deleteComment(widget.newsId, widget.catId, newsComments?[i].commentId ?? 0, newsComments?[i].replies![j].commentReplyId.toString() ?? '');
+                                                                                                    },
+                                                                                                    child: Container(height: 30, width: 100, child: Text(textAlign: TextAlign.center, 'Yes', style: TextStyle(fontSize: 12, color: Colors.orange, fontWeight: FontWeight.bold)))),
+                                                                                              ],
+                                                                                            ),
+                                                                                          )
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              );
+                                                                            });
+                                                                      },
+                                                                      icon:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .delete_forever_outlined,
+                                                                        size:
+                                                                            20,
+                                                                      )),
+                                                                ],
+                                                              ),
+                                                            ),
                                                           ),
                                                         ],
                                                       ),

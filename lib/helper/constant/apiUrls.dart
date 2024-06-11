@@ -23,6 +23,8 @@ class ApiUrls {
 
   static String postComment = baseUrl('NewsDetails/CreateNewsComment');
 
+  static String delComment = baseUrl('NewsDetails/DeleteNewsComment');
+
 
 
 
