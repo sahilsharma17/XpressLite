@@ -28,6 +28,7 @@ class NewsCommentsLoaded extends NewsDetailScreenState {
   List<PaginatedNewsModel>? relatedHappeningModel;
   List? pComment;
   List? delComment;
+  List? updateComment;
 
   NewsCommentsLoaded(
       {required this.msg,
@@ -37,10 +38,11 @@ class NewsCommentsLoaded extends NewsDetailScreenState {
       this.relatedHappeningModel,
       this.pComment,
       this.delComment,
-      });
+      this.updateComment});
 }
 
 class DetailsScreenError extends NewsDetailScreenState {
   String error;
+
   DetailsScreenError({required this.error});
 }

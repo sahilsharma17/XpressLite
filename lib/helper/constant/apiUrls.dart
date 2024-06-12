@@ -25,6 +25,8 @@ class ApiUrls {
 
   static String delComment = baseUrl('NewsDetails/DeleteNewsComment');
 
+  static String updateComment = baseUrl('NewsDetails/UpdateNewsComment');
+
 
 
 

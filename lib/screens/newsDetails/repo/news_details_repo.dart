@@ -206,12 +206,10 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
     if (nComReplyId == '') {
       delcommentMap = {
         "NewsCommentsId": nComId,
-
       };
     } else {
       delcommentMap = {
         "CommentsReplyId": nComReplyId,
-
       };
     }
 
@@ -219,6 +217,35 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
 
     final resp = await networkRequest.networkCallPostMap2(
         ApiUrls.delComment, delcommentMap);
+    debugPrint(resp.toString());
+
+    if (resp["status"] == true) {
+      return ApiResponse(
+        isSuccess: resp["status"],
+        errorCause: resp["message"],
+        resObject: resp['data'],
+      );
+    } else {
+      return ApiResponse(
+        isSuccess: true,
+        errorCause: resp["message"],
+        resObject: null,
+      );
+    }
+  }
+
+  @override
+  Future<ApiResponse<List>> updateComment(
+      {required int nComId, required String newComment}) async {
+    Map<String, dynamic> delcommentMap = {
+      "NewsCommentsId": nComId,
+      "Comment": newComment
+    };
+
+    debugPrint("Comment Data Param is $delcommentMap");
+
+    final resp = await networkRequest.networkCallPostMap2(
+        ApiUrls.updateComment, delcommentMap);
     debugPrint(resp.toString());
 
     if (resp["status"] == true) {

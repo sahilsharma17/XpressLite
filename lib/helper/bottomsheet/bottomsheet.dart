@@ -1,10 +1,32 @@
 import 'package:flutter/material.dart';
 
+import '../../screens/newsDetails/cubit/news_detail_cubit.dart';
 
-class MyBottomSheet extends StatelessWidget {
-  MyBottomSheet({super.key});
+class MyBottomSheet extends StatefulWidget {
+  String oldComment, categoryId, newsId;
+  NewsDetailScreenCubit cubit;
+  int commentId;
 
+  MyBottomSheet(
+      {required this.oldComment,
+      required this.cubit,
+      required this.commentId,
+      required this.categoryId,
+      required this.newsId,
+      super.key});
+
+  @override
+  State<MyBottomSheet> createState() => _MyBottomSheetState();
+}
+
+class _MyBottomSheetState extends State<MyBottomSheet> {
   TextEditingController commentController = TextEditingController();
+
+  @override
+  void initState() {
+    commentController.text = widget.oldComment;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +75,9 @@ class MyBottomSheet extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                       child: Text(
                         "Cancel",
                         style: TextStyle(color: Colors.white),
@@ -69,7 +93,14 @@ class MyBottomSheet extends StatelessWidget {
                       width: 8,
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        widget.cubit.updateComment(
+                            widget.newsId,
+                            widget.categoryId,
+                            widget.commentId,
+                            commentController.text);
+                        Navigator.pop(context);
+                      },
                       child: Text(
                         "Update",
                         style: TextStyle(color: Colors.white),

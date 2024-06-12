@@ -35,7 +35,7 @@ class NewsCommentsModel {
   NewsCommentsModel.fromJson(Map<String, dynamic> json) {
     name = json['name'] ?? "";
     profileImage = json['profileImage'] ?? "";
-    commentId = json['commentId'] ?? "";
+    commentId = json['commentId'] ?? 0;
     comment = json['comment'] ?? "";
     totalCommentLikes = json['totalCommentLikes'] ?? 0;
     likeType = json['likeType'] ?? "";

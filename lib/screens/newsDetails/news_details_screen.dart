@@ -45,6 +45,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
 
   List? pc;
   List? delCom;
+  List? newCom;
 
   @override
   void initState() {
@@ -65,6 +66,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
         relatedHappeningModel = state.relatedHappeningModel ?? [];
         pc = state.pComment ?? [];
         delCom = state.delComment ?? [];
+        newCom = state.updateComment ?? [];
 
         return body();
       } else if (state is DetailsScreenInitial) {
@@ -269,14 +271,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                       Column(
                         children: [
                           IconButton(
-                              onPressed: () async {
-                                await showModalBottomSheet(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return MyBottomSheet();
-                                  },
-                                );
-                              },
+                              onPressed: () {},
                               icon: Icon(
                                 Icons.remove_red_eye,
                                 color: Colors.blue,
@@ -440,7 +435,23 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                                               builder:
                                                                   (BuildContext
                                                                       context) {
-                                                                return MyBottomSheet();
+                                                                return MyBottomSheet(
+                                                                  oldComment:
+                                                                      newsComments![
+                                                                              i]
+                                                                          .comment
+                                                                          .toString(),
+                                                                  cubit: _cubit,
+                                                                  commentId:
+                                                                      newsComments?[i]
+                                                                              .commentId ??
+                                                                          0,
+                                                                  categoryId:
+                                                                      widget
+                                                                          .catId,
+                                                                  newsId: widget
+                                                                      .newsId,
+                                                                );
                                                               },
                                                             );
                                                           },
@@ -634,14 +645,14 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                                                   IconButton(
                                                                       onPressed:
                                                                           () {
-                                                                        showModalBottomSheet(
-                                                                          context:
-                                                                              context,
-                                                                          builder:
-                                                                              (BuildContext context) {
-                                                                            return MyBottomSheet();
-                                                                          },
-                                                                        );
+                                                                        // showModalBottomSheet(
+                                                                        //   context:
+                                                                        //       context,
+                                                                        //   builder:
+                                                                        //       (BuildContext context) {
+                                                                        //     return MyBottomSheet();
+                                                                        //   },
+                                                                        // );
                                                                       },
                                                                       icon:
                                                                           Icon(
