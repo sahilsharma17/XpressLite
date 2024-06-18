@@ -18,14 +18,27 @@ class _CustomCardState extends State<CustomCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => NewsDetailsScreen(
-                      newsId: widget.eventValue.id.toString(),
-                      catId: widget.eventValue.categoryId.toString(),
-                    )));
+      onTap: () async {
+        final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NewsDetailsScreen(
+              newsId: widget.eventValue.id.toString(),
+              catId: widget.eventValue.categoryId.toString(),
+            ),
+          ),
+        );
+
+        // Check if result is not null and is a string
+        if (result != null && result is String) {
+          // Update the state or reload data here using the returned newsId
+          if (mounted){
+            setState(() {
+              widget.eventValue.id = int.parse(result);
+              print("Here ${widget.eventValue.id}");
+            });
+          }
+        }
       },
       child: Padding(
         padding: const EdgeInsets.all(10.0),

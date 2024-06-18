@@ -61,6 +61,7 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       controller: commentController,
+                      cursorColor: Colors.orange,
                       maxLines: 4,
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -70,7 +71,7 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(5.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [

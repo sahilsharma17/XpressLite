@@ -1,4 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:xpresslite/screens/category/category_screen.dart';
+import 'package:xpresslite/screens/appNavBar.dart';
+import 'package:xpresslite/screens/home_controller.dart';
+import '../../screens/profile/profile_screen.dart';
 import '../app_utilities/app_images.dart';
 import '../custom_widgets/dailog/Logout.dart';
 import '../routeAndBlocManager/navigator.dart';
@@ -32,36 +38,26 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
           Column(
             children: [
-              Container(
-                //height: 150,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        fit: BoxFit.cover,
-                        colorFilter: ColorFilter.mode(
-                            Colors.black.withOpacity(0.4), BlendMode.colorBurn),
-                        image: AssetImage(AppImages.background))),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 10),
-                    CircleAvatar(
-                        backgroundImage: NetworkImage(image), radius: 40),
-                    const SizedBox(height: 6),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        DxTextBlack("Hello!"),
-                        const SizedBox(width: 5),
-                        DxTextBlack(
-                          "DashboardScreenState.name!",
-                          mSize: 18,
-                          mBold: true,
-                        ),
-                      ],
-                    ),
-                    DxTextBlack("Role ", mSize: 18, mBold: true),
-                  ],
-                ),
+              Column(
+                children: [
+                  const SizedBox(height: 10),
+                  CircleAvatar(
+                      backgroundImage: NetworkImage(image), radius: 40),
+                  const SizedBox(height: 6),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      DxTextBlack("Hello!"),
+                      const SizedBox(width: 5),
+                      DxTextBlack(
+                        "DashboardScreenState.name!",
+                        mSize: 18,
+                        mBold: true,
+                      ),
+                    ],
+                  ),
+                  DxTextBlack("Role ", mSize: 18, mBold: true),
+                ],
               ),
               Container(
                 child: ListView.builder(
@@ -97,6 +93,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
     if (name == "Logout") {
       showLogoutDialog();
     } else if (name == "Categories") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CategoryScreen()),
+      );
     } else if (name == "Favourites") {
     } else if (name == "Xpress Bulletin") {
     } else if (name == "Upcoming Events") {
@@ -106,6 +106,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
       // openScreenAsBottomToTop(
       //    SyncScreen());
     } else if (name == "Profile") {
+      // Navigator.pop(context);
+      Get.to(() => AppNavBar());
+      HomeController().changeIndex(4);
     } else {}
   }
 

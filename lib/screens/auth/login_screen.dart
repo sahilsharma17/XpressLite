@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:xpresslite/Widget/dailog/OtpDailog.dart';
 import 'package:xpresslite/helper/app_utilities/method_utils.dart';
 import 'package:xpresslite/helper/constant/appMessages.dart';
@@ -13,6 +14,8 @@ import 'package:xpresslite/screens/auth/cubit/login_cubit.dart';
 import 'package:xpresslite/screens/auth/cubit/login_state.dart';
 import 'package:xpresslite/screens/home/home_screen.dart';
 import 'package:xpresslite/screens/splash_screen.dart';
+
+import '../appNavBar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -63,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
           } else {
             MethodUtils.toast(state.msg);
             Future.delayed(const Duration(milliseconds: 500));
-            openScreenAfterLogin(HomeScreen());
+            Get.to(() => AppNavBar());
           }
         }
       },

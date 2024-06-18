@@ -1,8 +1,10 @@
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:xpresslite/helper/app_utilities/size_reziser.dart';
 import 'package:xpresslite/helper/routeAndBlocManager/blocProvider.dart';
+import 'package:xpresslite/screens/appNavBar.dart';
 import 'package:xpresslite/screens/home/home_screen.dart';
 import 'package:xpresslite/screens/splash_screen.dart';
 
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
     SizeConfig().init(context);
     return MultiBlocProvider(
       providers: BlocManager.blocProviders,
-      child: MaterialApp(
+      child: GetMaterialApp(
         title: '',
         navigatorKey: navigatorKey,
         builder: (BuildContext context, Widget? child) {
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
         },
         debugShowCheckedModeBanner: false,
         
-        home: HomeScreen(),
+        home: AppNavBar(),
       ),
     );
   }

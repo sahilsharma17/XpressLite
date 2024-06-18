@@ -139,7 +139,7 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
       {required String newsCatId}) async {
     Map<String, dynamic> pRelatedMap = {
       "pageNumber": 1,
-      "pageSize": 5,
+      "pageSize": 6,
       "categoryId": newsCatId,
       "createdBy": "00500877"
     };

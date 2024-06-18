@@ -10,9 +10,11 @@ class ViewImageScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey.shade300,
       appBar: AppBar(
+        elevation: 3,
+        shadowColor: Colors.grey,
         backgroundColor: Colors.white,
         title: Text(
-          'View Image',
+          'VIEW IMAGE',
           style: TextStyle(
               fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold),
         ),

@@ -5,10 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xpresslite/Widget/customWidget/commentBarWidget.dart';
 import 'package:xpresslite/helper/bottomsheet/bottomsheet.dart';
 import 'package:xpresslite/model/newsFeaturesModel.dart';
+import 'package:xpresslite/screens/home/home_screen.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_cubit.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_state.dart';
 
 import '../../Widget/customWidget/custom_card.dart';
+import '../../Widget/customWidget/news_features_widget.dart';
 import '../../helper/app_utilities/method_utils.dart';
 import '../../helper/custom_widgets/accessDenied/accessDenied.dart';
 import '../../helper/custom_widgets/app_circular_loader.dart';
@@ -17,10 +19,10 @@ import '../../model/newsCommentsModel.dart';
 import '../../model/newsDetailsByIdModel.dart';
 
 class NewsDetailsScreen extends StatefulWidget {
-  final String newsId;
-  final String catId;
+   String newsId;
+   String catId;
 
-  const NewsDetailsScreen(
+   NewsDetailsScreen(
       {super.key, required this.newsId, required this.catId});
 
   @override
@@ -48,12 +50,21 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   List? newCom;
 
   @override
+  void dispose() {
+    // Cancel timers, animations, or listeners here
+    super.dispose();
+  }
+
+  @override
   void initState() {
     _cubit = BlocProvider.of<NewsDetailScreenCubit>(context);
     _cubit.getIdWiseNewsDetails(widget.newsId, widget.catId);
+    print(widget.newsId);
 
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +119,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
           IconButton(
               onPressed: () {
                 debugPrint("Download");
+                Navigator.popAndPushNamed(context, HomeScreen().toString());
               },
               icon: Icon(
                 Icons.download,
@@ -245,62 +257,39 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Column(
-                        children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.thumb_up,
-                                color: Colors.orange,
-                              )),
-                          Text(newsFeaturesModel?.totalLikes.toString() ?? "0")
-                        ],
+                      NewsFeatureWidget(
+                        iconData: Icons.thumb_up,
+                        iconColor: Colors.orange,
+                        value: newsFeaturesModel?.totalLikes,
+                        onPressed: () {},
                       ),
-                      Column(
-                        children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.comment,
-                                color: Colors.blue,
-                              )),
-                          Text(newsFeaturesModel?.totalComments.toString() ??
-                              "0")
-                        ],
+                      NewsFeatureWidget(
+                        iconData: Icons.comment,
+                        iconColor: Colors.blue,
+                        value: newsFeaturesModel?.totalComments,
+                        onPressed: () {},
                       ),
-                      Column(
-                        children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.remove_red_eye,
-                                color: Colors.blue,
-                              )),
-                          Text(newsFeaturesModel?.totalViews.toString() ?? "0")
-                        ],
+                      NewsFeatureWidget(
+                        iconData: Icons.remove_red_eye,
+                        iconColor: Colors.blue,
+                        value: newsFeaturesModel?.totalViews,
+                        onPressed: () {},
                       ),
-                      Column(
-                        children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.share,
-                                color: Colors.blue,
-                              )),
-                          Text('Share')
-                        ],
+                      if (detailsById?.shareable == true)
+                      NewsFeatureWidget(
+                        iconData: Icons.share,
+                        iconColor: Colors.blue,
+                        labelText: "Share",
+                        onPressed: () {},
                       ),
-                      Column(
-                        children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.picture_as_pdf_outlined,
-                                color: Colors.red,
-                              )),
-                          Text("View PDF")
-                        ],
-                      ),
+                      if (detailsById?.downloadable == true)
+                        NewsFeatureWidget(
+                        iconData: Icons.picture_as_pdf_outlined,
+                        iconColor: Colors.red,
+                        labelText: "View PDF",
+                        onPressed: () {},
+                      )
+                      ,
                     ],
                   ),
                   SizedBox(
@@ -432,6 +421,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                                           onPressed: () {
                                                             showModalBottomSheet(
                                                               context: context,
+                                                              isScrollControlled: true,
                                                               builder:
                                                                   (BuildContext
                                                                       context) {
