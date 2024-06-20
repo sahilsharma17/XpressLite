@@ -84,7 +84,7 @@ class HomeRepo implements HomeRepoAbstract {
     Map<String, dynamic> pNewsMap = {
       "pageNumber": 1,
       "pageSize": 5,
-      "categoryId": 4,
+      "categoryId": 5,
       "createdBy": "00500877"
     };
 

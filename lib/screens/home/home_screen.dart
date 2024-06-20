@@ -256,8 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             model.imageFileName.toString())));
                           },
                           child: CachedNetworkImage(
-                            imageBuilder: (context, imageProvider) =>
-                                Container(
+                            imageBuilder: (context, imageProvider) => Container(
                               height: 170,
                               width: 170,
                               decoration: BoxDecoration(

@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:xpresslite/Widget/customWidget/commentBarWidget.dart';
 import 'package:xpresslite/helper/bottomsheet/bottomsheet.dart';
 import 'package:xpresslite/model/newsFeaturesModel.dart';
+import 'package:xpresslite/screens/appNavBar.dart';
 import 'package:xpresslite/screens/home/home_screen.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_cubit.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_state.dart';
@@ -17,13 +19,13 @@ import '../../helper/custom_widgets/app_circular_loader.dart';
 import '../../model/PaginatedNewsModel .dart';
 import '../../model/newsCommentsModel.dart';
 import '../../model/newsDetailsByIdModel.dart';
+import '../view_image/view_image_screen.dart';
 
 class NewsDetailsScreen extends StatefulWidget {
-   String newsId;
-   String catId;
+  String newsId;
+  String catId;
 
-   NewsDetailsScreen(
-      {super.key, required this.newsId, required this.catId});
+  NewsDetailsScreen({super.key, required this.newsId, required this.catId});
 
   @override
   State<NewsDetailsScreen> createState() => _NewsDetailsScreenState();
@@ -63,8 +65,6 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
 
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +110,12 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
       backgroundColor: Colors.grey.shade300,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AppNavBar()));
+            },
+            icon: Icon(Icons.arrow_back)),
         title: Text(
           'DETAILS',
           style: TextStyle(
@@ -156,9 +162,12 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                               return GestureDetector(
                                 onTap: () {
                                   debugPrint("Show Details");
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(builder: (context) => NewsDetailsScreen(newsId: model.id.toString() ,)));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ViewImageScreen(
+                                              imgUrl:
+                                              model.toString())));
                                 },
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.circular(20.0),
@@ -276,20 +285,19 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                         onPressed: () {},
                       ),
                       if (detailsById?.shareable == true)
-                      NewsFeatureWidget(
-                        iconData: Icons.share,
-                        iconColor: Colors.blue,
-                        labelText: "Share",
-                        onPressed: () {},
-                      ),
+                        NewsFeatureWidget(
+                          iconData: Icons.share,
+                          iconColor: Colors.blue,
+                          labelText: "Share",
+                          onPressed: () {},
+                        ),
                       if (detailsById?.downloadable == true)
                         NewsFeatureWidget(
-                        iconData: Icons.picture_as_pdf_outlined,
-                        iconColor: Colors.red,
-                        labelText: "View PDF",
-                        onPressed: () {},
-                      )
-                      ,
+                          iconData: Icons.picture_as_pdf_outlined,
+                          iconColor: Colors.red,
+                          labelText: "View PDF",
+                          onPressed: () {},
+                        ),
                     ],
                   ),
                   SizedBox(
@@ -421,7 +429,8 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                                           onPressed: () {
                                                             showModalBottomSheet(
                                                               context: context,
-                                                              isScrollControlled: true,
+                                                              isScrollControlled:
+                                                                  true,
                                                               builder:
                                                                   (BuildContext
                                                                       context) {
@@ -779,9 +788,12 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
         child: CommentBottomBar(
             controller: commentController,
             onSend: () {
-              _cubit.postComment(
-                  widget.newsId, commentController.text, widget.catId);
-              commentController.text = '';
+
+              // Call the method to post the comment
+              _cubit.postComment(widget.newsId, commentController.text, widget.catId);
+
+              // Clear the text field after posting the comment
+              commentController.clear();
             }),
       ),
     );

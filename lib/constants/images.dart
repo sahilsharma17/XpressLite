@@ -4,10 +4,9 @@ const img3 = "assets/img3.jpg";
 const img4 = "assets/img4.jpg";
 const img5 = "assets/img5.jpg";
 
-
 // Categories
 
-const cat1 = "assets/chairman.png";
+const cat1 = "assets/chairman_two.png";
 const cat2 = "assets/director_message.jpg";
 const cat3 = "assets/awards.png";
 const cat4 = "assets/happening.png";

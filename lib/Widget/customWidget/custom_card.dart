@@ -32,7 +32,7 @@ class _CustomCardState extends State<CustomCard> {
         // Check if result is not null and is a string
         if (result != null && result is String) {
           // Update the state or reload data here using the returned newsId
-          if (mounted){
+          if (mounted) {
             setState(() {
               widget.eventValue.id = int.parse(result);
               print("Here ${widget.eventValue.id}");
