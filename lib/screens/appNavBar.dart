@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:xpresslite/helper/app_utilities/app_theme.dart';
+import 'package:xpresslite/screens/bulletin/bulletin_screen.dart';
+import 'package:xpresslite/screens/explore/explore_screen.dart';
+import 'package:xpresslite/screens/fav/fav_screen.dart';
 import 'package:xpresslite/screens/profile/profile_screen.dart';
 
 import 'category/category_screen.dart';
@@ -24,15 +27,15 @@ class AppNavBar extends StatelessWidget {
       ),
       BottomNavigationBarItem(
           icon: Icon(Icons.favorite_border_outlined), label: 'Favourites'),
-      BottomNavigationBarItem(icon: Icon(Icons.person_2), label: "Profile"),
+      BottomNavigationBarItem(icon: Icon(Icons.newspaper_outlined), label: "Bulletin"),
     ];
 
     var navBody = [
       CategoryScreen(),
+      ExploreScreen(),
       HomeScreen(),
-      HomeScreen(),
-      ProfileScreen(),
-      ProfileScreen(),
+      FavScreen(),
+      BulletinScreen(),
     ];
 
     return Scaffold(

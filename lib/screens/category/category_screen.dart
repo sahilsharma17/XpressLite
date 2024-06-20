@@ -31,7 +31,7 @@ class CategoryScreen extends StatelessWidget {
               crossAxisCount: 2,
               mainAxisSpacing: 14,
               crossAxisSpacing: 10,
-              mainAxisExtent: 250,
+              mainAxisExtent: 255,
             ),
             itemBuilder: (context, index) {
               return Padding(
@@ -42,13 +42,29 @@ class CategoryScreen extends StatelessWidget {
                   children: [
                     Stack(
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(15.0),
-                          child: Image.asset(
-                            CategoryListImage[index],
-                            width: 200,
-                            height: 250,
-                            fit: BoxFit.cover,
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.0),
+                            border: Border.all(
+                              color: Colors.grey, // Border color
+                              width: 1.0, // Border width
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 8.0,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15.0),
+                            child: Image.asset(
+                              CategoryListImage[index],
+                              width: 200,
+                              height: 250,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                         Positioned(
