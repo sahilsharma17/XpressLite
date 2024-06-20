@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:xpresslite/Widget/customWidget/commentBarWidget.dart';
 import 'package:xpresslite/helper/bottomsheet/bottomsheet.dart';
@@ -35,6 +36,10 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   TextEditingController commentController = TextEditingController();
   int _currentIndex = 0;
 
+  FlutterTts _tts = FlutterTts();
+
+  bool reading = false;
+
   bool showComment = false;
 
   late NewsDetailScreenCubit _cubit;
@@ -64,6 +69,13 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
     print(widget.newsId);
 
     super.initState();
+  }
+
+  void speak(String text) async {
+    await _tts.setPitch(0.8);
+    await _tts.setVolume(1.0);
+    await _tts.setLanguage("en-US");
+    await _tts.speak(text);
   }
 
   @override
@@ -166,8 +178,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => ViewImageScreen(
-                                              imgUrl:
-                                              model.toString())));
+                                              imgUrl: model.toString())));
                                 },
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.circular(20.0),
@@ -213,22 +224,46 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                       Spacer(),
                       Row(
                         children: [
-                          IconButton(
-                              onPressed: () {
-                                debugPrint("Youtube");
-                              },
-                              icon: Icon(
-                                Icons.record_voice_over,
-                                color: Colors.red,
-                              )),
-                          IconButton(
-                              onPressed: () {
-                                debugPrint("Play");
-                              },
-                              icon: Icon(
-                                Icons.speaker,
-                                color: Colors.blue,
-                              )),
+                          GestureDetector(
+                            onTap: () {
+                              debugPrint("Youtube");
+                            },
+                            child: Image.asset(
+                              'assets/youtube.png',
+                              width: 40.0, // Set the width of the icon
+                              height: 40.0, // Set the height of the icon
+                            ),
+                          ),
+                          SizedBox(width: 10,),
+                          reading == false
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      reading = true;
+                                    });
+                                    debugPrint("Play");
+                                    speak(detailsById!.description.toString());
+                                  },
+                                  child: Image.asset(
+                                    'assets/text_to_speech.png',
+                                    width: 35.0, // Set the width of the icon
+                                    height: 35.0, // Set the height of the icon
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      reading = false;
+                                    });
+                                    debugPrint("stop");
+                                    _tts.stop();
+                                  },
+                                  child: Image.asset(
+                                    'assets/stop_record.png',
+                                    width: 35.0, // Set the width of the icon
+                                    height: 35.0, // Set the height of the icon
+                                  ),
+                                )
                         ],
                       ),
                     ],
@@ -788,9 +823,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
         child: CommentBottomBar(
             controller: commentController,
             onSend: () {
-
               // Call the method to post the comment
-              _cubit.postComment(widget.newsId, commentController.text, widget.catId);
+              _cubit.postComment(
+                  widget.newsId, commentController.text, widget.catId);
 
               // Clear the text field after posting the comment
               commentController.clear();

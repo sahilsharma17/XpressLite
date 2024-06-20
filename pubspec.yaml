@@ -68,6 +68,8 @@ dependencies:
   external_path: ^1.0.3
   get: ^4.6.6
   flutter_file_dialog: ^3.0.2
+  flutter_tts: 3.8.5
+
 
 dev_dependencies:
   flutter_test:
