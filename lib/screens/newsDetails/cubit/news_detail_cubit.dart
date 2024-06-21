@@ -137,6 +137,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
             relatedHappeningModel: relatedHappenings.resObject ?? [],
           ));
 
+
           // getIdWiseNewsDetails(nId, cId);
 
         } else {

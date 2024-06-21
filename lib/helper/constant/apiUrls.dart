@@ -27,8 +27,7 @@ class ApiUrls {
 
   static String updateComment = baseUrl('NewsDetails/UpdateNewsComment');
 
-
-
+  static String directorCategory = baseUrl('NewsDetails/GetDirectorsList?categoryId=6');
 
   //=====================Tasks=============//
 

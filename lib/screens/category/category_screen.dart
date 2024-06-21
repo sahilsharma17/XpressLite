@@ -42,28 +42,36 @@ class CategoryScreen extends StatelessWidget {
                   children: [
                     Stack(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.0),
-                            border: Border.all(
-                              color: Colors.grey, // Border color
-                              width: 1.0, // Border width
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black26,
-                                blurRadius: 8.0,
-                                offset: Offset(0, 4),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => insideCategory[index]));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.0),
+                              border: Border.all(
+                                color: Colors.grey, // Border color
+                                width: 1.0, // Border width
                               ),
-                            ],
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15.0),
-                            child: Image.asset(
-                              CategoryListImage[index],
-                              width: 200,
-                              height: 250,
-                              fit: BoxFit.cover,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 8.0,
+                                  offset: Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15.0),
+                              child: Image.asset(
+                                CategoryListImage[index],
+                                width: 200,
+                                height: 250,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),

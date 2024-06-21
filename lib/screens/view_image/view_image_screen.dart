@@ -36,7 +36,7 @@ class ViewImageScreen extends StatelessWidget {
       final finalPath = await FlutterFileDialog.saveFile(params: params);
 
       if (finalPath != null) {
-        message = 'Image saved to disk';
+        message = 'Image Saved to device';
       }
     } catch (e) {
       message = e.toString();
