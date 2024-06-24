@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/src/bloc_provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:xpresslite/screens/allPdfs/cubit/allpdfs_cubit.dart';
 import 'package:xpresslite/screens/auth/cubit/login_cubit.dart';
 import 'package:xpresslite/screens/category/InsideCategory/cubit/directors_category_cubit.dart';
 import 'package:xpresslite/screens/home/cubit/home_cubit.dart';
@@ -14,5 +15,6 @@ class BlocManager {
     BlocProvider(create: (context) => HomeCubit()),
     BlocProvider(create: (context) => NewsDetailScreenCubit()),
     BlocProvider(create: (context) => DirectorsCategoryCubit()),
+    BlocProvider(create: (context) => PdfsCubit()),
   ];
 }

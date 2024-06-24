@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xpresslite/model/directorsCatModel.dart';
+import 'package:xpresslite/screens/allPdfs/AllPdfScreen.dart';
 import 'package:xpresslite/screens/category/InsideCategory/cubit/directors_category_cubit.dart';
 import 'package:xpresslite/screens/category/InsideCategory/cubit/directors_category_state.dart';
 
@@ -101,10 +102,10 @@ class _DirectorsCategoryScreenState extends State<DirectorsCategoryScreen> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => insideCategory[index]));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AllPdfScreen(appBarTitle: directorModel[index].directorName, id: directorModel[index].id,)));
                           },
                           child: Container(
                             decoration: BoxDecoration(

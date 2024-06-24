@@ -29,6 +29,8 @@ class ApiUrls {
 
   static String directorCategory = baseUrl('NewsDetails/GetDirectorsList?categoryId=6');
 
+  static String getPdfs = baseUrl('NewsDetails/GetPdfLists');
+
   //=====================Tasks=============//
 
   static String CreateTask = baseUrl("Tasks/Create");

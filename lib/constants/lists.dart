@@ -1,7 +1,7 @@
 
 import 'package:xpresslite/constants/images.dart';
 import 'package:xpresslite/constants/strings.dart';
-import 'package:xpresslite/screens/category/InsideCategory/Category1_screen.dart';
+import 'package:xpresslite/screens/allPdfs/AllPdfScreen.dart';
 
 import '../screens/category/InsideCategory/directors_category_screen.dart';
 import '../screens/category/InsideCategory/Category3_screen.dart';
@@ -31,13 +31,13 @@ const CategoryListTitle = [
 ];
 
 const insideCategory = [
-  Category1Screen(),
+  DirectorsCategoryScreen(),
   DirectorsCategoryScreen(),
   Category3Screen(),
-  Category1Screen(),
-  Category1Screen(),
-  Category1Screen(),
-  Category1Screen(),
+  DirectorsCategoryScreen(),
+  Category3Screen(),
+  DirectorsCategoryScreen(),
+  Category3Screen(),
 ];
 
 const directorsBg = [
