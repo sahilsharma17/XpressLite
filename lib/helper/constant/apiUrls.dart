@@ -31,6 +31,8 @@ class ApiUrls {
 
   static String getPdfs = baseUrl('NewsDetails/GetPdfLists');
 
+  static String getFocusedCategory = baseUrl('TopicsTag/GetAll');
+
   //=====================Tasks=============//
 
   static String CreateTask = baseUrl("Tasks/Create");

@@ -98,16 +98,16 @@ class _DirectorsCategoryScreenState extends State<DirectorsCategoryScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Stack(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AllPdfScreen(appBarTitle: directorModel[index].directorName, id: directorModel[index].id,)));
-                          },
-                          child: Container(
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AllPdfScreen(appBarTitle: directorModel[index].directorName, DirId: directorModel[index].id, CatId: null,)));
+                      },
+                      child: Stack(
+                        children: [
+                          Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15.0),
                               border: Border.all(
@@ -135,54 +135,54 @@ class _DirectorsCategoryScreenState extends State<DirectorsCategoryScreen> {
                               ),
                             ),
                           ),
-                        ),
-                        Positioned(
-                            top: 40,
+                          Positioned(
+                              top: 40,
+                              left: 0,
+                              right: 0,
+                              child: Center(
+                                child: ClipOval(
+                                  child: CachedNetworkImage(
+                                    imageUrl: (directorModel[index]
+                                        .directorImage
+                                        .toString()),
+                                    width: 100.0,
+                                    // Diameter
+                                    height: 100.0,
+                                    // Diameter
+                                    fit: BoxFit.cover,
+                                    placeholder: (context, url) =>
+                                        CircularProgressIndicator(color: Colors.orange,),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                  ),
+                                ),
+                              )),
+                          Positioned(
+                            bottom: 0,
                             left: 0,
                             right: 0,
-                            child: Center(
-                              child: ClipOval(
-                                child: CachedNetworkImage(
-                                  imageUrl: (directorModel[index]
-                                      .directorImage
-                                      .toString()),
-                                  width: 100.0,
-                                  // Diameter
-                                  height: 100.0,
-                                  // Diameter
-                                  fit: BoxFit.cover,
-                                  placeholder: (context, url) =>
-                                      CircularProgressIndicator(color: Colors.orange,),
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.7),
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(15.0),
+                                  bottomRight: Radius.circular(15.0),
                                 ),
                               ),
-                            )),
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.7),
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(15.0),
-                                bottomRight: Radius.circular(15.0),
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "${directorModel[index].directorName}  ${directorModel[index].directorType}",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                            ),
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "${directorModel[index].directorName}  ${directorModel[index].directorType}",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center,
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     const Spacer(),
                   ],

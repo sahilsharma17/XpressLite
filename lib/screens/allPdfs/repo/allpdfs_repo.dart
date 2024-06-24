@@ -15,8 +15,13 @@ class AllPdfsRepo extends AllPdfsRepoAbstract {
 
   @override
   Future<ApiResponse<List<AllPdfModel>>> getAllPdfs(
-      {required int directorId}) async {
-    Map<String, dynamic> pdfsMap = {"DirectorId": directorId};
+      {int? directorId, int? categoryId}) async {
+    Map<String, dynamic> pdfsMap;
+    if (directorId == null) {
+      pdfsMap = {"CategoryId": categoryId};
+    } else {
+      pdfsMap = {"DirectorId": directorId};
+    }
     debugPrint("login Data Param is $pdfsMap");
 
     Map<String, dynamic> resp =

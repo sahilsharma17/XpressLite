@@ -86,38 +86,43 @@ class _CustomCardState extends State<CustomCard> {
                           widget.eventValue.title.toString(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 10,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          MethodUtils.getFormattedCustomDate(
-                              widget.eventValue.happeningDate.toString(),
-                              'yyyy-MM-ddTHH:mm:ss',
-                              'dd MMMM, yyyy'),
-                          style: TextStyle(
-                            color: Colors.grey,
                             fontSize: 12,
                           ),
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              MethodUtils.getFormattedCustomDate(
+                                  widget.eventValue.happeningDate.toString(),
+                                  'yyyy-MM-ddTHH:mm:ss',
+                                  'dd MMMM, yyyy'),
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                            Spacer(),
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  widget.eventValue.isFavourite =
+                                  widget.eventValue.isFavourite == false
+                                      ? true
+                                      : false;
+                                });
+                              },
+                              icon: widget.eventValue.isFavourite!
+                                  ? Icon(Icons.favorite, color: Colors.orange)
+                                  : Icon(Icons.favorite_border_outlined,
+                                  color: Colors.orange),
+                              iconSize: 24,
+                            )
+
+                          ],
                         ),
                       ],
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        widget.eventValue.isFavourite =
-                            widget.eventValue.isFavourite == false
-                                ? true
-                                : false;
-                      });
-                    },
-                    icon: widget.eventValue.isFavourite!
-                        ? Icon(Icons.favorite, color: Colors.orange)
-                        : Icon(Icons.favorite_border_outlined,
-                            color: Colors.orange),
-                    iconSize: 30,
-                  )
                 ],
               ),
             ],

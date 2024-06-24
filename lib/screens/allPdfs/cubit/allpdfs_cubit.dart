@@ -14,11 +14,18 @@ class PdfsCubit extends Cubit<AllPdfState> {
   AllPdfsRepo allPdfRepo = AllPdfsRepo(networkRequest: NetworkRequest());
   late ApiResponse<List<AllPdfModel>> pdfModel;
 
-  void getAllPdfs(int id) async {
+  void getAllPdfs(
+    int? DirId,
+    int? CatId,
+  ) async {
     try {
       emit(AllPdfLoading());
       if (await MethodUtils.isInternetPresent()) {
-        pdfModel = await allPdfRepo.getAllPdfs(directorId: id);
+        if (DirId != null) {
+          pdfModel = await allPdfRepo.getAllPdfs(directorId: DirId);
+        } else {
+          pdfModel = await allPdfRepo.getAllPdfs(categoryId: CatId);
+        }
         if (pdfModel.isSuccess) {
           emit(AllPdfLoaded(msg: "Got pdfs", pdfsModel: pdfModel.resObject));
         } else {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xpresslite/Widget/pdfviewer_pg.dart';
 import 'package:xpresslite/model/allPdfModel.dart';
 
 import '../helper/app_utilities/method_utils.dart';
@@ -17,7 +18,10 @@ class _PdfWidgetState extends State<PdfWidget> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => PdfViewerScreen(pdfUrl: widget.pdfData.pdfFileNames.toString(),)));
+
+        },
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Stack(children: [

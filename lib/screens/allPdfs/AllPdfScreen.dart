@@ -11,9 +11,10 @@ import 'cubit/allpdfs_state.dart';
 
 class AllPdfScreen extends StatefulWidget {
   String? appBarTitle;
-  int? id;
+  int? CatId;
+  int? DirId;
 
-  AllPdfScreen({super.key, this.appBarTitle, this.id});
+  AllPdfScreen({super.key, this.appBarTitle, this.DirId, this.CatId});
 
   @override
   State<AllPdfScreen> createState() => _AllPdfScreenState();
@@ -23,11 +24,10 @@ class _AllPdfScreenState extends State<AllPdfScreen> {
   late PdfsCubit _cubit;
   List<AllPdfModel>? allPdfs = [];
 
-
   @override
   void initState() {
     _cubit = BlocProvider.of<PdfsCubit>(context);
-    _cubit.getAllPdfs(widget.id ?? 5);
+    _cubit.getAllPdfs(widget.DirId, widget.CatId);
     super.initState();
   }
 
@@ -83,7 +83,9 @@ class _AllPdfScreenState extends State<AllPdfScreen> {
               shrinkWrap: true,
               itemCount: allPdfs?.length,
               itemBuilder: (context, i) {
-                return PdfWidget(pdfData: allPdfs![i],);
+                return PdfWidget(
+                  pdfData: allPdfs![i],
+                );
               }),
         ),
       ),
