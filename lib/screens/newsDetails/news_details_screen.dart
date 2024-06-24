@@ -11,6 +11,7 @@ import 'package:xpresslite/screens/appNavBar.dart';
 import 'package:xpresslite/screens/home/home_screen.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_cubit.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_state.dart';
+import 'package:xpresslite/screens/newsDetails/youtube_player_screen.dart';
 
 import '../../Widget/customWidget/custom_card.dart';
 import '../../Widget/customWidget/news_features_widget.dart';
@@ -227,6 +228,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                           GestureDetector(
                             onTap: () {
                               debugPrint("Youtube");
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => YoutubePlayerScreen(videoUrl: detailsById?.youtubeVideoLink?.toString() ?? '')));
                             },
                             child: Image.asset(
                               'assets/youtube.png',
