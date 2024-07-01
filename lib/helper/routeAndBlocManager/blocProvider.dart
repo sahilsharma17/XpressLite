@@ -8,6 +8,7 @@ import 'package:xpresslite/screens/category/InsideCategory/cubit/directors_categ
 import 'package:xpresslite/screens/focusedCategory/cubit/focused_cat_cubit.dart';
 import 'package:xpresslite/screens/home/cubit/home_cubit.dart';
 
+import '../../screens/explore/cubit/explore_screen_cubit.dart';
 import '../../screens/newsDetails/cubit/news_detail_cubit.dart';
 
 
@@ -20,5 +21,6 @@ class BlocManager {
     BlocProvider(create: (context) => PdfsCubit()),
     BlocProvider(create: (context) => CatNewsScreenCubit()),
     BlocProvider(create: (context) => FocusedCategoryScreenCubit()),
+    BlocProvider(create: (context) => ExploreScreenCubit()),
   ];
 }

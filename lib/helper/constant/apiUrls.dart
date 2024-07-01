@@ -6,8 +6,8 @@ class ApiUrls {
       "https://xpress.businesstowork.com/api/$endPoint";
 
   static String login = baseUrl("Auth/LoginUser");
-  static String VerifyOtp = baseUrl("Auth/VerifyUserotp");
 
+  static String VerifyOtp = baseUrl("Auth/VerifyUserotp");
 
   static String getCategoryWiseNewsDetails = baseUrl("NewsDetails/GetCategoryWiseNewsDetails");
 
@@ -31,11 +31,10 @@ class ApiUrls {
 
   static String getPdfs = baseUrl('NewsDetails/GetPdfLists');
 
+  static String searchNews = baseUrl('NewsDetails/GetNewsDetailsOnSearch');
+
   static String getFocusedCategory = baseUrl('TopicsTag/GetAll');
 
-  //=====================Tasks=============//
-
-  static String CreateTask = baseUrl("Tasks/Create");
 }
 
 class AppAuth {
