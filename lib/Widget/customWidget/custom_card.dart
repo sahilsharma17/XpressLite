@@ -84,6 +84,8 @@ class _CustomCardState extends State<CustomCard> {
                       children: [
                         Text(
                           widget.eventValue.title.toString(),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 12,

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:xpresslite/helper/app_utilities/app_theme.dart';
 import 'package:xpresslite/screens/bulletin/bulletin_screen.dart';
 import 'package:xpresslite/screens/explore/explore_screen.dart';
 import 'package:xpresslite/screens/fav/fav_screen.dart';
-import 'package:xpresslite/screens/profile/profile_screen.dart';
 import 'category/category_screen.dart';
 import 'home/home_screen.dart';
 import 'home_controller.dart';
@@ -17,27 +15,27 @@ class AppNavBar extends StatelessWidget {
     var controller = Get.put(HomeController());
 
     var navbarItems = [
-      BottomNavigationBarItem(
+      const BottomNavigationBarItem(
         icon: Icon(Icons.category_outlined),
         activeIcon: Icon(Icons.category),
         label: "Categories",
       ),
-      BottomNavigationBarItem(
+      const BottomNavigationBarItem(
         icon: Icon(Icons.search_outlined),
         activeIcon: Icon(Icons.search),
         label: "Search",
       ),
-      BottomNavigationBarItem(
+      const BottomNavigationBarItem(
         icon: Icon(Icons.home_outlined),
         activeIcon: Icon(Icons.home),
         label: "Home",
       ),
-      BottomNavigationBarItem(
+      const BottomNavigationBarItem(
         icon: Icon(Icons.favorite_border_outlined),
         activeIcon: Icon(Icons.favorite),
         label: "Favourites",
       ),
-      BottomNavigationBarItem(
+      const BottomNavigationBarItem(
         icon: Icon(Icons.newspaper_outlined),
         activeIcon: Icon(Icons.newspaper),
         label: "Bulletin",
@@ -53,14 +51,10 @@ class AppNavBar extends StatelessWidget {
     ];
 
     return Scaffold(
-      body: Column(
-        children: [
-          Obx(
-                () => Expanded(
-              child: navBody.elementAt(controller.currentIndex.value),
-            ),
-          ),
-        ],
+      backgroundColor: Colors.transparent,
+      body:
+      Obx(
+            () => navBody.elementAt(controller.currentIndex.value),
       ),
       bottomNavigationBar: Obx(
             () => BottomNavigationBar(

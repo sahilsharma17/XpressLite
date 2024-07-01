@@ -44,7 +44,7 @@ class _DirectorsCategoryScreenState extends State<DirectorsCategoryScreen> {
         return body();
       } else if (state is DirectorsCategoryLoading) {
         return Stack(
-          children: [const AppLoaderProgress()],
+          children: [AppLoaderProgress()],
         );
       } else if (state is DirectorsCategoryError) {
         return body();

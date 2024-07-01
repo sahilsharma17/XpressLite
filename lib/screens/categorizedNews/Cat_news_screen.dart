@@ -43,7 +43,7 @@ class _CategoryNewsScreenState extends State<CategoryNewsScreen> {
         return AppLoaderProgress();
       } else if (state is CatNewsScreenLoading) {
         return Stack(
-          children: [const AppLoaderProgress()],
+          children: [AppLoaderProgress()],
         );
       } else if (state is CatNewsScreenError) {
         return body();

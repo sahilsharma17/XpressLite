@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:xpresslite/helper/app_utilities/size_reziser.dart';
 import 'package:xpresslite/helper/routeAndBlocManager/blocProvider.dart';
 import 'package:xpresslite/screens/appNavBar.dart';
-import 'package:xpresslite/screens/home/home_screen.dart';
-import 'package:xpresslite/screens/splash_screen.dart';
 
 Future<void> main() async {
    WidgetsFlutterBinding.ensureInitialized();

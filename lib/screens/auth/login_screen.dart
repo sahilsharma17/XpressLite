@@ -46,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
           return body();
         } else if (state is LoginLoading) {
           return Stack(
-            children: [body(), const AppLoaderProgress()],
+            children: [body(), AppLoaderProgress()],
           );
         }
         return AccessDeniedScreen(

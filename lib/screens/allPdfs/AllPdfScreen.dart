@@ -42,7 +42,7 @@ class _AllPdfScreenState extends State<AllPdfScreen> {
         return body();
       } else if (state is AllPdfLoading) {
         return Stack(
-          children: [const AppLoaderProgress()],
+          children: [AppLoaderProgress()],
         );
       } else if (state is AllPdfError) {
         return body();

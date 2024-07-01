@@ -33,7 +33,7 @@ class _CustomCard2State extends State<CustomCard2> {
         padding: const EdgeInsets.all(10.0),
         child: Container(
           width: screenWidth * 0.6,
-          height: screenWidth * 0.65,
+          height: screenHeight * 0.65,
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(20.0),
@@ -99,6 +99,8 @@ class _CustomCard2State extends State<CustomCard2> {
                     SizedBox(height: 5),
                     Text(
                       widget.eventValue.title.toString(),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 10,

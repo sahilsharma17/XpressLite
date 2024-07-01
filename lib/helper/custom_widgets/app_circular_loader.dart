@@ -14,7 +14,7 @@ class AppLoaderProgress extends StatelessWidget {
     return Container(
       height: SizeConfig.screenHeight,
       width: SizeConfig.screenWidth,
-      color: Colors.transparent,
+      color: Colors.grey.shade200,
       child: Center(
         child:  Container(
           height: 90.0,

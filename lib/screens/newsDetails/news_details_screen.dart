@@ -97,7 +97,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
         return AppLoaderProgress();
       } else if (state is DetailsScreenLoading) {
         return Stack(
-          children: [const AppLoaderProgress()],
+          children: [AppLoaderProgress()],
         );
       } else if (state is DetailsScreenError) {
         return body();
