@@ -1,4 +1,4 @@
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:xpresslite/constants/images.dart';
 import 'package:xpresslite/constants/strings.dart';
 import 'package:xpresslite/screens/allPdfs/AllPdfScreen.dart';
@@ -6,7 +6,6 @@ import 'package:xpresslite/screens/focusedCategory/focused_category_screen.dart'
 
 import '../screens/categorizedNews/Cat_news_screen.dart';
 import '../screens/category/InsideCategory/directors_category_screen.dart';
-import '../screens/category/InsideCategory/Category3_screen.dart';
 
 const CategoryListImage = [
   cat1,
@@ -32,7 +31,8 @@ const CategoryListTitle = [
   specialBulletins
 ];
 
-List<Widget> insideCategory = [
+List<
+    Widget> insideCategory = [
   AllPdfScreen(appBarTitle: chairmanMsg, CatId: 2, DirId: null,),
   const DirectorsCategoryScreen(),
   CategoryNewsScreen(catId: '5', appBarTitle: awardsRecognition,),
@@ -51,4 +51,78 @@ const directorsBg = [
   pipeline,
   finance,
   researchDev
+];
+
+
+// Filter Lists
+
+const filter1 = [
+  'Leadership',
+  'Marketing Division',
+  'Refineries Division',
+  'Pipelines Division',
+  'R&D Division',
+  'Others'
+];
+
+const leadershipFilter = [
+  'Chairman',
+  'Director(Marketing)',
+  'Director(Refineries)',
+  'Director(Planning & Business Development)',
+  'Director(Pipelines)',
+  'Director(Finance)',
+  'Director(R&D)',
+  'Director(HR)',
+];
+
+const marketingFilter = [
+  'Northern Region Office',
+  'Eastern Region Office',
+  'Western Region Office',
+  'Southern Region Office',
+  'Bihar State Office',
+  'Delhi & Haryana State Office',
+  'West Bengal State Office',
+  'Tamil Nadu State Office',
+  'Maharashtra State Office',
+  'Madhya Pradesh State Office',
+];
+
+const refineryFilter = [
+  'Head Quarter',
+  'Digboi',
+  'Barauni',
+  'Gujarat',
+  'Guwahati',
+  'Haldia',
+];
+
+
+
+const pipelineFilter = [
+  'Head Office Pipeline',
+  'Northern Region Pipeline',
+  'Eastern Region Pipeline',
+  'Western Region Pipeline',
+  'Southern Region Pipeline',
+  'South Eastern Region Pipeline',
+];
+const rdFilter = [
+  'Faridabad'
+];
+
+const others = [
+  'IiPM',
+  'Petrochemicals'
+];
+
+
+List<List<String>> listOfFilters = [
+  leadershipFilter,
+  marketingFilter,
+  refineryFilter,
+  pipelineFilter,
+  rdFilter,
+  others
 ];

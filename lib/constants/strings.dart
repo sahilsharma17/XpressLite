@@ -15,3 +15,7 @@ const knowledgeCenter = "KNOWLEDGE CENTER";
 const indianOilNews = "INDIANOIL NEWS";
 const xpresNewsArchive = "XPRESSNEWS ARCHIVE";
 const specialBulletins = "SPECIAL BULLETINS";
+
+// filter List1 strings
+
+const leadership = "Leadership";
