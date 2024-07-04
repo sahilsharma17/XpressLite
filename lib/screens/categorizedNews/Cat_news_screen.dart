@@ -73,20 +73,17 @@ class _CategoryNewsScreenState extends State<CategoryNewsScreen> {
               fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold),
         ),
       ),
-      body: SingleChildScrollView(
+      body: ListView.builder(
+        shrinkWrap: true,
         physics: AlwaysScrollableScrollPhysics(),
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: newsByCat?.length,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                CustomCard(eventValue: newsByCat![index]),
-              ],
-            );
-          },
-        ),
+        itemCount: newsByCat?.length,
+        itemBuilder: (context, index) {
+          return Column(
+            children: [
+              CustomCard(eventValue: newsByCat![index]),
+            ],
+          );
+        },
       ),
     );
   }

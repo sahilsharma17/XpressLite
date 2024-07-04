@@ -5,6 +5,7 @@ import 'package:xpresslite/screens/category/category_screen.dart';
 import 'package:xpresslite/screens/appNavBar.dart';
 import 'package:xpresslite/screens/home_controller.dart';
 import '../../screens/profile/profile_screen.dart';
+import '../../screens/reports/reports_screen.dart';
 import '../app_utilities/app_images.dart';
 import '../custom_widgets/dailog/Logout.dart';
 import '../routeAndBlocManager/navigator.dart';
@@ -105,6 +106,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
     } else if (name == "Reports") {
       // openScreenAsBottomToTop(
       //    SyncScreen());
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ReportsScreen()),
+      );
     } else if (name == "Profile") {
       // Navigator.pop(context);
       Get.to(() => AppNavBar());

@@ -31,25 +31,25 @@ class _BulletinScreenState extends State<BulletinScreen> {
         shadowColor: Colors.grey,
         backgroundColor: Colors.white,
       ),
-      body: Padding(
+      body:
+      Padding(
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                Container(
-                  child: TableCalendar(
-                    locale: "en_US",
-                    rowHeight: 40,
-                    headerStyle: HeaderStyle(formatButtonVisible: false, titleCentered: true),
-                    availableGestures: AvailableGestures.all,
-                    firstDay: DateTime.utc(2010, 10, 16),
-                    lastDay: DateTime.utc(2030, 3, 14),
-                    focusedDay: today,
-                    selectedDayPredicate: (day) => isSameDay(day, today),
-                    onDaySelected: _onDaySelected,
+                Text('Selected Date - ' + today.toString().split(' ')[0]),
+                TableCalendar(
+                  locale: "en_US",
+                  rowHeight: 40,
+                  headerStyle: HeaderStyle(formatButtonVisible: false, titleCentered: true),
+                  availableGestures: AvailableGestures.all,
+                  firstDay: DateTime.utc(2010, 10, 16),
+                  lastDay: DateTime.utc(2030, 3, 14),
+                  focusedDay: today,
+                  selectedDayPredicate: (day) => isSameDay(day, today),
+                  onDaySelected: _onDaySelected,
 
-                  ),
                 )
               ],
             ),

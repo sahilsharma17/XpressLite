@@ -7,6 +7,7 @@ import 'package:xpresslite/screens/categorizedNews/cubit/cat_news_cubit.dart';
 import 'package:xpresslite/screens/category/InsideCategory/cubit/directors_category_cubit.dart';
 import 'package:xpresslite/screens/focusedCategory/cubit/focused_cat_cubit.dart';
 import 'package:xpresslite/screens/home/cubit/home_cubit.dart';
+import 'package:xpresslite/screens/reports/cubit/reports_cubit.dart';
 
 import '../../screens/explore/cubit/explore_screen_cubit.dart';
 import '../../screens/newsDetails/cubit/news_detail_cubit.dart';
@@ -22,5 +23,6 @@ class BlocManager {
     BlocProvider(create: (context) => CatNewsScreenCubit()),
     BlocProvider(create: (context) => FocusedCategoryScreenCubit()),
     BlocProvider(create: (context) => ExploreScreenCubit()),
+    BlocProvider(create: (context) => ReportsCubit()),
   ];
 }

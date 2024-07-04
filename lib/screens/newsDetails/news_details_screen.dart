@@ -807,6 +807,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                           child: Column(
                             children: [
                               CustomCard(
+                                newsDetailScreenCubit: _cubit,
                                   eventValue: relatedHappeningModel![index]),
                             ],
                           ),

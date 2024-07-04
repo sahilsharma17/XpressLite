@@ -16,7 +16,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
   NewsDetailScreenCubit() : super(DetailsScreenInitial());
 
   NewsDetailScreenRepo newsDetailsRepo =
-  NewsDetailScreenRepo(networkRequest: NetworkRequest());
+      NewsDetailScreenRepo(networkRequest: NetworkRequest());
 
   late ApiResponse<NewsDetailsByIdModel> newsDetailById;
   late ApiResponse<NewsFeaturesModel> newsFeatures;
@@ -25,6 +25,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
   late ApiResponse postedComment;
   late ApiResponse deletedComment;
   late ApiResponse updatedComment;
+  late ApiResponse newsFavs;
 
   Future<void> getIdWiseNewsDetails(String nId, String catId) async {
     try {
@@ -85,7 +86,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
       emit(DetailsScreenLoading());
       if (await MethodUtils.isInternetPresent()) {
         relatedHappenings =
-        await newsDetailsRepo.getRelatedNews(newsCatId: catId);
+            await newsDetailsRepo.getRelatedNews(newsCatId: catId);
         if (newsComments.isSuccess) {
           emit(NewsCommentsLoaded(
             msg: "Got data",
@@ -110,25 +111,27 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
       emit(DetailsScreenLoading());
       if (await MethodUtils.isInternetPresent()) {
         postedComment =
-        await newsDetailsRepo.postComment(newsId: nId, comment: comment);
+            await newsDetailsRepo.postComment(newsId: nId, comment: comment);
         if (postedComment.isSuccess) {
-          newsComments.resObject?.insert(0,NewsCommentsModel(
-              name: "dharmender",
-              profileImage: "https://xpress.businesstowork.com/Admin/img/ProfileImages/default_user100.jpg",
-              commentId: 100,
-              comment: comment,
-              totalCommentLikes: 0,
-              likeType: "Like",
-              commentRepliesCount: 0,
-              replies: [],
-              isActive: true,
-              createdDate: AppDateUtils.getFormattedDateWithTime().toString(),
-              createdBy : '',
-              modifiedDate:  '',
-              modifiedBy: '',
-              ip: '',
-          ));
-          // emit(NewsCommentsLoaded(newsCommentsModel: newsComments.resObject, msg: 'ABCD',));
+          newsComments.resObject?.insert(
+              0,
+              NewsCommentsModel(
+                name: "dharmender",
+                profileImage:
+                    "https://xpress.businesstowork.com/Admin/img/ProfileImages/default_user100.jpg",
+                commentId: 100,
+                comment: comment,
+                totalCommentLikes: 0,
+                likeType: "Like",
+                commentRepliesCount: 0,
+                replies: [],
+                isActive: true,
+                createdDate: AppDateUtils.getFormattedDateWithTime().toString(),
+                createdBy: '',
+                modifiedDate: '',
+                modifiedBy: '',
+                ip: '',
+              ));
           emit(NewsCommentsLoaded(
             msg: "Got data",
             newsCommentsModel: newsComments.resObject ?? [],
@@ -137,9 +140,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
             relatedHappeningModel: relatedHappenings.resObject ?? [],
           ));
 
-
           // getIdWiseNewsDetails(nId, cId);
-
         } else {
           emit(DetailsScreenError(error: postedComment.errorCause));
         }
@@ -151,32 +152,16 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
     }
   }
 
-  Future<void> deleteComment(String nId, String cId, int nComId,
-      String ncrId) async {
+  Future<void> deleteComment(
+      String nId, String cId, int nComId, String ncrId) async {
     try {
       emit(DetailsScreenLoading());
       if (await MethodUtils.isInternetPresent()) {
-        deletedComment =
-        await newsDetailsRepo.delComment(nComId: nComId, nComReplyId: ncrId);
+        deletedComment = await newsDetailsRepo.delComment(
+            nComId: nComId, nComReplyId: ncrId);
         if (deletedComment.isSuccess) {
-          newsComments.resObject?.removeWhere((item) => item.commentId == nComId);
-          // insert(0,NewsCommentsModel(
-          //   name: "Test",
-          //   profileImage: "https://xpress.businesstowork.com/Admin/img/ProfileImages/default_user100.jpg",
-          //   commentId: 100,
-          //   comment: '',
-          //   totalCommentLikes: 0,
-          //   likeType: '',
-          //   commentRepliesCount: 0,
-          //   replies: [],
-          //   isActive: false,
-          //   createdDate: AppDateUtils.getFormattedDateWithTime().toString(),
-          //   createdBy : '',
-          //   modifiedDate:  '',
-          //   modifiedBy: '',
-          //   ip: '',
-          // ));
-          // emit(NewsCommentsLoaded(newsCommentsModel: newsComments.resObject, msg: 'ABCD',));
+          newsComments.resObject
+              ?.removeWhere((item) => item.commentId == nComId);
           emit(NewsCommentsLoaded(
             msg: "Got data",
             newsCommentsModel: newsComments.resObject ?? [],
@@ -184,7 +169,6 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
             newsFeaturesModel: newsFeatures.resObject!,
             relatedHappeningModel: relatedHappenings.resObject ?? [],
           ));
-
         } else {
           emit(DetailsScreenError(error: deletedComment.errorCause));
         }
@@ -196,18 +180,41 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
     }
   }
 
-  Future<void> updateComment(String nId, String cId, int nComId,
-      String newComment) async {
+  Future<void> updateComment(
+      String nId, String cId, int nComId, String newComment) async {
     try {
       emit(DetailsScreenLoading());
       if (await MethodUtils.isInternetPresent()) {
-        updatedComment =
-        await newsDetailsRepo.updateComment(
+        updatedComment = await newsDetailsRepo.updateComment(
             nComId: nComId, newComment: newComment);
         if (updatedComment.isSuccess) {
           getIdWiseNewsDetails(nId, cId);
         } else {
           emit(DetailsScreenError(error: deletedComment.errorCause));
+        }
+      } else {
+        emit(DetailsScreenError(error: AppMessages.getNoInternetMsg));
+      }
+    } catch (e) {
+      emit(DetailsScreenError(error: e.toString()));
+    }
+  }
+
+  void updateFavNews(int newsId, bool favValue) async {
+    try {
+      emit(DetailsScreenLoading());
+      if (await MethodUtils.isInternetPresent()) {
+        newsFavs = await newsDetailsRepo.newsFav(newsId, favValue);
+        if (newsDetailById.isSuccess) {
+          emit(NewsCommentsLoaded(
+            msg: "Updated Fav",
+            newsCommentsModel: newsComments.resObject ?? [],
+            newsDetailByIdModel: newsDetailById.resObject!,
+            newsFeaturesModel: newsFeatures.resObject!,
+            relatedHappeningModel: relatedHappenings.resObject ?? [],
+          ));
+        } else {
+          emit(DetailsScreenError(error: newsDetailById.errorCause));
         }
       } else {
         emit(DetailsScreenError(error: AppMessages.getNoInternetMsg));

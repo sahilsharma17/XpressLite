@@ -122,8 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            NewsDetailsScreen(
+                                        builder: (context) => NewsDetailsScreen(
                                               newsId: model.id.toString(),
                                               catId:
                                                   model.categoryId.toString(),
@@ -132,8 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Stack(
                                 children: [
                                   ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(20.0),
+                                      borderRadius: BorderRadius.circular(20.0),
                                       child: CachedNetworkImage(
                                         imageUrl:
                                             model.imageFileNames.toString(),
@@ -154,15 +152,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                         color: Colors.white.withOpacity(0.5),
                                         borderRadius: BorderRadius.only(
                                             bottomLeft: Radius.circular(15.0),
-                                            bottomRight:
-                                                Radius.circular(15.0)),
+                                            bottomRight: Radius.circular(15.0)),
                                       ),
                                       child: Text(
                                         model.title.toString(),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                          color:
-                                              Colors.black.withOpacity(0.5),
+                                          color: Colors.black.withOpacity(0.5),
                                           fontSize: 12.0,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -221,7 +217,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.grey.withOpacity(0.2),
                 child: Column(
                   children: [
-                    CustomCard(eventValue: pageNewsModel![index]),
+                    CustomCard(
+                        homeCubit: _cubit, eventValue: pageNewsModel![index]),
                   ],
                 ),
               );
@@ -252,8 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => ViewImageScreen(
-                                      imgUrl:
-                                          model.imageFileName.toString())));
+                                      imgUrl: model.imageFileName.toString())));
                         },
                         child: CachedNetworkImage(
                           imageBuilder: (context, imageProvider) => Container(
@@ -314,8 +310,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Container(
                       color: Colors.grey.withOpacity(0.2),
-                      child: CustomCard2(
-                          eventValue: pageAwardsRecoModel![index]),
+                      child:
+                          CustomCard2(eventValue: pageAwardsRecoModel![index]),
                     ),
                   ],
                 );

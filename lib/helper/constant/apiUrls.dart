@@ -9,13 +9,15 @@ class ApiUrls {
 
   static String VerifyOtp = baseUrl("Auth/VerifyUserotp");
 
-  static String getCategoryWiseNewsDetails = baseUrl("NewsDetails/GetCategoryWiseNewsDetails");
+  static String getCategoryWiseNewsDetails =
+      baseUrl("NewsDetails/GetCategoryWiseNewsDetails");
 
   static String upcomingEvent = baseUrl('EventBanner/GetEventBannerList');
 
   static String idWiseNewsDetails = baseUrl('NewsDetails/GetNewsDetailById');
 
-  static String getNewsCommentDetails = baseUrl('NewsDetails/GetNewsCommentDetails');
+  static String getNewsCommentDetails =
+      baseUrl('NewsDetails/GetNewsCommentDetails');
 
   static String getNewsFeatures = baseUrl('NewsDetails/GetNewsFeatures');
 
@@ -27,7 +29,8 @@ class ApiUrls {
 
   static String updateComment = baseUrl('NewsDetails/UpdateNewsComment');
 
-  static String directorCategory = baseUrl('NewsDetails/GetDirectorsList?categoryId=6');
+  static String directorCategory =
+      baseUrl('NewsDetails/GetDirectorsList?categoryId=6');
 
   static String getPdfs = baseUrl('NewsDetails/GetPdfLists');
 
@@ -35,6 +38,11 @@ class ApiUrls {
 
   static String getFocusedCategory = baseUrl('TopicsTag/GetAll');
 
+  static String createFav = baseUrl('NewsDetails/CreateNewsFavourite');
+
+  static String ceoReports = baseUrl('MisPdfReport/MisPdfList');
+
+  static String otherReports = baseUrl('MisPdfReport/MisBulletinPdfList');
 }
 
 class AppAuth {

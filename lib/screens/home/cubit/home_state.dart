@@ -22,6 +22,11 @@ class HomeLoaded extends HomeState {
   List<PaginatedNewsModel>? pHappeningModel;
   List<PaginatedNewsModel>? pAwardRecoModel;
 
+
   HomeLoaded({required this.msg, this.eventModel, this.newsBannerModel, this.pHappeningModel, this.pAwardRecoModel});
 }
 
+// class NewsFavLoaded extends HomeState {
+//   String msg;
+//
+// }

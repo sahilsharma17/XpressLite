@@ -22,6 +22,8 @@ abstract class NewsDetailScreenRepoAbstract {
 
   Future<ApiResponse<List<PaginatedNewsModel>>> getRelatedNews(
       {required String newsCatId});
+
+  Future<ApiResponse> newsFav(int newsId, bool favValue);
 }
 
 class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
@@ -258,6 +260,42 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
       return ApiResponse(
         isSuccess: true,
         errorCause: resp["message"],
+        resObject: null,
+      );
+    }
+  }
+
+  @override
+  Future<ApiResponse> newsFav(int newsId, bool favValue) async {
+    Map<String, dynamic> favNewsMap = {
+
+      "newsDetailsId": newsId,
+      "createdBy": "00500877",
+      "createdDate": AppDateUtils.getFormattedDateWithTime().toString(),
+      "IP": "",
+      "isFavourite": favValue,
+    };
+
+    Map<String, dynamic> resp = await networkRequest.networkCallPostMap2(
+        ApiUrls.createFav, favNewsMap);
+
+    // ApiResponse? _newsFav;
+    debugPrint(resp.toString());
+
+    if (resp["status"] == true) {
+      // List<dynamic> data = resp['data'];
+      // if (data != null) {
+      //   _newsFav = List.generate(data.length,
+      //           (index) => ApiResponse.fromJson(data[index]));
+      // }
+      return ApiResponse(
+          isSuccess: resp['status'],
+          errorCause: resp['message'],
+          resObject: 'updated');
+    } else {
+      return ApiResponse(
+        isSuccess: resp['status'],
+        errorCause: resp['message'],
         resObject: null,
       );
     }

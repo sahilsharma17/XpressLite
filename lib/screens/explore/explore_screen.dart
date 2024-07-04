@@ -76,7 +76,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
               if (state.error.isNotEmpty) {
                 MethodUtils.toast(state.error);
               }
-            } else if (state is ExploreScreenLoaded) {}
+            } else if (state is ExploreScreenLoaded) {
+
+            }
           },
         ),
       ),
@@ -264,6 +266,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     onChanged: (val) {
                       if (keyword.text.length >= 3) {
                         _cubit.searchingNews(keyword.text);
+                      }
+                      else if (keyword.text.length <= 2){
+                        setState(() {
+                          _cubit.refresh();
+                        });
+                      }
+                      else if (keyword.text.length == 0){
+                        setState(() {
+                          _cubit.refresh();
+                        });
                       }
                     },
                     decoration: InputDecoration(

@@ -25,6 +25,8 @@ class HomeCubit extends Cubit<HomeState> {
 
   late ApiResponse<List<PaginatedNewsModel>> awardRecoModel;
 
+  late ApiResponse newsFavs;
+
   void getNewsBanner() async {
     try {
       emit(HomeLoading());
@@ -108,8 +110,30 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-
-
+  void updateFavNews(int newsId, bool favValue) async {
+    try {
+      emit(HomeLoading());
+      if (await MethodUtils.isInternetPresent()) {
+        newsFavs = await homeRepo.newsFav(newsId, favValue);
+        if (eventModel.isSuccess) {
+          emit(HomeLoaded(
+              msg: "Updated Fav",
+              newsBannerModel: newsModel.resObject,
+              eventModel: eventModel.resObject,
+              pHappeningModel: happingModel.resObject,
+              pAwardRecoModel: awardRecoModel.resObject
+          ));
+        } else {
+          emit(HomeError(error: eventModel.errorCause));
+        }
+      } else {
+        emit(HomeError(
+            error: AppMessages.getNoInternetMsg));
+      }
+    } catch (e) {
+      emit(HomeError(error: e.toString()));
+    }
+  }
 
 
   void refresh() {

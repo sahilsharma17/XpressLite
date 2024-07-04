@@ -1,14 +1,23 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:xpresslite/helper/app_utilities/method_utils.dart';
+import 'package:xpresslite/screens/home/cubit/home_cubit.dart';
+import 'package:xpresslite/screens/newsDetails/cubit/news_detail_cubit.dart';
 
 import '../../model/PaginatedNewsModel .dart';
 import '../../screens/newsDetails/news_details_screen.dart';
 
 class CustomCard extends StatefulWidget {
+  HomeCubit? homeCubit;
+  NewsDetailScreenCubit? newsDetailScreenCubit;
   PaginatedNewsModel eventValue;
 
-  CustomCard({Key? key, required this.eventValue}) : super(key: key);
+  CustomCard(
+      {Key? key,
+      required this.eventValue,
+      this.homeCubit,
+      this.newsDetailScreenCubit})
+      : super(key: key);
 
   @override
   State<CustomCard> createState() => _CustomCardState();
@@ -41,7 +50,7 @@ class _CustomCardState extends State<CustomCard> {
         }
       },
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
         child: Container(
           child: Column(
             children: [
@@ -108,18 +117,27 @@ class _CustomCardState extends State<CustomCard> {
                               onPressed: () {
                                 setState(() {
                                   widget.eventValue.isFavourite =
-                                  widget.eventValue.isFavourite == false
-                                      ? true
-                                      : false;
+                                      !(widget.eventValue.isFavourite ?? false);
                                 });
+                                if (widget.homeCubit != null) {
+                                  widget.homeCubit?.updateFavNews(
+                                      widget.eventValue.id!,
+                                      widget.eventValue.isFavourite!);
+                                } else if (widget.newsDetailScreenCubit !=
+                                    null) {
+                                  widget.newsDetailScreenCubit?.updateFavNews(
+                                      widget.eventValue.id!,
+                                      widget.eventValue.isFavourite!);
+                                }
                               },
-                              icon: widget.eventValue.isFavourite!
-                                  ? Icon(Icons.favorite, color: Colors.orange)
-                                  : Icon(Icons.favorite_border_outlined,
-                                  color: Colors.orange),
+                              icon: Icon(
+                                widget.eventValue.isFavourite!
+                                    ? Icons.favorite
+                                    : Icons.favorite_border_outlined,
+                                color: Colors.orange,
+                              ),
                               iconSize: 24,
                             )
-
                           ],
                         ),
                       ],
@@ -127,6 +145,8 @@ class _CustomCardState extends State<CustomCard> {
                   ),
                 ],
               ),
+              SizedBox(height: 10,),
+              Image.asset('assets/divider.png')
             ],
           ),
         ),
