@@ -20,10 +20,8 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   var random = Random();
 
-
   @override
   Widget build(BuildContext context) {
-
     Future<void> _savePdf(BuildContext context) async {
       final scaffoldMessenger = ScaffoldMessenger.of(context);
       late String message;
@@ -94,7 +92,6 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
               onPressed: () {
                 debugPrint("Download");
                 _savePdf(context);
-
               },
               icon: Icon(
                 Icons.download,
@@ -111,4 +108,3 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
     );
   }
 }
-

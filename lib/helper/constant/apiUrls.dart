@@ -43,6 +43,8 @@ class ApiUrls {
   static String ceoReports = baseUrl('MisPdfReport/MisPdfList');
 
   static String otherReports = baseUrl('MisPdfReport/MisBulletinPdfList');
+
+  static String bulletinPdf = baseUrl('BulletinPdf/GetBulletinPdfList');
 }
 
 class AppAuth {
