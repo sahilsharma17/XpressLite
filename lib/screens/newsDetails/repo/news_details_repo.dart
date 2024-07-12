@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:xpresslite/helper/app_utilities/method_utils.dart';
 import 'package:xpresslite/helper/constant/apiUrls.dart';
-import 'package:xpresslite/model/PaginatedNewsModel%20.dart';
 import 'package:xpresslite/model/newsCommentsModel.dart';
 import 'package:xpresslite/model/newsDetailsByIdModel.dart';
 import 'package:xpresslite/model/newsFeaturesModel.dart';
 import 'package:xpresslite/network_configs/networkRequest.dart';
 
 import '../../../helper/app_utilities/date_utils.dart';
+import '../../../model/PaginatedNewsModel.dart';
 import '../../../model/reposeCallBack.dart';
 
 abstract class NewsDetailScreenRepoAbstract {

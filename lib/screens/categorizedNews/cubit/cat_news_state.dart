@@ -1,4 +1,4 @@
-import '../../../model/PaginatedNewsModel .dart';
+import '../../../model/PaginatedNewsModel.dart';
 
 abstract class CatNewsScreenState {}
 

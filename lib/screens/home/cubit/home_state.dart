@@ -1,6 +1,6 @@
 
 
-import '../../../model/PaginatedNewsModel .dart';
+import '../../../model/PaginatedNewsModel.dart';
 import '../../../model/UpcomingEventBannerModel.dart';
 import '../../../model/categorised_news_detail_model.dart';
 

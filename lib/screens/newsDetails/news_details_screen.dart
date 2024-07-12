@@ -18,7 +18,7 @@ import '../../Widget/customWidget/news_features_widget.dart';
 import '../../helper/app_utilities/method_utils.dart';
 import '../../helper/custom_widgets/accessDenied/accessDenied.dart';
 import '../../helper/custom_widgets/app_circular_loader.dart';
-import '../../model/PaginatedNewsModel .dart';
+import '../../model/PaginatedNewsModel.dart';
 import '../../model/newsCommentsModel.dart';
 import '../../model/newsDetailsByIdModel.dart';
 import '../view_image/view_image_screen.dart';

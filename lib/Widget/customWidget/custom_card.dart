@@ -1,23 +1,25 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:xpresslite/helper/app_utilities/method_utils.dart';
+import 'package:xpresslite/screens/fav/cubit/favs_screen_cubit.dart';
 import 'package:xpresslite/screens/home/cubit/home_cubit.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_cubit.dart';
-
-import '../../model/PaginatedNewsModel .dart';
+import '../../model/PaginatedNewsModel.dart';
 import '../../screens/newsDetails/news_details_screen.dart';
 
 class CustomCard extends StatefulWidget {
-  HomeCubit? homeCubit;
-  NewsDetailScreenCubit? newsDetailScreenCubit;
-  PaginatedNewsModel eventValue;
+  final HomeCubit? homeCubit;
+  final NewsDetailScreenCubit? newsDetailScreenCubit;
+  final FavsScreenCubit? favCubit;
+  final PaginatedNewsModel eventValue;
 
-  CustomCard(
-      {Key? key,
-      required this.eventValue,
-      this.homeCubit,
-      this.newsDetailScreenCubit})
-      : super(key: key);
+  CustomCard({
+    Key? key,
+    required this.eventValue,
+    this.homeCubit,
+    this.newsDetailScreenCubit,
+    this.favCubit,
+  }) : super(key: key);
 
   @override
   State<CustomCard> createState() => _CustomCardState();
@@ -60,7 +62,9 @@ class _CustomCardState extends State<CustomCard> {
                   Container(
                     width: 140,
                     height: 100,
-                    child: CachedNetworkImage(
+                    child:
+                        widget.eventValue.imageFileNames!.isNotEmpty ?
+                    CachedNetworkImage(
                       imageUrl: widget.eventValue.imageFileNames![0].toString(),
                       imageBuilder: (context, imageProvider) => Container(
                         width: 80.0,
@@ -84,7 +88,12 @@ class _CustomCardState extends State<CustomCard> {
                           color: Colors.orange,
                         ),
                       ),
-                    ),
+                      errorWidget: (context, url, error) {
+                        return Center(
+                            child: Image.asset(
+                                'assets/no_image_found.jpg'));
+                      },
+                    ) : Image.asset('assets/no_image_found.jpg'),
                   ),
                   SizedBox(width: 10),
                   Expanded(
@@ -117,8 +126,9 @@ class _CustomCardState extends State<CustomCard> {
                               onPressed: () {
                                 setState(() {
                                   widget.eventValue.isFavourite =
-                                      !(widget.eventValue.isFavourite ?? false);
+                                  !(widget.eventValue.isFavourite ?? false);
                                 });
+
                                 if (widget.homeCubit != null) {
                                   widget.homeCubit?.updateFavNews(
                                       widget.eventValue.id!,
@@ -128,6 +138,14 @@ class _CustomCardState extends State<CustomCard> {
                                   widget.newsDetailScreenCubit?.updateFavNews(
                                       widget.eventValue.id!,
                                       widget.eventValue.isFavourite!);
+                                } else if (widget.favCubit != null) {
+                                  widget.favCubit?.updateFavNews(
+                                      widget.eventValue.id!,
+                                      widget.eventValue.isFavourite!);
+                                  setState(() {
+
+                                  });
+
                                 }
                               },
                               icon: Icon(
@@ -145,7 +163,9 @@ class _CustomCardState extends State<CustomCard> {
                   ),
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Image.asset('assets/divider.png')
             ],
           ),

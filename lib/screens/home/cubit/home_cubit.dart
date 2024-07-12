@@ -8,7 +8,7 @@ import 'package:xpresslite/screens/home/repo/home_repo.dart';
 
 import '../../../helper/app_utilities/method_utils.dart';
 import '../../../helper/constant/appMessages.dart';
-import '../../../model/PaginatedNewsModel .dart';
+import '../../../model/PaginatedNewsModel.dart';
 import '../../../model/UpcomingEventBannerModel.dart';
 import '../../../model/categorised_news_detail_model.dart';
 import '../../../model/reposeCallBack.dart';

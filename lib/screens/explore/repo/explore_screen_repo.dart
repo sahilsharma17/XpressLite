@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../helper/constant/apiUrls.dart';
-import '../../../model/PaginatedNewsModel .dart';
+import '../../../model/PaginatedNewsModel.dart';
 import '../../../model/reposeCallBack.dart';
 import '../../../model/searchModel.dart';
 import '../../../network_configs/networkRequest.dart';

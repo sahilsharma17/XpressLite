@@ -4,7 +4,7 @@ import 'package:xpresslite/screens/categorizedNews/repo/cat_news_repo.dart';
 
 import '../../../helper/app_utilities/method_utils.dart';
 import '../../../helper/constant/appMessages.dart';
-import '../../../model/PaginatedNewsModel .dart';
+import '../../../model/PaginatedNewsModel.dart';
 import '../../../model/reposeCallBack.dart';
 import '../../../network_configs/networkRequest.dart';
 

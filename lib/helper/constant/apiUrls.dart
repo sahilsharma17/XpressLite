@@ -45,6 +45,8 @@ class ApiUrls {
   static String otherReports = baseUrl('MisPdfReport/MisBulletinPdfList');
 
   static String bulletinPdf = baseUrl('BulletinPdf/GetBulletinPdfList');
+
+  static String favs = baseUrl('NewsDetails/GetNewsFavouriteList?createdBy=00500877');
 }
 
 class AppAuth {

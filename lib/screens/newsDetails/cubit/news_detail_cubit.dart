@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:xpresslite/model/PaginatedNewsModel%20.dart';
 import 'package:xpresslite/model/newsCommentsModel.dart';
 import 'package:xpresslite/model/newsFeaturesModel.dart';
 import 'package:xpresslite/model/reposeCallBack.dart';
@@ -10,6 +9,7 @@ import 'package:xpresslite/screens/newsDetails/repo/news_details_repo.dart';
 import '../../../helper/app_utilities/date_utils.dart';
 import '../../../helper/app_utilities/method_utils.dart';
 import '../../../helper/constant/appMessages.dart';
+import '../../../model/PaginatedNewsModel.dart';
 import '../../../model/newsDetailsByIdModel.dart';
 
 class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {

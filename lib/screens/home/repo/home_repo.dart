@@ -3,7 +3,7 @@ import 'package:xpresslite/network_configs/networkRequest.dart';
 
 import '../../../helper/app_utilities/date_utils.dart';
 import '../../../helper/constant/apiUrls.dart';
-import '../../../model/PaginatedNewsModel .dart';
+import '../../../model/PaginatedNewsModel.dart';
 import '../../../model/UpcomingEventBannerModel.dart';
 import '../../../model/categorised_news_detail_model.dart';
 import '../../../model/reposeCallBack.dart';

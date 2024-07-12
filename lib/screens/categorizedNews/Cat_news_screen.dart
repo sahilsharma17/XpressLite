@@ -7,7 +7,7 @@ import '../../Widget/customWidget/custom_card.dart';
 import '../../helper/app_utilities/method_utils.dart';
 import '../../helper/custom_widgets/accessDenied/accessDenied.dart';
 import '../../helper/custom_widgets/app_circular_loader.dart';
-import '../../model/PaginatedNewsModel .dart';
+import '../../model/PaginatedNewsModel.dart';
 
 class CategoryNewsScreen extends StatefulWidget {
   String catId;

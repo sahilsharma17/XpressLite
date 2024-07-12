@@ -1,6 +1,6 @@
 import 'package:xpresslite/model/newsCommentsModel.dart';
 
-import '../../../model/PaginatedNewsModel .dart';
+import '../../../model/PaginatedNewsModel.dart';
 import '../../../model/newsDetailsByIdModel.dart';
 import '../../../model/newsFeaturesModel.dart';
 
