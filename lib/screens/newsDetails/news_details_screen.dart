@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -182,18 +184,63 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                               imgUrl: model.toString())));
                                 },
                                 child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    child: CachedNetworkImage(
-                                      imageUrl: model.toString(),
-                                      fit: BoxFit.cover,
-                                      height: 200.0,
-                                      width: double.infinity,
-                                      placeholder: (context, url) => Center(
-                                        child: CircularProgressIndicator(
-                                          color: Colors.orange,
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: Stack(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: SizedBox(
+                                          height: double.infinity,
+                                          width: double.infinity,
+                                          child: ClipRRect(
+                                            child: ImageFiltered(
+                                              imageFilter: ImageFilter.blur(
+                                                  sigmaX: 10, sigmaY: 10),
+                                              child: CachedNetworkImage(
+                                                imageUrl: model.toString(),
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Container(
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover),
+                                                  ),
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) {
+                                                  return Center(
+                                                      child: Image.asset(
+                                                          'assets/no_image_found.jpg'));
+                                                },
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    )),
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: CachedNetworkImage(
+                                          imageUrl: model.toString(),
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  Container(
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: imageProvider,
+                                                  fit: BoxFit.contain),
+                                            ),
+                                          ),
+                                          errorWidget: (context, url, error) {
+                                            return Center(
+                                                child: Image.asset(
+                                                    'assets/no_image_found.jpg'));
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               );
                             },
                           );
@@ -228,7 +275,14 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                           GestureDetector(
                             onTap: () {
                               debugPrint("Youtube");
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => YoutubePlayerScreen(videoUrl: detailsById?.youtubeVideoLink?.toString() ?? '')));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => YoutubePlayerScreen(
+                                          videoUrl: detailsById
+                                                  ?.youtubeVideoLink
+                                                  ?.toString() ??
+                                              '')));
                             },
                             child: Image.asset(
                               'assets/youtube.png',
@@ -236,7 +290,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                               height: 40.0, // Set the height of the icon
                             ),
                           ),
-                          SizedBox(width: 10,),
+                          SizedBox(
+                            width: 10,
+                          ),
                           reading == false
                               ? GestureDetector(
                                   onTap: () {
@@ -807,7 +863,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                           child: Column(
                             children: [
                               CustomCard(
-                                newsDetailScreenCubit: _cubit,
+                                  newsDetailScreenCubit: _cubit,
                                   eventValue: relatedHappeningModel![index]),
                             ],
                           ),

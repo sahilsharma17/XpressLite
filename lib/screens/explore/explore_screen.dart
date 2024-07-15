@@ -76,9 +76,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               if (state.error.isNotEmpty) {
                 MethodUtils.toast(state.error);
               }
-            } else if (state is ExploreScreenLoaded) {
-
-            }
+            } else if (state is ExploreScreenLoaded) {}
           },
         ),
       ),
@@ -101,8 +99,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 crossAxisCount: 2,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 10,
-                mainAxisExtent:
-                MediaQuery.of(context).size.height / 4,
+                mainAxisExtent: MediaQuery.of(context).size.height / 4,
               ),
               itemBuilder: (context, index) {
                 return GestureDetector(
@@ -124,10 +121,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          height: (size.height / 5) -28,
+                          height: (size.height / 5) - 28,
                           width: (size.width / 2) - 12,
                           decoration: const BoxDecoration(color: Colors.white),
-                          child: Stack(
+                          child:
+                          Stack(
                             children: [
                               Align(
                                 alignment: Alignment.center,
@@ -144,13 +142,18 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                             .toString(),
                                         imageBuilder:
                                             (context, imageProvider) =>
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: imageProvider,
-                                                    fit: BoxFit.cover),
-                                              ),
-                                            ),
+                                                Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover),
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) {
+                                          return Center(
+                                              child: Image.asset(
+                                                  'assets/no_image_found.jpg'));
+                                        },
                                       ),
                                     ),
                                   ),
@@ -164,12 +167,17 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                       .toString(),
                                   imageBuilder: (context, imageProvider) =>
                                       Container(
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              image: imageProvider,
-                                              fit: BoxFit.contain),
-                                        ),
-                                      ),
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.contain),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) {
+                                    return Center(
+                                        child: Image.asset(
+                                            'assets/no_image_found.jpg'));
+                                  },
                                 ),
                               ),
                             ],
@@ -221,7 +229,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-
   Widget ExploreBar() {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 16, 16),
@@ -266,13 +273,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     onChanged: (val) {
                       if (keyword.text.length >= 3) {
                         _cubit.searchingNews(keyword.text);
-                      }
-                      else if (keyword.text.length <= 2){
+                      } else if (keyword.text.length <= 2) {
                         setState(() {
                           _cubit.refresh();
                         });
-                      }
-                      else if (keyword.text.length == 0){
+                      } else if (keyword.text.length == 0) {
                         setState(() {
                           _cubit.refresh();
                         });

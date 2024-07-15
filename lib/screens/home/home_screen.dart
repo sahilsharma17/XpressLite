@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// import 'package:overlapped_carousel/overlapped_carousel.dart';
 import 'package:xpresslite/Widget/customWidget/custom_card.dart';
 import 'package:xpresslite/constants/strings.dart';
 import 'package:xpresslite/helper/custom_widgets/app_circular_loader.dart';
@@ -11,6 +13,7 @@ import 'package:xpresslite/screens/newsDetails/news_details_screen.dart';
 import 'package:xpresslite/screens/view_image/view_image_screen.dart';
 
 import '../../Widget/customWidget/custom_card2.dart';
+import '../../Widget/customWidget/overlapping_carousel.dart';
 import '../../helper/app_utilities/method_utils.dart';
 import '../../helper/custom_widgets/accessDenied/accessDenied.dart';
 import '../../helper/dxWidget/drawer.dart';
@@ -231,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: pageNewsModel?.length ,
+          itemCount: pageNewsModel?.length,
           itemBuilder: (context, index) {
             return Container(
               color: Colors.grey.withOpacity(0.2),
@@ -248,85 +251,173 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // upcomingEvents() {
+  //   return Column(
+  //     children: [
+  //       Text('Upcoming Events'),
+  //       Stack(children: [
+  //         Container(
+  //             decoration: BoxDecoration(boxShadow: [
+  //               BoxShadow(
+  //                   color: Colors.black,
+  //                   offset: Offset(0.2, 0.2),
+  //                   blurRadius: 0.2,
+  //                   spreadRadius: 0.2)
+  //             ]),
+  //             child: Image(image: AssetImage('assets/bg_event.png'))),
+  //         OverlappedCarousel(
+  //           widgets: List.generate(eventBannerModel.length, (index) => Container(
+  //             height: 100,width: 100,
+  //             color: Colors.red,
+  //           )), //List of widgets
+  //           currentIndex: 2,
+  //           onClicked: (index) {
+  //             ScaffoldMessenger.of(context).showSnackBar(
+  //               SnackBar(
+  //                 content: Text("You clicked at $index"),
+  //               ),
+  //             );
+  //           },
+  //           // To obscure or blur cards not in focus use the obscure parameter.
+  //           obscure: 0.4,
+  //           // To control skew angle
+  //           skewAngle: 0.25,
+  //         ),
+  //         // CarouselSlider(
+  //         //   items: eventBannerModel.map((model) {
+  //         //     return Builder(
+  //         //       builder: (BuildContext context) {
+  //         //         return Padding(
+  //         //           padding: const EdgeInsets.all(8.0),
+  //         //           child: GestureDetector(
+  //         //             onTap: () {
+  //         //               Navigator.push(
+  //         //                   context,
+  //         //                   MaterialPageRoute(
+  //         //                       builder: (context) => ViewImageScreen(
+  //         //                           imgUrl: model.imageFileName.toString())));
+  //         //             },
+  //         //             child: CachedNetworkImage(
+  //         //               imageBuilder: (context, imageProvider) => Container(
+  //         //                 height: 170,
+  //         //                 width: 170,
+  //         //                 decoration: BoxDecoration(
+  //         //                   shape: BoxShape.rectangle,
+  //         //                   borderRadius: BorderRadius.circular(10.0),
+  //         //                   boxShadow: [
+  //         //                     BoxShadow(
+  //         //                         color: Colors.black,
+  //         //                         offset: Offset(0.2, 0.2),
+  //         //                         blurRadius: 0.2,
+  //         //                         spreadRadius: 0.2)
+  //         //                   ],
+  //         //                   image: DecorationImage(
+  //         //                       image: imageProvider, fit: BoxFit.fill),
+  //         //                 ),
+  //         //               ),
+  //         //               imageUrl: model.imageFileName.toString(),
+  //         //               placeholder: (context, url) => Center(
+  //         //                 child: CircularProgressIndicator(
+  //         //                   color: Colors.orange,
+  //         //                 ),
+  //         //               ),
+  //         //             ),
+  //         //           ),
+  //         //         );
+  //         //       },
+  //         //     );
+  //         //   }).toList(),
+  //         //   options: CarouselOptions(
+  //         //     // autoPlay: true,
+  //         //
+  //         //     animateToClosest: true,
+  //         //     height: 170,
+  //         //     // aspectRatio: 1 / 1,
+  //         //     //viewportFraction: 0.8,
+  //         //     enlargeCenterPage: true,
+  //         //     onPageChanged: (index, reason) {
+  //         //       setState(() {
+  //         //         _currentIndex = index;
+  //         //       });
+  //         //     },
+  //         //   ),
+  //         // ),
+  //       ]),
+  //     ],
+  //   );
+  // }
+
   upcomingEvents() {
     return Column(
       children: [
         Text('Upcoming Events'),
-        Stack(children: [
-          Container(
-            child: Container(
-                decoration: BoxDecoration(boxShadow: [
-                  BoxShadow(
-                      color: Colors.black,
-                      offset: Offset(0.2, 0.2),
-                      blurRadius: 0.2,
-                      spreadRadius: 0.2)
-                ]),
-                child: Image(image: AssetImage('assets/bg_event.png'))),
-          ),
-          CarouselSlider(
-            items: eventBannerModel.map((model) {
-              return Builder(
-                builder: (BuildContext context) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
+        Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(boxShadow: [
+                BoxShadow(
+                  color: Colors.black,
+                  offset: Offset(0.2, 0.2),
+                  blurRadius: 0.2,
+                  spreadRadius: 0.2,
+                )
+              ]),
+              child: Image(image: AssetImage('assets/bg_event.png')),
+            ),
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.center,
+                child: OverlappedCarousel(
+                  widgets: List.generate(eventBannerModel.length, (index) {
+                    String? imageUrl = eventBannerModel[index].imageFileName?.toString();
+                    return SizedBox(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ViewImageScreen(
-                                    imgUrl: model.imageFileName.toString())));
-                      },
-                      child: CachedNetworkImage(
-                        imageBuilder: (context, imageProvider) => Container(
-                          height: 170,
-                          width: 170,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(10.0),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black,
-                                  offset: Offset(0.2, 0.2),
-                                  blurRadius: 0.2,
-                                  spreadRadius: 0.2)
-                            ],
-                            image: DecorationImage(
-                                image: imageProvider, fit: BoxFit.fill),
+                              builder: (context) => ViewImageScreen(
+                                imgUrl: imageUrl != null && imageUrl.isNotEmpty
+                                    ? imageUrl
+                                    : 'https://via.placeholder.com/100',
+                              ),
+                            ),
+                          );
+                        },
+                        child: CachedNetworkImage(
+                          imageUrl: imageUrl != null && imageUrl.isNotEmpty
+                              ? imageUrl
+                              : 'https://via.placeholder.com/100',
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(10.0),
+                              image: DecorationImage(
+                                  image: imageProvider, fit: BoxFit.cover),
+                            ),
                           ),
-                        ),
-                        imageUrl: model.imageFileName.toString(),
-                        placeholder: (context, url) => Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.orange,
+                          placeholder: (context, url) => const Center(
+                            child: CircularProgressIndicator(),
                           ),
+                          errorWidget: (context, url, error) => const Icon(Icons.error),
                         ),
                       ),
-                    ),
-                  );
-                },
-              );
-            }).toList(),
-            options: CarouselOptions(
-              // autoPlay: true,
-
-              animateToClosest: true,
-              height: 170,
-              // aspectRatio: 1 / 1,
-              //viewportFraction: 0.8,
-              enlargeCenterPage: true,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
+                    );
+                  }),
+                  currentIndex: 2,
+                  onClicked: (index) {},
+                  // obscure: 0.4,
+                  // skewAngle: -0.2,
+                ),
+              ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ],
     );
   }
+
+
 
   awards() {
     return Column(
