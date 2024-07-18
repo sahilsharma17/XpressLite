@@ -26,6 +26,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
   late ApiResponse deletedComment;
   late ApiResponse updatedComment;
   late ApiResponse newsFavs;
+  late ApiResponse replyComment;
 
   Future<void> getIdWiseNewsDetails(String nId, String catId) async {
     try {
@@ -190,7 +191,26 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
         if (updatedComment.isSuccess) {
           getIdWiseNewsDetails(nId, cId);
         } else {
-          emit(DetailsScreenError(error: deletedComment.errorCause));
+          emit(DetailsScreenError(error: updatedComment.errorCause));
+        }
+      } else {
+        emit(DetailsScreenError(error: AppMessages.getNoInternetMsg));
+      }
+    } catch (e) {
+      emit(DetailsScreenError(error: e.toString()));
+    }
+  }
+
+  Future<void> replyOnComment(
+      String nId, String cId, int nComId, String reply) async {
+    try {
+      emit(DetailsScreenLoading());
+      if (await MethodUtils.isInternetPresent()) {
+        replyComment = await newsDetailsRepo.postReply(comId : nComId, reply: reply);
+        if (replyComment.isSuccess) {
+          getIdWiseNewsDetails(nId, cId);
+        } else {
+          emit(DetailsScreenError(error: replyComment.errorCause));
         }
       } else {
         emit(DetailsScreenError(error: AppMessages.getNoInternetMsg));

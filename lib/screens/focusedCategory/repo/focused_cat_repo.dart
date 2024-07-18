@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:xpresslite/model/focusedCatModel.dart';
 
 import '../../../helper/constant/apiUrls.dart';
-import '../../../model/PaginatedNewsModel.dart';
 import '../../../model/reposeCallBack.dart';
 import '../../../network_configs/networkRequest.dart';
-import '../../newsDetails/repo/news_details_repo.dart';
 
 abstract class FocusedCategoryScreenRepoAbstract {
   Future<ApiResponse<List<FocusedCategoryModel>>> getFocusedCategory();

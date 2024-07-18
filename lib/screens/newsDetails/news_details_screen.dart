@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:xpresslite/Widget/customWidget/commentBarWidget.dart';
+import 'package:xpresslite/helper/app_utilities/size_reziser.dart';
 import 'package:xpresslite/helper/bottomsheet/bottomsheet.dart';
 import 'package:xpresslite/model/newsFeaturesModel.dart';
 import 'package:xpresslite/screens/appNavBar.dart';
@@ -14,6 +15,7 @@ import 'package:xpresslite/screens/home/home_screen.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_cubit.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_state.dart';
 import 'package:xpresslite/screens/newsDetails/youtube_player_screen.dart';
+import 'package:xpresslite/screens/reply/reply_screen.dart';
 
 import '../../Widget/customWidget/custom_card.dart';
 import '../../Widget/customWidget/news_features_widget.dart';
@@ -58,10 +60,10 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   List? pc;
   List? delCom;
   List? newCom;
+  List? replyCom;
 
   @override
   void dispose() {
-    // Cancel timers, animations, or listeners here
     super.dispose();
   }
 
@@ -69,8 +71,6 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   void initState() {
     _cubit = BlocProvider.of<NewsDetailScreenCubit>(context);
     _cubit.getIdWiseNewsDetails(widget.newsId, widget.catId);
-    print(widget.newsId);
-
     super.initState();
   }
 
@@ -93,6 +93,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
         pc = state.pComment ?? [];
         delCom = state.delComment ?? [];
         newCom = state.updateComment ?? [];
+        replyCom = state.replyComment ?? [];
 
         return body();
       } else if (state is DetailsScreenInitial) {
@@ -136,18 +137,18 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
           style: TextStyle(
               fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                debugPrint("Download");
-                Navigator.popAndPushNamed(context, HomeScreen().toString());
-              },
-              icon: Icon(
-                Icons.download,
-                color: Colors.black,
-                size: 30,
-              ))
-        ],
+        // actions: [
+        //   IconButton(
+        //       onPressed: () {
+        //         debugPrint("Download");
+        //         Navigator.popAndPushNamed(context, HomeScreen().toString());
+        //       },
+        //       icon: Icon(
+        //         Icons.download,
+        //         color: Colors.black,
+        //         size: 30,
+        //       ))
+        // ],
       ),
       body: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(),
@@ -286,8 +287,8 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                             },
                             child: Image.asset(
                               'assets/youtube.png',
-                              width: 40.0, // Set the width of the icon
-                              height: 40.0, // Set the height of the icon
+                              width: 40.0,
+                              height: 40.0,
                             ),
                           ),
                           SizedBox(
@@ -412,428 +413,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                           ),
                         ),
                         Visibility(
-                          visible: showComment,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 10.0),
-                            child: ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: newsComments?.length,
-                              itemBuilder: (context, i) {
-                                return Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 10),
-                                    child: Column(children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 20.0,
-                                            backgroundImage: NetworkImage(
-                                                newsComments?[i]
-                                                        .profileImage
-                                                        ?.toString() ??
-                                                    ''),
-                                            backgroundColor: Colors.transparent,
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Column(
-                                            children: [
-                                              Container(
-                                                width: screenWidth * 0.7,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20)),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        newsComments?[i]
-                                                                .name
-                                                                ?.toString() ??
-                                                            '',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                      Text(
-                                                        newsComments?[i]
-                                                                .comment
-                                                                ?.toString() ??
-                                                            '',
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              Container(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 10),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(
-                                                        'time ago',
-                                                        style: TextStyle(
-                                                            fontSize: 12),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 20,
-                                                      ),
-                                                      GestureDetector(
-                                                          onTap: () {},
-                                                          child: Text('Like',
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                      .black87))),
-                                                      SizedBox(
-                                                        width: 20,
-                                                      ),
-                                                      GestureDetector(
-                                                          onTap: () {},
-                                                          child: Text('Reply',
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                      .black87))),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      IconButton(
-                                                          onPressed: () {
-                                                            showModalBottomSheet(
-                                                              context: context,
-                                                              isScrollControlled:
-                                                                  true,
-                                                              builder:
-                                                                  (BuildContext
-                                                                      context) {
-                                                                return MyBottomSheet(
-                                                                  oldComment:
-                                                                      newsComments![
-                                                                              i]
-                                                                          .comment
-                                                                          .toString(),
-                                                                  cubit: _cubit,
-                                                                  commentId:
-                                                                      newsComments?[i]
-                                                                              .commentId ??
-                                                                          0,
-                                                                  categoryId:
-                                                                      widget
-                                                                          .catId,
-                                                                  newsId: widget
-                                                                      .newsId,
-                                                                );
-                                                              },
-                                                            );
-                                                          },
-                                                          icon: Icon(
-                                                            Icons.edit_outlined,
-                                                            size: 20,
-                                                          )),
-                                                      IconButton(
-                                                          onPressed: () {
-                                                            showDialog(
-                                                                context:
-                                                                    context,
-                                                                builder:
-                                                                    (BuildContext
-                                                                        context) {
-                                                                  return Dialog(
-                                                                    child:
-                                                                        Container(
-                                                                      width:
-                                                                          100,
-                                                                      height:
-                                                                          150,
-                                                                      decoration: BoxDecoration(
-                                                                          color: Colors
-                                                                              .white,
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(10)),
-                                                                      child:
-                                                                          Center(
-                                                                        child:
-                                                                            Padding(
-                                                                          padding:
-                                                                              EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              Column(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.spaceBetween,
-                                                                            children: [
-                                                                              Text(
-                                                                                'XpressLite',
-                                                                                style: TextStyle(fontWeight: FontWeight.bold),
-                                                                              ),
-                                                                              Text(
-                                                                                textAlign: TextAlign.center,
-                                                                                'Are you Sure? You want to delete this comment.',
-                                                                                style: TextStyle(fontWeight: FontWeight.normal),
-                                                                              ),
-                                                                              Padding(
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                                                                  children: [
-                                                                                    GestureDetector(
-                                                                                        onTap: () {
-                                                                                          print('No');
-                                                                                        },
-                                                                                        child: Container(height: 30, width: 100, child: Text(textAlign: TextAlign.center, 'No', style: TextStyle(fontSize: 12, color: Colors.black87, fontWeight: FontWeight.bold)))),
-                                                                                    GestureDetector(
-                                                                                        onTap: () {
-                                                                                          print('Yes');
-                                                                                          Navigator.pop(context, true);
-                                                                                          _cubit.deleteComment(widget.newsId, widget.catId, newsComments?[i].commentId ?? 0, '');
-                                                                                        },
-                                                                                        child: Container(height: 30, width: 100, child: Text(textAlign: TextAlign.center, 'Yes', style: TextStyle(fontSize: 12, color: Colors.orange, fontWeight: FontWeight.bold)))),
-                                                                                  ],
-                                                                                ),
-                                                                              )
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                });
-                                                          },
-                                                          icon: Icon(
-                                                            Icons
-                                                                .delete_forever_outlined,
-                                                            size: 20,
-                                                          )),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                      if (newsComments![i]
-                                              .replies!
-                                              .isNotEmpty ||
-                                          newsComments![i].replies != null)
-                                        ListView.builder(
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          itemCount:
-                                              newsComments?[i].replies?.length,
-                                          itemBuilder:
-                                              (BuildContext context, int j) {
-                                            return Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 40, top: 10),
-                                              child: Row(
-                                                children: [
-                                                  CircleAvatar(
-                                                    radius: 18.0,
-                                                    backgroundImage: NetworkImage(
-                                                        newsComments![i]
-                                                                .replies?[j]
-                                                                .profileImage
-                                                                ?.toString() ??
-                                                            ''),
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    width: screenWidth * 0.65,
-                                                    decoration: BoxDecoration(
-                                                        color:
-                                                            Colors.transparent,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20)),
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            newsComments![i]
-                                                                    .replies?[j]
-                                                                    .name
-                                                                    ?.toString() ??
-                                                                '',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                          Text(
-                                                            newsComments![i]
-                                                                    .replies?[j]
-                                                                    .commentsReply
-                                                                    ?.toString() ??
-                                                                '',
-                                                          ),
-                                                          Container(
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      left: 10),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceAround,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  GestureDetector(
-                                                                      onTap:
-                                                                          () {},
-                                                                      child: Text(
-                                                                          'Like',
-                                                                          style: TextStyle(
-                                                                              fontSize: 12,
-                                                                              color: Colors.black87))),
-                                                                  SizedBox(
-                                                                    width: 20,
-                                                                  ),
-                                                                  GestureDetector(
-                                                                      onTap:
-                                                                          () {},
-                                                                      child: Text(
-                                                                          'Reply',
-                                                                          style: TextStyle(
-                                                                              fontSize: 12,
-                                                                              color: Colors.black87))),
-                                                                  SizedBox(
-                                                                    width: 10,
-                                                                  ),
-                                                                  IconButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        // showModalBottomSheet(
-                                                                        //   context:
-                                                                        //       context,
-                                                                        //   builder:
-                                                                        //       (BuildContext context) {
-                                                                        //     return MyBottomSheet();
-                                                                        //   },
-                                                                        // );
-                                                                      },
-                                                                      icon:
-                                                                          Icon(
-                                                                        Icons
-                                                                            .edit_outlined,
-                                                                        size:
-                                                                            20,
-                                                                      )),
-                                                                  IconButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        showDialog(
-                                                                            context:
-                                                                                context,
-                                                                            builder:
-                                                                                (BuildContext context) {
-                                                                              return Dialog(
-                                                                                child: Container(
-                                                                                  width: 100,
-                                                                                  height: 150,
-                                                                                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-                                                                                  child: Center(
-                                                                                    child: Padding(
-                                                                                      padding: EdgeInsets.all(8.0),
-                                                                                      child: Column(
-                                                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                        children: [
-                                                                                          Text(
-                                                                                            'XpressLite',
-                                                                                            style: TextStyle(fontWeight: FontWeight.bold),
-                                                                                          ),
-                                                                                          Text(
-                                                                                            textAlign: TextAlign.center,
-                                                                                            'Are you Sure? You want to delete this comment.',
-                                                                                            style: TextStyle(fontWeight: FontWeight.normal),
-                                                                                          ),
-                                                                                          Padding(
-                                                                                            padding: const EdgeInsets.all(8.0),
-                                                                                            child: Row(
-                                                                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                                                                              children: [
-                                                                                                GestureDetector(
-                                                                                                    onTap: () {
-                                                                                                      print('No');
-                                                                                                    },
-                                                                                                    child: Container(height: 30, width: 100, child: Text(textAlign: TextAlign.center, 'No', style: TextStyle(fontSize: 12, color: Colors.black87, fontWeight: FontWeight.bold)))),
-                                                                                                GestureDetector(
-                                                                                                    onTap: () {
-                                                                                                      print('Yes');
-                                                                                                      Navigator.pop(context, true);
-                                                                                                      _cubit.deleteComment(widget.newsId, widget.catId, newsComments?[i].commentId ?? 0, newsComments?[i].replies![j].commentReplyId.toString() ?? '');
-                                                                                                    },
-                                                                                                    child: Container(height: 30, width: 100, child: Text(textAlign: TextAlign.center, 'Yes', style: TextStyle(fontSize: 12, color: Colors.orange, fontWeight: FontWeight.bold)))),
-                                                                                              ],
-                                                                                            ),
-                                                                                          )
-                                                                                        ],
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              );
-                                                                            });
-                                                                      },
-                                                                      icon:
-                                                                          Icon(
-                                                                        Icons
-                                                                            .delete_forever_outlined,
-                                                                        size:
-                                                                            20,
-                                                                      )),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                    ]));
-                              },
-                            ),
-                          ),
-                        )
+                            visible: showComment, child: commentSection())
                       ],
                     )
                 ],
@@ -888,7 +468,505 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
 
               // Clear the text field after posting the comment
               commentController.clear();
+              setState(() {
+
+              });
             }),
+      ),
+    );
+  }
+
+  commentSection() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10.0),
+      child: ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: newsComments?.length,
+        itemBuilder: (context, i) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CircleAvatar(
+                      radius: 20.0,
+                      backgroundImage: NetworkImage(
+                          newsComments?[i].profileImage?.toString() ?? ''),
+                      backgroundColor: Colors.transparent,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 250,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    newsComments?[i].name?.toString() ?? '',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    newsComments?[i].comment?.toString() ?? '',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'time ago',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              SizedBox(width: 20),
+                              GestureDetector(
+                                onTap: () {},
+                                child: Text(
+                                  'Like',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ReplyScreen(
+                                                newsComId: newsComments?[i]
+                                                        .commentId ??
+                                                    0,
+                                                comment: newsComments![i],
+                                              )));
+                                },
+                                child: Text(
+                                  'Reply',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              IconButton(
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    builder: (BuildContext context) {
+                                      return MyBottomSheet(
+                                        oldComment:
+                                            newsComments![i].comment.toString(),
+                                        cubit: _cubit,
+                                        commentId:
+                                            newsComments?[i].commentId ?? 0,
+                                        categoryId: widget.catId,
+                                        newsId: widget.newsId,
+                                      );
+                                    },
+                                  );
+                                },
+                                icon: Icon(
+                                  Icons.edit_outlined,
+                                  size: 20,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Dialog(
+                                        child: Container(
+                                          width: 100,
+                                          height: 150,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Center(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    'XpressLite',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  Text(
+                                                    'Are you Sure? You want to delete this comment.',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceAround,
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.pop(
+                                                                context, false);
+                                                          },
+                                                          child: Container(
+                                                            height: 30,
+                                                            width: 100,
+                                                            child: Text(
+                                                              'No',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: Colors
+                                                                    .black87,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.pop(
+                                                                context, true);
+                                                            _cubit
+                                                                .deleteComment(
+                                                              widget.newsId,
+                                                              widget.catId,
+                                                              newsComments?[i]
+                                                                      .commentId ??
+                                                                  0,
+                                                              '',
+                                                            );
+                                                          },
+                                                          child: Container(
+                                                            height: 30,
+                                                            width: 100,
+                                                            child: Text(
+                                                              'Yes',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: Colors
+                                                                    .orange,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                icon: Icon(
+                                  Icons.delete_forever_outlined,
+                                  size: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                if (newsComments![i].replies!.isNotEmpty)
+                  ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: newsComments?[i].replies?.length,
+                    itemBuilder: (BuildContext context, int j) {
+                      return Padding(
+                        padding: EdgeInsets.only(left: 40, top: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              radius: 18.0,
+                              backgroundImage: NetworkImage(newsComments![i]
+                                      .replies?[j]
+                                      .profileImage
+                                      ?.toString() ??
+                                  ''),
+                              backgroundColor: Colors.transparent,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      // color: Colors.white,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            newsComments![i]
+                                                    .replies?[j]
+                                                    .name
+                                                    ?.toString() ??
+                                                '',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            newsComments![i]
+                                                    .replies?[j]
+                                                    .commentsReply
+                                                    ?.toString() ??
+                                                '',
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 5),
+                                    child: Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {},
+                                          child: Text(
+                                            'Like',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black87,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 20),
+                                        GestureDetector(
+                                          onTap: () {},
+                                          child: Text(
+                                            'Reply',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black87,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 10),
+                                        IconButton(
+                                          onPressed: () {
+                                            // showModalBottomSheet(
+                                            //   context: context,
+                                            //   builder: (BuildContext context) {
+                                            //     return MyBottomSheet();
+                                            //   },
+                                            // );
+                                          },
+                                          icon: Icon(
+                                            Icons.edit_outlined,
+                                            size: 20,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Dialog(
+                                                  child: Container(
+                                                    width: 100,
+                                                    height: 150,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    child: Center(
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsets.all(8.0),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              'XpressLite',
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                            Text(
+                                                              'Are you Sure? You want to delete this comment.',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal),
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceAround,
+                                                                children: [
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      Navigator.pop(
+                                                                          context,
+                                                                          false);
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      height:
+                                                                          30,
+                                                                      width:
+                                                                          100,
+                                                                      child:
+                                                                          Text(
+                                                                        'No',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              Colors.black87,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      Navigator.pop(
+                                                                          context,
+                                                                          true);
+                                                                      _cubit
+                                                                          .deleteComment(
+                                                                        widget
+                                                                            .newsId,
+                                                                        widget
+                                                                            .catId,
+                                                                        newsComments?[i].commentId ??
+                                                                            0,
+                                                                        newsComments![i].replies![j].commentReplyId.toString() ??
+                                                                            '',
+                                                                      );
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      height:
+                                                                          30,
+                                                                      width:
+                                                                          100,
+                                                                      child:
+                                                                          Text(
+                                                                        'Yes',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              Colors.orange,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                          icon: Icon(
+                                            Icons.delete_forever_outlined,
+                                            size: 20,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

@@ -29,6 +29,7 @@ class NewsCommentsLoaded extends NewsDetailScreenState {
   List? pComment;
   List? delComment;
   List? updateComment;
+  List? replyComment;
 
   NewsCommentsLoaded(
       {required this.msg,
@@ -38,7 +39,9 @@ class NewsCommentsLoaded extends NewsDetailScreenState {
       this.relatedHappeningModel,
       this.pComment,
       this.delComment,
-      this.updateComment});
+      this.updateComment,
+      this.replyComment,
+      });
 }
 
 class DetailsScreenError extends NewsDetailScreenState {

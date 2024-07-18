@@ -15,7 +15,7 @@ class ApiUrls {
   static String upcomingEvent = baseUrl('EventBanner/GetEventBannerList');
 
   static String idWiseNewsDetails = baseUrl('NewsDetails/GetNewsDetailById');
-
+// by user A with some empl id on A NEWS ID
   static String getNewsCommentDetails =
       baseUrl('NewsDetails/GetNewsCommentDetails');
 
@@ -47,6 +47,12 @@ class ApiUrls {
   static String bulletinPdf = baseUrl('BulletinPdf/GetBulletinPdfList');
 
   static String favs = baseUrl('NewsDetails/GetNewsFavouriteList?createdBy=00500877');
+
+
+  // for posting a reply on COMMENT
+  static String reply = baseUrl('NewsDetails/CommentsCommentReply');
+
+  static String repliesOnComment = baseUrl('NewsDetails/GetNewsCommentRepliesDetails');
 }
 
 class AppAuth {

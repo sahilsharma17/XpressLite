@@ -9,6 +9,7 @@ import 'package:xpresslite/screens/category/InsideCategory/cubit/directors_categ
 import 'package:xpresslite/screens/fav/cubit/favs_screen_cubit.dart';
 import 'package:xpresslite/screens/focusedCategory/cubit/focused_cat_cubit.dart';
 import 'package:xpresslite/screens/home/cubit/home_cubit.dart';
+import 'package:xpresslite/screens/reply/cubit/reply_cubit.dart';
 import 'package:xpresslite/screens/reports/cubit/reports_cubit.dart';
 
 import '../../screens/explore/cubit/explore_screen_cubit.dart';
@@ -28,5 +29,6 @@ class BlocManager {
     BlocProvider(create: (context) => ReportsCubit()),
     BlocProvider(create: (context) => BulletinCubit()),
     BlocProvider(create: (context) => FavsScreenCubit()),
+    BlocProvider(create: (context) => ReplyCubit()),
   ];
 }
