@@ -24,13 +24,7 @@ class _BulletinScreenState extends State<BulletinScreen> {
   DateTime? selectedDate;
   DateTime focusedDay = DateTime.now();
   Map<DateTime, List<dynamic>> bulletinsDay = {};
-  Map<DateTime, List<dynamic>> bd = {
-    DateTime.utc(2024, 7, 2): ['Bulletin 1', 'Bulletin 2'],
-    DateTime.utc(2024, 7, 10): ['Bulletin 3'],
-    DateTime.utc(2024, 7, 17): ['Bulletin 4', 'Bulletin 5'],
-    DateTime.utc(2024, 7, 24): ['Bulletin 6'],
-    DateTime.utc(2024, 7, 31): ['Bulletin 7'],
-  };
+  Map<DateTime, List<String>> bd = {};
 
   @override
   void initState() {
@@ -94,18 +88,21 @@ class _BulletinScreenState extends State<BulletinScreen> {
         // Ensure the insertDate is not null before parsing
         if (bulletin.insertDate != null) {
           DateTime bulletinDate = DateTime.parse(bulletin.insertDate!).toUtc();
+          DateTime dateWithoutTime = DateTime.utc(
+              bulletinDate.year, bulletinDate.month, bulletinDate.day);
 
           // Check if the date already exists in bd map, if not, initialize it
-          if (bd[bulletinDate] == null) {
-            bd[bulletinDate] = [];
+          if (!bd.containsKey(dateWithoutTime)) {
+            bd[dateWithoutTime] = [];
           }
 
           // Check if the event is already added
-          bool isAlreadyAdded = bd[bulletinDate]?.contains(bulletin.title ?? 'Untitled Bulletin') ?? false;
+          bool isAlreadyAdded = bd[dateWithoutTime]!
+              .contains(bulletin.title ?? 'Untitled Bulletin');
 
           // Add the bulletin title to the events list of the corresponding date if it's not already added
           if (!isAlreadyAdded) {
-            bd[bulletinDate]?.add(bulletin.title ?? 'Untitled Bulletin');
+            bd[dateWithoutTime]!.add(bulletin.title ?? 'Untitled Bulletin');
           }
         }
       }
@@ -145,10 +142,7 @@ class _BulletinScreenState extends State<BulletinScreen> {
                       _addEvents(bulletinPdfs);
                     });
                     return Column(
-                      children: [
-                        calender(),
-                        _buildBulletinList()
-                      ],
+                      children: [calender(), _buildBulletinList()],
                     );
                   } else if (state is BulletinLoading) {
                     return Center(child: CircularProgressIndicator());
@@ -275,7 +269,7 @@ class _BulletinScreenState extends State<BulletinScreen> {
             formatButtonVisible: false,
             titleCentered: true,
             titleTextStyle:
-            TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           availableGestures: AvailableGestures.all,
           firstDay: DateTime.utc(2024, 3, 1),
@@ -290,7 +284,7 @@ class _BulletinScreenState extends State<BulletinScreen> {
             todayDecoration: BoxDecoration(
                 color: Colors.orange.shade200, shape: BoxShape.circle),
             selectedDecoration:
-            BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+                BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
           ),
           eventLoader: (day) {
             return bd[day] ?? [];
@@ -298,15 +292,11 @@ class _BulletinScreenState extends State<BulletinScreen> {
           calendarBuilders: CalendarBuilders(
             markerBuilder: (context, day, events) {
               if (events.isNotEmpty) {
-                // for (var i = 0; i < events.length; i++) {
-                //   print(events[i]);
-                // }
-                // print(day);
                 return Container(
                   padding: EdgeInsets.only(top: 5),
                   decoration: BoxDecoration(
                       image:
-                      DecorationImage(image: AssetImage('assets/pdf.png'))),
+                          DecorationImage(image: AssetImage('assets/pdf.png'))),
                   width: 20,
                   height: 20,
                 );
