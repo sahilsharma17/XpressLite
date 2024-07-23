@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:xpresslite/helper/app_utilities/method_utils.dart';
 import 'package:xpresslite/helper/constant/apiUrls.dart';
@@ -25,9 +24,8 @@ abstract class NewsDetailScreenRepoAbstract {
       {required String newsCatId});
 
   Future<ApiResponse> newsFav(int newsId, bool favValue);
-  
-  Future<ApiResponse> postReply({required int comId, required String reply});
 
+  Future<ApiResponse> postReply({required int comId, required String reply});
 }
 
 class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
@@ -241,6 +239,34 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
   }
 
   @override
+  Future<ApiResponse<List>> delReply(
+      {required String nComReplyId}) async {
+    Map<String, dynamic> delReplyMap = {
+      "CommentsReplyId": nComReplyId,
+    };
+
+    debugPrint("Comment Data Param is $delReplyMap");
+
+    final resp = await networkRequest.networkCallPostMap2(
+        ApiUrls.delComment, delReplyMap);
+    debugPrint(resp.toString());
+
+    if (resp["status"] == true) {
+      return ApiResponse(
+        isSuccess: resp["status"],
+        errorCause: resp["message"],
+        resObject: resp['data'],
+      );
+    } else {
+      return ApiResponse(
+        isSuccess: true,
+        errorCause: resp["message"],
+        resObject: null,
+      );
+    }
+  }
+
+  @override
   Future<ApiResponse<List>> updateComment(
       {required int nComId, required String newComment}) async {
     Map<String, dynamic> delcommentMap = {
@@ -272,7 +298,6 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
   @override
   Future<ApiResponse> newsFav(int newsId, bool favValue) async {
     Map<String, dynamic> favNewsMap = {
-
       "newsDetailsId": newsId,
       "createdBy": "00500877",
       "createdDate": AppDateUtils.getFormattedDateWithTime().toString(),
@@ -280,8 +305,8 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
       "isFavourite": favValue,
     };
 
-    Map<String, dynamic> resp = await networkRequest.networkCallPostMap2(
-        ApiUrls.createFav, favNewsMap);
+    Map<String, dynamic> resp =
+        await networkRequest.networkCallPostMap2(ApiUrls.createFav, favNewsMap);
 
     // ApiResponse? _newsFav;
     debugPrint(resp.toString());
@@ -306,22 +331,21 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
   }
 
   @override
-  Future<ApiResponse> postReply({required int comId, required String reply}) async {
+  Future<ApiResponse> postReply(
+      {required int comId, required String reply}) async {
     Map<String, dynamic> replyMap = {
-
       "NewsCommentsId": comId,
       "createdBy": "00500877",
       "createdDate": AppDateUtils.getFormattedDateWithTime().toString(),
       "isFavourite": reply,
     };
 
-    Map<String, dynamic> resp = await networkRequest.networkCallPostMap2(
-        ApiUrls.reply, replyMap);
+    Map<String, dynamic> resp =
+        await networkRequest.networkCallPostMap2(ApiUrls.reply, replyMap);
 
     debugPrint(resp.toString());
 
     if (resp["status"] == true) {
-
       return ApiResponse(
           isSuccess: resp['status'],
           errorCause: resp['message'],

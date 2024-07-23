@@ -24,6 +24,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
   late ApiResponse<List<PaginatedNewsModel>> relatedHappenings;
   late ApiResponse postedComment;
   late ApiResponse deletedComment;
+  late ApiResponse deletedReply;
   late ApiResponse updatedComment;
   late ApiResponse newsFavs;
   late ApiResponse replyComment;
@@ -163,6 +164,36 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
         if (deletedComment.isSuccess) {
           newsComments.resObject
               ?.removeWhere((item) => item.commentId == nComId);
+          emit(NewsCommentsLoaded(
+            msg: "Got data",
+            newsCommentsModel: newsComments.resObject ?? [],
+            newsDetailByIdModel: newsDetailById.resObject!,
+            newsFeaturesModel: newsFeatures.resObject!,
+            relatedHappeningModel: relatedHappenings.resObject ?? [],
+          ));
+        } else {
+          emit(DetailsScreenError(error: deletedComment.errorCause));
+        }
+      } else {
+        emit(DetailsScreenError(error: AppMessages.getNoInternetMsg));
+      }
+    } catch (e) {
+      emit(DetailsScreenError(error: e.toString()));
+    }
+  }
+
+  Future<void> deleteReply(
+      String nId, String cId, int nComId, String ncrId) async {
+    try {
+      emit(DetailsScreenLoading());
+      if (await MethodUtils.isInternetPresent()) {
+        deletedComment = await newsDetailsRepo.delReply(
+          nComReplyId: ncrId);
+        if (deletedComment.isSuccess) {
+          newsComments.resObject?.forEach((comment) {
+            comment.replies?.removeWhere((reply) => reply.commentReplyId.toString() == ncrId);
+          });
+
           emit(NewsCommentsLoaded(
             msg: "Got data",
             newsCommentsModel: newsComments.resObject ?? [],

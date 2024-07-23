@@ -369,7 +369,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                       NewsFeatureWidget(
                         iconData: Icons.comment,
                         iconColor: Colors.blue,
-                        value: newsFeaturesModel?.totalComments,
+                        value: newsComments?.length ?? 0,
                         onPressed: () {},
                       ),
                       NewsFeatureWidget(
@@ -468,9 +468,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
 
               // Clear the text field after posting the comment
               commentController.clear();
-              setState(() {
-
-              });
+              setState(() {});
             }),
       ),
     );
@@ -873,24 +871,33 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                                                           false);
                                                                     },
                                                                     child:
-                                                                        Container(
-                                                                      height:
-                                                                          30,
-                                                                      width:
-                                                                          100,
+                                                                        GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        Navigator.pop(
+                                                                            context,
+                                                                            true);
+                                                                      },
                                                                       child:
-                                                                          Text(
-                                                                        'No',
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          color:
-                                                                              Colors.black87,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
+                                                                          Container(
+                                                                        height:
+                                                                            30,
+                                                                        width:
+                                                                            100,
+                                                                        child:
+                                                                            Text(
+                                                                          'No',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            color:
+                                                                                Colors.black87,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -901,7 +908,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                                                           context,
                                                                           true);
                                                                       _cubit
-                                                                          .deleteComment(
+                                                                          .deleteReply(
                                                                         widget
                                                                             .newsId,
                                                                         widget
