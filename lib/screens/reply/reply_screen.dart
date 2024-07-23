@@ -10,12 +10,22 @@ import '../../helper/app_utilities/method_utils.dart';
 import '../../helper/bottomsheet/bottomsheet.dart';
 import '../../helper/custom_widgets/accessDenied/accessDenied.dart';
 import '../../helper/custom_widgets/app_circular_loader.dart';
+import '../newsDetails/cubit/news_detail_cubit.dart';
 
 class ReplyScreen extends StatefulWidget {
   int newsComId;
+  String newsId;
+  String catId;
   NewsCommentsModel comment;
+  NewsDetailScreenCubit newsDetailScreenCubit;
 
-  ReplyScreen({required this.newsComId, required this.comment, super.key});
+  ReplyScreen(
+      {required this.newsComId,
+      required this.comment,
+      required this.newsDetailScreenCubit,
+      required this.newsId,
+      required this.catId,
+      super.key});
 
   @override
   State<ReplyScreen> createState() => _ReplyScreenState();
@@ -99,216 +109,62 @@ class _ReplyScreenState extends State<ReplyScreen> {
   commentSection() {
     return Scaffold(
         backgroundColor: Colors.grey.shade200,
-        body: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  radius: 20.0,
-                  backgroundImage: NetworkImage(
-                      widget.comment?.profileImage?.toString() ?? ''),
-                  backgroundColor: Colors.transparent,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 250,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.comment?.name?.toString() ?? '',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                widget.comment?.comment?.toString() ?? '',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'time ago',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          SizedBox(width: 20),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Text(
-                              'Like',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          // IconButton(
-                          //   onPressed: () {
-                          //     showModalBottomSheet(
-                          //       context: context,
-                          //       isScrollControlled: true,
-                          //       builder: (BuildContext context) {
-                          //         return MyBottomSheet(
-                          //           oldComment:
-                          //           widget.comment![i].comment.toString(),
-                          //           cubit: _cubit,
-                          //           commentId:
-                          //           widget.comment?[i].commentId ?? 0,
-                          //           categoryId: widget.catId,
-                          //           newsId: widget.newsId,
-                          //         );
-                          //       },
-                          //     );
-                          //   },
-                          //   icon: Icon(
-                          //     Icons.edit_outlined,
-                          //     size: 20,
-                          //   ),
-                          // ),
-                          IconButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Dialog(
-                                    child: Container(
-                                      width: 100,
-                                      height: 150,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Center(
-                                        child: Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'XpressLite',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              Text(
-                                                'Are you Sure? You want to delete this comment.',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.normal),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceAround,
-                                                  children: [
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.pop(
-                                                            context, false);
-                                                      },
-                                                      child: Container(
-                                                        height: 30,
-                                                        width: 100,
-                                                        child: Text(
-                                                          'No',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                            fontSize: 12,
-                                                            color:
-                                                                Colors.black87,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        // Navigator.pop(
-                                                        //     context, true);
-                                                        // _cubit
-                                                        //     .deleteComment(
-                                                        //   widget.newsId,
-                                                        //   widget.catId,
-                                                        //   widget.comment?[i]
-                                                        //       .commentId ??
-                                                        //       0,
-                                                        //   '',
-                                                        // );
-                                                      },
-                                                      child: Container(
-                                                        height: 30,
-                                                        width: 100,
-                                                        child: Text(
-                                                          'Yes',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                            fontSize: 12,
-                                                            color:
-                                                                Colors.orange,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                            icon: Icon(
-                              Icons.delete_forever_outlined,
-                              size: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+        body: Padding(
+          padding: EdgeInsets.only(left: 20, top: 10),
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    radius: 20.0,
+                    backgroundImage: NetworkImage(
+                        widget.comment?.profileImage?.toString() ?? ''),
+                    backgroundColor: Colors.transparent,
                   ),
-                ),
-              ],
-            ),
-            ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: replies?.length,
-              itemBuilder: (BuildContext context, int j) {
-                return Padding(
-                  padding: EdgeInsets.only(left: 20, top: 10),
-                  child: Row(
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: SizeConfig.screenWidth * 0.7,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.comment?.name?.toString() ?? '',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  widget.comment?.comment?.toString() ?? '',
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: replies?.length,
+                itemBuilder: (BuildContext context, int j) {
+                  return Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CircleAvatar(
@@ -428,36 +284,57 @@ class _ReplyScreenState extends State<ReplyScreen> {
                                                                   context,
                                                                   false);
                                                             },
-                                                            child: Container(
-                                                              height: 30,
-                                                              width: 100,
-                                                              child: Text(
-                                                                'No',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                      .black87,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                Navigator.pop(
+                                                                    context,
+                                                                    true);
+                                                              },
+                                                              child: Container(
+                                                                height: 30,
+                                                                width: 100,
+                                                                child: Text(
+                                                                  'No',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Colors
+                                                                        .black87,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
                                                           ),
                                                           GestureDetector(
-                                                            // onTap: () {
-                                                            //   Navigator.pop(context, true);
-                                                            //   _cubit.deleteComment(
-                                                            //     widget.newsId,
-                                                            //     widget.catId,
-                                                            //     replies?[i].commentId ?? 0,
-                                                            //     replies![i].replies![j].commentReplyId.toString() ?? '',
-                                                            //   );
-                                                            // },
+                                                            onTap: () {
+                                                              Navigator.pop(
+                                                                  context,
+                                                                  true);
+                                                              widget
+                                                                  .newsDetailScreenCubit
+                                                                  .deleteReply(
+                                                                widget.newsId,
+                                                                widget.catId,
+                                                                widget.comment
+                                                                        .commentId ??
+                                                                    0,
+                                                                widget
+                                                                        .comment
+                                                                        .replies![
+                                                                            j]
+                                                                        .commentReplyId
+                                                                        .toString() ??
+                                                                    '',
+                                                              );
+                                                            },
                                                             child: Container(
                                                               height: 30,
                                                               width: 100,
@@ -501,11 +378,11 @@ class _ReplyScreenState extends State<ReplyScreen> {
                         ),
                       ),
                     ],
-                  ),
-                );
-              },
-            ),
-          ],
+                  );
+                },
+              ),
+            ],
+          ),
         ));
   }
 }

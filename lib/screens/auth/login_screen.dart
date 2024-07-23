@@ -42,7 +42,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<LoginCubit, LoginState>(
       builder: (BuildContext context, state) {
-        if (state is LoginLoaded || state is LoginInitial || state is LoginError) {
+        if (state is LoginLoaded ||
+            state is LoginInitial ||
+            state is LoginError) {
           return body();
         } else if (state is LoginLoading) {
           return Stack(
@@ -148,13 +150,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 20),
                             child: Column(
                               children: [
                                 Text(
                                   'Login',
                                   style: TextStyle(
-                                      fontSize: 30, fontWeight: FontWeight.bold),
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
                                   height: 20,
@@ -173,27 +177,33 @@ class _LoginScreenState extends State<LoginScreen> {
                                       keyboardType: TextInputType.number,
                                       controller: _mobileController,
                                       decoration: InputDecoration(
-                                          isDense: true,
-                                          contentPadding: EdgeInsets.all(10),
-                                          hintText: "Enter your Mobile Number",
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.deepOrangeAccent.shade100,
-                                                width: 2.0),
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                        enabledBorder : OutlineInputBorder(
+                                        isDense: true,
+                                        contentPadding: EdgeInsets.all(10),
+                                        hintText: "Enter your Mobile Number",
+                                        border: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                              color: Colors.deepOrangeAccent.shade100,
+                                              color: Colors
+                                                  .deepOrangeAccent.shade100,
                                               width: 2.0),
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.deepOrangeAccent.shade100,
-                                                width: 2.0),
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors
+                                                  .deepOrangeAccent.shade100,
+                                              width: 2.0),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors
+                                                  .deepOrangeAccent.shade100,
+                                              width: 2.0),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
                                       ),
                                       validator: (value) {
                                         if (value!.isEmpty) {
@@ -221,7 +231,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           child: Switch(
                                               value: rememeberMe,
                                               inactiveThumbColor: Colors.grey,
-                                              activeColor: Colors.deepOrangeAccent,
+                                              activeColor:
+                                                  Colors.deepOrangeAccent,
                                               onChanged: (bool value) {
                                                 setState(() {
                                                   rememeberMe = value;
@@ -239,11 +250,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                       child: ElevatedButton(
                                         onPressed: () {
                                           print('Continue Pressed');
-                                          _cubit.mobileValidation(_mobileController.text);
+                                          _cubit.mobileValidation(
+                                              _mobileController.text);
                                         },
                                         style: ButtonStyle(
-                                          backgroundColor: MaterialStateProperty.all<Color>(
-                                              Colors.black45),
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  Colors.black45),
                                         ),
                                         child: Text(
                                           'Continue',

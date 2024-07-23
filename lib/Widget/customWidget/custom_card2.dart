@@ -38,7 +38,8 @@ class _CustomCard2State extends State<CustomCard2> {
           height: screenHeight * 0.65,
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(20.0),
+            
+            borderRadius: BorderRadius.all(Radius.circular(20)),
             border: Border.all(color: Colors.black, width: 0.2),
             boxShadow: [
               BoxShadow(
@@ -49,12 +50,15 @@ class _CustomCard2State extends State<CustomCard2> {
             ],
           ),
           child: Column(
+            // mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
                 width: screenWidth * 0.6,
                 height: 120,
                 child: widget.eventValue.imageFileNames!.isNotEmpty
-                    ? Stack(
+                    ?
+                Stack(
                         children: [
                           Align(
                             alignment: Alignment.center,
@@ -62,6 +66,10 @@ class _CustomCard2State extends State<CustomCard2> {
                               height: double.infinity,
                               width: double.infinity,
                               child: ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20.0),
+                                  topRight: Radius.circular(20.0),
+                                ),
                                 child: ImageFiltered(
                                   imageFilter:
                                       ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -72,6 +80,11 @@ class _CustomCard2State extends State<CustomCard2> {
                                     imageBuilder: (context, imageProvider) =>
                                         Container(
                                       decoration: BoxDecoration(
+                                        shape: BoxShape.rectangle,
+                                                    borderRadius: BorderRadius.only(
+                                                      topLeft: Radius.circular(20.0),
+                                                      topRight: Radius.circular(20.0),
+                                                    ),
                                         image: DecorationImage(
                                             image: imageProvider,
                                             fit: BoxFit.cover),
@@ -95,6 +108,11 @@ class _CustomCard2State extends State<CustomCard2> {
                               imageBuilder: (context, imageProvider) =>
                                   Container(
                                 decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(20.0),
+                                                topRight: Radius.circular(20.0),
+                                              ),
                                   image: DecorationImage(
                                       image: imageProvider,
                                       fit: BoxFit.contain),

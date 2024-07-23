@@ -137,18 +137,6 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
           style: TextStyle(
               fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold),
         ),
-        // actions: [
-        //   IconButton(
-        //       onPressed: () {
-        //         debugPrint("Download");
-        //         Navigator.popAndPushNamed(context, HomeScreen().toString());
-        //       },
-        //       icon: Icon(
-        //         Icons.download,
-        //         color: Colors.black,
-        //         size: 30,
-        //       ))
-        // ],
       ),
       body: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(),
@@ -552,6 +540,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => ReplyScreen(
+                                                newsDetailScreenCubit: _cubit,
+                                                catId: widget.catId,
+                                                newsId: widget.newsId,
                                                 newsComId: newsComments?[i]
                                                         .commentId ??
                                                     0,
@@ -750,9 +741,10 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8.0),
-                                      child: Column(
+                                      child: Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
+                                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                         children: [
                                           Text(
                                             newsComments![i]
@@ -763,6 +755,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold),
                                           ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
                                           Text(
                                             newsComments![i]
                                                     .replies?[j]
@@ -772,194 +767,6 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                           ),
                                         ],
                                       ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 5),
-                                    child: Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {},
-                                          child: Text(
-                                            'Like',
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.black87,
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(width: 20),
-                                        GestureDetector(
-                                          onTap: () {},
-                                          child: Text(
-                                            'Reply',
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.black87,
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(width: 10),
-                                        IconButton(
-                                          onPressed: () {
-                                            // showModalBottomSheet(
-                                            //   context: context,
-                                            //   builder: (BuildContext context) {
-                                            //     return MyBottomSheet();
-                                            //   },
-                                            // );
-                                          },
-                                          icon: Icon(
-                                            Icons.edit_outlined,
-                                            size: 20,
-                                          ),
-                                        ),
-                                        IconButton(
-                                          onPressed: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return Dialog(
-                                                  child: Container(
-                                                    width: 100,
-                                                    height: 150,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                    ),
-                                                    child: Center(
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                              'XpressLite',
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            ),
-                                                            Text(
-                                                              'Are you Sure? You want to delete this comment.',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .normal),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceAround,
-                                                                children: [
-                                                                  GestureDetector(
-                                                                    onTap: () {
-                                                                      Navigator.pop(
-                                                                          context,
-                                                                          false);
-                                                                    },
-                                                                    child:
-                                                                        GestureDetector(
-                                                                      onTap:
-                                                                          () {
-                                                                        Navigator.pop(
-                                                                            context,
-                                                                            true);
-                                                                      },
-                                                                      child:
-                                                                          Container(
-                                                                        height:
-                                                                            30,
-                                                                        width:
-                                                                            100,
-                                                                        child:
-                                                                            Text(
-                                                                          'No',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontSize:
-                                                                                12,
-                                                                            color:
-                                                                                Colors.black87,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  GestureDetector(
-                                                                    onTap: () {
-                                                                      Navigator.pop(
-                                                                          context,
-                                                                          true);
-                                                                      _cubit
-                                                                          .deleteReply(
-                                                                        widget
-                                                                            .newsId,
-                                                                        widget
-                                                                            .catId,
-                                                                        newsComments?[i].commentId ??
-                                                                            0,
-                                                                        newsComments![i].replies![j].commentReplyId.toString() ??
-                                                                            '',
-                                                                      );
-                                                                    },
-                                                                    child:
-                                                                        Container(
-                                                                      height:
-                                                                          30,
-                                                                      width:
-                                                                          100,
-                                                                      child:
-                                                                          Text(
-                                                                        'Yes',
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          color:
-                                                                              Colors.orange,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                          icon: Icon(
-                                            Icons.delete_forever_outlined,
-                                            size: 20,
-                                          ),
-                                        ),
-                                      ],
                                     ),
                                   ),
                                 ],
