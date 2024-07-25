@@ -4,7 +4,7 @@ class LoginModel {
   String? name;
   String? profileImage;
   bool? approved;
-  bool? isActive;
+  
   String? gender;
   String? accessToken;
   String? refreshToken;
@@ -17,7 +17,6 @@ class LoginModel {
       this.name,
       this.profileImage,
       this.approved,
-      this.isActive,
       this.gender,
       this.accessToken,
       this.refreshToken,
@@ -30,7 +29,6 @@ class LoginModel {
     name = json['name'];
     profileImage = json['profileImage'];
     approved = json['approved'];
-    isActive = json['isActive'];
     gender = json['gender'];
     accessToken = json['accessToken'];
     refreshToken = json['refreshToken'];
@@ -45,7 +43,6 @@ class LoginModel {
     data['name'] = this.name;
     data['profileImage'] = this.profileImage;
     data['approved'] = this.approved;
-    data['isActive'] = this.isActive;
     data['gender'] = this.gender;
     data['accessToken'] = this.accessToken;
     data['refreshToken'] = this.refreshToken;

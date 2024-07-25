@@ -7,11 +7,11 @@ class AllPdfModel {
   String? categoryName;
   String? directorName;
   String? pdfFileNames;
-  bool? isActive;
+
   String? createdDate;
   String? createdBy;
   String? modifiedDate;
-  String? modifiedBy;
+  
   String? ip;
 
   AllPdfModel(
@@ -23,11 +23,9 @@ class AllPdfModel {
       this.categoryName,
       this.directorName,
       this.pdfFileNames,
-      this.isActive,
       this.createdDate,
       this.createdBy,
       this.modifiedDate,
-      this.modifiedBy,
       this.ip});
 
   AllPdfModel.fromJson(Map<String, dynamic> json) {
@@ -39,11 +37,9 @@ class AllPdfModel {
     categoryName = json['categoryName'];
     directorName = json['directorName'];
     pdfFileNames = json['pdfFileNames'];
-    isActive = json['isActive'];
     createdDate = json['createdDate'];
     createdBy = json['createdBy'];
     modifiedDate = json['modifiedDate'];
-    modifiedBy = json['modifiedBy'];
     ip = json['ip'];
   }
 
@@ -57,11 +53,9 @@ class AllPdfModel {
     data['categoryName'] = this.categoryName;
     data['directorName'] = this.directorName;
     data['pdfFileNames'] = this.pdfFileNames;
-    data['isActive'] = this.isActive;
     data['createdDate'] = this.createdDate;
     data['createdBy'] = this.createdBy;
     data['modifiedDate'] = this.modifiedDate;
-    data['modifiedBy'] = this.modifiedBy;
     data['ip'] = this.ip;
     return data;
   }

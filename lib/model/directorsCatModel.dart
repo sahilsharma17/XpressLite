@@ -5,11 +5,11 @@ class DirectorCatModel {
   String? directorName;
   String? directorType;
   String? directorImage;
-  bool? isActive;
+  
   String? createdDate;
   String? createdBy;
   Null? modifiedDate;
-  String? modifiedBy;
+  
   String? ip;
 
   DirectorCatModel(
@@ -19,11 +19,9 @@ class DirectorCatModel {
         this.directorName,
         this.directorType,
         this.directorImage,
-        this.isActive,
         this.createdDate,
         this.createdBy,
         this.modifiedDate,
-        this.modifiedBy,
         this.ip});
 
   DirectorCatModel.fromJson(Map<String, dynamic> json) {
@@ -33,11 +31,9 @@ class DirectorCatModel {
     directorName = json['directorName'];
     directorType = json['directorType'];
     directorImage = json['directorImage'];
-    isActive = json['isActive'];
     createdDate = json['createdDate'];
     createdBy = json['createdBy'];
     modifiedDate = json['modifiedDate'];
-    modifiedBy = json['modifiedBy'];
     ip = json['ip'];
   }
 
@@ -49,11 +45,9 @@ class DirectorCatModel {
     data['directorName'] = this.directorName;
     data['directorType'] = this.directorType;
     data['directorImage'] = this.directorImage;
-    data['isActive'] = this.isActive;
     data['createdDate'] = this.createdDate;
     data['createdBy'] = this.createdBy;
     data['modifiedDate'] = this.modifiedDate;
-    data['modifiedBy'] = this.modifiedBy;
     data['ip'] = this.ip;
     return data;
   }

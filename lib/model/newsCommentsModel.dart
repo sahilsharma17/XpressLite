@@ -9,11 +9,11 @@ class NewsCommentsModel {
   String? likeType;
   int? commentRepliesCount;
   List<Replies>? replies;
-  bool? isActive;
+  
   String? createdDate;
   String? createdBy;
   String? modifiedDate;
-  String? modifiedBy;
+  
   String? ip;
 
   NewsCommentsModel(
@@ -25,11 +25,9 @@ class NewsCommentsModel {
         this.likeType,
         this.commentRepliesCount,
         this.replies,
-        this.isActive,
         this.createdDate,
         this.createdBy,
         this.modifiedDate,
-        this.modifiedBy,
         this.ip});
 
   NewsCommentsModel.fromJson(Map<String, dynamic> json) {
@@ -46,11 +44,9 @@ class NewsCommentsModel {
         replies!.add(new Replies.fromJson(v));
       });
     }
-    isActive = json['isActive'] ?? true;
     createdDate = json['createdDate'] ?? "";
     createdBy = json['createdBy'] ?? "";
     modifiedDate = json['modifiedDate'] ?? "";
-    modifiedBy = json['modifiedBy'] ?? "";
     ip = json['ip'] ?? "";
   }
 
@@ -66,11 +62,9 @@ class NewsCommentsModel {
     if (this.replies != null) {
       data['replies'] = this.replies!.map((v) => v.toJson()).toList();
     }
-    data['isActive'] = this.isActive;
     data['createdDate'] = this.createdDate;
     data['createdBy'] = this.createdBy;
     data['modifiedDate'] = this.modifiedDate;
-    data['modifiedBy'] = this.modifiedBy;
     data['ip'] = this.ip;
     return data;
   }
@@ -83,11 +77,11 @@ class Replies {
   String? commentsReply;
   int? totalCommentReplyLikes;
   String? replyLikeType;
-  bool? isActive;
+  
   String? createdDate;
   String? createdBy;
   String? modifiedDate;
-  String? modifiedBy;
+  
   String? ip;
 
   Replies(
@@ -97,11 +91,9 @@ class Replies {
         this.commentsReply,
         this.totalCommentReplyLikes,
         this.replyLikeType,
-        this.isActive,
         this.createdDate,
         this.createdBy,
         this.modifiedDate,
-        this.modifiedBy,
         this.ip});
 
   Replies.fromJson(Map<String, dynamic> json) {
@@ -111,11 +103,9 @@ class Replies {
     commentsReply = json['commentsReply'];
     totalCommentReplyLikes = json['totalCommentReplyLikes'];
     replyLikeType = json['replyLikeType'];
-    isActive = json['isActive'];
     createdDate = json['createdDate'];
     createdBy = json['createdBy'];
     modifiedDate = json['modifiedDate'];
-    modifiedBy = json['modifiedBy'];
     ip = json['ip'];
   }
 
@@ -127,11 +117,9 @@ class Replies {
     data['commentsReply'] = this.commentsReply;
     data['totalCommentReplyLikes'] = this.totalCommentReplyLikes;
     data['replyLikeType'] = this.replyLikeType;
-    data['isActive'] = this.isActive;
     data['createdDate'] = this.createdDate;
     data['createdBy'] = this.createdBy;
     data['modifiedDate'] = this.modifiedDate;
-    data['modifiedBy'] = this.modifiedBy;
     data['ip'] = this.ip;
     return data;
   }

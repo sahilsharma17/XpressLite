@@ -127,11 +127,9 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
                 likeType: "Like",
                 commentRepliesCount: 0,
                 replies: [],
-                isActive: true,
                 createdDate: AppDateUtils.getFormattedDateWithTime().toString(),
                 createdBy: '',
                 modifiedDate: '',
-                modifiedBy: '',
                 ip: '',
               ));
           emit(NewsCommentsLoaded(

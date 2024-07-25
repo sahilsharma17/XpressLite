@@ -5,7 +5,7 @@ class ReplyCommentModel {
   String? commentsReply;
   int? totalCommentReplyLikes;
   String? replyLikeType;
-  bool? isActive;
+  
   String? createdDate;
   Null? createdBy;
   Null? modifiedDate;
@@ -19,7 +19,6 @@ class ReplyCommentModel {
         this.commentsReply,
         this.totalCommentReplyLikes,
         this.replyLikeType,
-        this.isActive,
         this.createdDate,
         this.createdBy,
         this.modifiedDate,
@@ -33,7 +32,6 @@ class ReplyCommentModel {
     commentsReply = json['commentsReply'];
     totalCommentReplyLikes = json['totalCommentReplyLikes'];
     replyLikeType = json['replyLikeType'];
-    isActive = json['isActive'];
     createdDate = json['createdDate'];
     createdBy = json['createdBy'];
     modifiedDate = json['modifiedDate'];
@@ -49,7 +47,6 @@ class ReplyCommentModel {
     data['commentsReply'] = this.commentsReply;
     data['totalCommentReplyLikes'] = this.totalCommentReplyLikes;
     data['replyLikeType'] = this.replyLikeType;
-    data['isActive'] = this.isActive;
     data['createdDate'] = this.createdDate;
     data['createdBy'] = this.createdBy;
     data['modifiedDate'] = this.modifiedDate;
