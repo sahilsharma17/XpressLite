@@ -5,13 +5,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:get/get.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:xpresslite/Widget/customWidget/commentBarWidget.dart';
 import 'package:xpresslite/helper/app_utilities/size_reziser.dart';
 import 'package:xpresslite/helper/bottomsheet/bottomsheet.dart';
 import 'package:xpresslite/model/newsFeaturesModel.dart';
 import 'package:xpresslite/screens/appNavBar.dart';
-import 'package:xpresslite/screens/home/home_screen.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_cubit.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_state.dart';
 import 'package:xpresslite/screens/newsDetails/youtube_player_screen.dart';
@@ -48,14 +48,11 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   bool showComment = false;
 
   late NewsDetailScreenCubit _cubit;
-
   NewsDetailsByIdModel? detailsById;
-
   NewsFeaturesModel? newsFeaturesModel;
-
   List<NewsCommentsModel>? newsComments;
-
   List<PaginatedNewsModel>? relatedHappeningModel = [];
+  final ScreenshotController screenshotController = ScreenshotController();
 
   List? pc;
   List? delCom;
@@ -79,6 +76,37 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
     await _tts.setVolume(1.0);
     await _tts.setLanguage("en-US");
     await _tts.speak(text);
+  }
+
+  Future<void> takeScreenshot(BuildContext context) async {
+    final imageFile = await screenshotController.capture(
+        pixelRatio: MediaQuery.of(context).devicePixelRatio);
+    if (imageFile != null) {
+      showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.white,
+        builder: (context) {
+          return ImagePreviewBottomSheet(
+            image: imageFile,
+            onSaveImage: () async {
+              final result = await ImageGallerySaver.saveImage(imageFile);
+              if (result['isSuccess']) {
+                // final savedPath = result['filePath'];
+                // print('Screenshot saved to gallery: $savedPath');
+                Navigator.pop(context);
+                MethodUtils.toast('Image Saved');
+              } else {
+                MethodUtils.toast('Failed to save screenshot to gallery');
+              }
+              Navigator.pop(context);
+            },
+            onCancel: () {
+              Navigator.pop(context);
+            },
+          );
+        },
+      );
+    }
   }
 
   @override
@@ -122,342 +150,304 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   body() {
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      backgroundColor: Colors.grey.shade300,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AppNavBar()));
-            },
-            icon: Icon(Icons.arrow_back)),
-        title: Text(
-          'DETAILS',
-          style: TextStyle(
-              fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-      ),
-      body: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
-        child: Column(
-          children: [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        detailsById?.title.toString() ?? "",
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                      )),
-                  Column(
-                    children: [
-                      CarouselSlider(
-                        items: detailsById?.imageFileNames?.map((model) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              return GestureDetector(
-                                onTap: () {
-                                  debugPrint("Show Details");
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ViewImageScreen(
-                                              imgUrl: model.toString())));
-                                },
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  child: Stack(
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: SizedBox(
-                                          height: double.infinity,
-                                          width: double.infinity,
-                                          child: ClipRRect(
-                                            child: ImageFiltered(
-                                              imageFilter: ImageFilter.blur(
-                                                  sigmaX: 10, sigmaY: 10),
-                                              child: CachedNetworkImage(
-                                                imageUrl: model.toString(),
-                                                imageBuilder:
-                                                    (context, imageProvider) =>
-                                                        Container(
-                                                  decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                        image: imageProvider,
-                                                        fit: BoxFit.cover),
-                                                  ),
-                                                ),
-                                                errorWidget:
-                                                    (context, url, error) {
-                                                  return Center(
-                                                      child: Image.asset(
-                                                          'assets/no_image_found.jpg'));
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: CachedNetworkImage(
-                                          imageUrl: model.toString(),
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  Container(
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.contain),
-                                            ),
-                                          ),
-                                          errorWidget: (context, url, error) {
-                                            return Center(
-                                                child: Image.asset(
-                                                    'assets/no_image_found.jpg'));
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        }).toList(),
-                        options: CarouselOptions(
-                          height: 200.0,
-                          enlargeCenterPage: true,
-                          enableInfiniteScroll: false,
-                          //autoPlay: true,
-                          aspectRatio: 16 / 9,
-                          viewportFraction: 0.8,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _currentIndex = index;
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        MethodUtils.getFormattedCustomDate(
-                            detailsById?.happeningDate.toString() ?? '',
-                            'yyyy-MM-ddTHH:mm:ss',
-                            'dd MMMM, yyyy'),
-                      ),
-                      Spacer(),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              debugPrint("Youtube");
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => YoutubePlayerScreen(
-                                          videoUrl: detailsById
-                                                  ?.youtubeVideoLink
-                                                  ?.toString() ??
-                                              '')));
-                            },
-                            child: Image.asset(
-                              'assets/youtube.png',
-                              width: 40.0,
-                              height: 40.0,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          reading == false
-                              ? GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      reading = true;
-                                    });
-                                    debugPrint("Play");
-                                    speak(detailsById!.description.toString());
-                                  },
-                                  child: Image.asset(
-                                    'assets/text_to_speech.png',
-                                    width: 35.0, // Set the width of the icon
-                                    height: 35.0, // Set the height of the icon
-                                  ),
-                                )
-                              : GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      reading = false;
-                                    });
-                                    debugPrint("stop");
-                                    _tts.stop();
-                                  },
-                                  child: Image.asset(
-                                    'assets/stop_record.png',
-                                    width: 35.0, // Set the width of the icon
-                                    height: 35.0, // Set the height of the icon
-                                  ),
-                                )
-                        ],
-                      ),
-                    ],
-                  ),
-                  Wrap(
-                    spacing: 0,
-                    children: List.generate(5, (index) {
-                      int n = detailsById?.calculatedRating != null
-                          ? int.parse(
-                              detailsById!.calculatedRating!.split('.').first)
-                          : 0;
-                      final isGolden = index < n;
-                      return IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: BoxConstraints(),
-                        icon: Icon(
-                          Icons.star,
-                          color: isGolden ? Colors.amber : Colors.grey,
-                        ),
-                        onPressed: () {},
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => AppNavBar()));
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade300,
+        appBar: AppBar(
+          elevation: 3,
+          shadowColor: Colors.grey,
+          backgroundColor: Colors.white,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AppNavBar()));
+              },
+              icon: Icon(Icons.arrow_back)),
+          title: Text(
+            'DETAILS',
+            style: TextStyle(
+                fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                    backgroundColor: Colors.transparent,
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (BuildContext context) {
+                      return DownloadBottomSheet(
+                        onDownloadImage: () {
+                          takeScreenshot(context);
+                        },
+                        onDownloadPDF: () {},
                       );
-                    }),
-                  ),
-                  Text(
-                    detailsById!.newsHashtagsOnNews
-                            ?.map((e) => e.hashtag)
-                            .join(' ') ??
-                        '',
-                    style: TextStyle(color: Colors.orange),
-                  ),
-                  Text(
-                    detailsById?.description.toString() ?? '',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      NewsFeatureWidget(
-                        iconData: Icons.thumb_up,
-                        iconColor: Colors.orange,
-                        value: newsFeaturesModel?.totalLikes,
-                        onPressed: () {},
-                      ),
-                      NewsFeatureWidget(
-                        iconData: Icons.comment,
-                        iconColor: Colors.blue,
-                        value: newsComments?.length ?? 0,
-                        onPressed: () {},
-                      ),
-                      NewsFeatureWidget(
-                        iconData: Icons.remove_red_eye,
-                        iconColor: Colors.blue,
-                        value: newsFeaturesModel?.totalViews,
-                        onPressed: () {},
-                      ),
-                      if (detailsById?.shareable == true)
-                        NewsFeatureWidget(
-                          iconData: Icons.share,
-                          iconColor: Colors.blue,
-                          labelText: "Share",
-                          onPressed: () {},
-                        ),
-                      if (detailsById?.downloadable == true)
-                        NewsFeatureWidget(
-                          iconData: Icons.picture_as_pdf_outlined,
-                          iconColor: Colors.red,
-                          labelText: "View PDF",
-                          onPressed: () {},
-                        ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  if (newsComments!.isNotEmpty)
-                    Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              showComment = !showComment;
-                            });
-                          },
-                          child: Text(
-                            textAlign: TextAlign.right,
-                            'Comments',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Visibility(
-                            visible: showComment, child: commentSection())
-                      ],
-                    )
-                ],
-              ),
-            ),
-            Container(
-              width: screenWidth,
-              color: Colors.white,
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 5),
+                    },
+                  );
+                },
+                icon: Icon(Icons.download_rounded))
+          ],
+        ),
+        body: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Column(
+            children: [
+              Screenshot(
+                controller: screenshotController,
                 child: Column(
                   children: [
-                    Text(
-                      "RELATED HAPPENINGS",
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: relatedHappeningModel?.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          color: Colors.grey.withOpacity(0.2),
-                          child: Column(
+                    Container(
+                      color: Colors.grey.shade300,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15.0, vertical: 10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                detailsById?.title.toString() ?? "",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              )),
+                          Column(
                             children: [
-                              CustomCard(
-                                  newsDetailScreenCubit: _cubit,
-                                  eventValue: relatedHappeningModel![index]),
+                              CarouselSlider(
+                                items:
+                                    detailsById?.imageFileNames?.map((model) {
+                                  return Builder(
+                                    builder: (BuildContext context) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          debugPrint("Show Details");
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ViewImageScreen(
+                                                          imgUrl: model
+                                                              .toString())));
+                                        },
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                          child: Stack(
+                                            children: [
+                                              Align(
+                                                alignment: Alignment.center,
+                                                child: SizedBox(
+                                                  height: double.infinity,
+                                                  width: double.infinity,
+                                                  child: ClipRRect(
+                                                    child: ImageFiltered(
+                                                      imageFilter:
+                                                          ImageFilter.blur(
+                                                              sigmaX: 10,
+                                                              sigmaY: 10),
+                                                      child: CachedNetworkImage(
+                                                        imageUrl:
+                                                            model.toString(),
+                                                        imageBuilder: (context,
+                                                                imageProvider) =>
+                                                            Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            image: DecorationImage(
+                                                                image:
+                                                                    imageProvider,
+                                                                fit: BoxFit
+                                                                    .cover),
+                                                          ),
+                                                        ),
+                                                        errorWidget: (context,
+                                                            url, error) {
+                                                          return Center(
+                                                              child: Image.asset(
+                                                                  'assets/no_image_found.jpg'));
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Align(
+                                                alignment: Alignment.center,
+                                                child: CachedNetworkImage(
+                                                  imageUrl: model.toString(),
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Container(
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                          image: imageProvider,
+                                                          fit: BoxFit.contain),
+                                                    ),
+                                                  ),
+                                                  errorWidget:
+                                                      (context, url, error) {
+                                                    return Center(
+                                                        child: Image.asset(
+                                                            'assets/no_image_found.jpg'));
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }).toList(),
+                                options: CarouselOptions(
+                                  height: 200.0,
+                                  enlargeCenterPage: true,
+                                  enableInfiniteScroll: false,
+                                  //autoPlay: true,
+                                  aspectRatio: 16 / 9,
+                                  viewportFraction: 0.8,
+                                  onPageChanged: (index, reason) {
+                                    setState(() {
+                                      _currentIndex = index;
+                                    });
+                                  },
+                                ),
+                              ),
                             ],
                           ),
-                        );
-                      },
+                          Row(
+                            children: [
+                              Text(
+                                MethodUtils.getFormattedCustomDate(
+                                    detailsById?.happeningDate.toString() ?? '',
+                                    'yyyy-MM-ddTHH:mm:ss',
+                                    'dd MMMM, yyyy'),
+                              ),
+                              Spacer(),
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      debugPrint("Youtube");
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  YoutubePlayerScreen(
+                                                      videoUrl: detailsById
+                                                              ?.youtubeVideoLink
+                                                              ?.toString() ??
+                                                          '')));
+                                    },
+                                    child: Image.asset(
+                                      'assets/youtube.png',
+                                      width: 40.0,
+                                      height: 40.0,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  reading == false
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              reading = true;
+                                            });
+                                            debugPrint("Play");
+                                            speak(detailsById!.description
+                                                .toString());
+                                          },
+                                          child: Image.asset(
+                                            'assets/text_to_speech.png',
+                                            width:
+                                                35.0, // Set the width of the icon
+                                            height:
+                                                35.0, // Set the height of the icon
+                                          ),
+                                        )
+                                      : GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              reading = false;
+                                            });
+                                            debugPrint("stop");
+                                            _tts.stop();
+                                          },
+                                          child: Image.asset(
+                                            'assets/stop_record.png',
+                                            width:
+                                                35.0, // Set the width of the icon
+                                            height:
+                                                35.0, // Set the height of the icon
+                                          ),
+                                        )
+                                ],
+                              ),
+                            ],
+                          ),
+                          Wrap(
+                            spacing: 0,
+                            children: List.generate(5, (index) {
+                              int n = detailsById?.calculatedRating != null
+                                  ? int.parse(detailsById!.calculatedRating!
+                                      .split('.')
+                                      .first)
+                                  : 0;
+                              final isGolden = index < n;
+                              return IconButton(
+                                padding: EdgeInsets.zero,
+                                constraints: BoxConstraints(),
+                                icon: Icon(
+                                  Icons.star,
+                                  color: isGolden ? Colors.amber : Colors.grey,
+                                ),
+                                onPressed: () {},
+                              );
+                            }),
+                          ),
+                          Text(
+                            detailsById!.newsHashtagsOnNews
+                                    ?.map((e) => e.hashtag)
+                                    .join(' ') ??
+                                '',
+                            style: TextStyle(color: Colors.orange),
+                          ),
+                          Text(
+                            detailsById?.description.toString() ?? '',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+              commentsAndStats(),
+              relatedHappenings(),
+            ],
+          ),
         ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: MediaQuery.of(context).viewInsets,
-        child: CommentBottomBar(
-            controller: commentController,
-            onSend: () {
-              // Call the method to post the comment
-              _cubit.postComment(
-                  widget.newsId, commentController.text, widget.catId);
+        bottomNavigationBar: Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: CommentBottomBar(
+              controller: commentController,
+              onSend: () {
+                // Call the method to post the comment
+                _cubit.postComment(
+                    widget.newsId, commentController.text, widget.catId);
 
-              // Clear the text field after posting the comment
-              commentController.clear();
-              setState(() {});
-            }),
+                // Clear the text field after posting the comment
+                commentController.clear();
+                setState(() {});
+              }),
+        ),
       ),
     );
   }
@@ -564,7 +554,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                     context: context,
                                     isScrollControlled: true,
                                     builder: (BuildContext context) {
-                                      return MyBottomSheet(
+                                      return UpdateCommentBottomSheet(
                                         oldComment:
                                             newsComments![i].comment.toString(),
                                         cubit: _cubit,
@@ -782,6 +772,109 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
           );
         },
       ),
+    );
+  }
+
+  relatedHappenings() {
+    return Container(
+      width: SizeConfig.screenWidth,
+      color: Colors.white,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 5),
+        child: Column(
+          children: [
+            Text(
+              "RELATED HAPPENINGS",
+              style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: relatedHappeningModel?.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  color: Colors.grey.withOpacity(0.2),
+                  child: Column(
+                    children: [
+                      CustomCard(
+                          newsDetailScreenCubit: _cubit,
+                          eventValue: relatedHappeningModel![index]),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  commentsAndStats() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            NewsFeatureWidget(
+              iconData: Icons.thumb_up,
+              iconColor: Colors.orange,
+              value: newsFeaturesModel?.totalLikes,
+              onPressed: () {},
+            ),
+            NewsFeatureWidget(
+              iconData: Icons.comment,
+              iconColor: Colors.blue,
+              value: newsComments?.length ?? 0,
+              onPressed: () {},
+            ),
+            NewsFeatureWidget(
+              iconData: Icons.remove_red_eye,
+              iconColor: Colors.blue,
+              value: newsFeaturesModel?.totalViews,
+              onPressed: () {},
+            ),
+            if (detailsById?.shareable == true)
+              NewsFeatureWidget(
+                iconData: Icons.share,
+                iconColor: Colors.blue,
+                labelText: "Share",
+                onPressed: () {},
+              ),
+            if (detailsById?.downloadable == true)
+              NewsFeatureWidget(
+                iconData: Icons.picture_as_pdf_outlined,
+                iconColor: Colors.red,
+                labelText: "View PDF",
+                onPressed: () {},
+              ),
+          ],
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        if (newsComments!.isNotEmpty)
+          Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    showComment = !showComment;
+                  });
+                },
+                child: Text(
+                  textAlign: TextAlign.right,
+                  'Comments',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Visibility(visible: showComment, child: commentSection())
+            ],
+          )
+      ],
     );
   }
 }

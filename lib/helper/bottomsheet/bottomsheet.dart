@@ -1,13 +1,16 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:xpresslite/helper/app_utilities/size_reziser.dart';
+import 'package:xpresslite/helper/dxWidget/dx_text.dart';
 
 import '../../screens/newsDetails/cubit/news_detail_cubit.dart';
 
-class MyBottomSheet extends StatefulWidget {
+class UpdateCommentBottomSheet extends StatefulWidget {
   String oldComment, categoryId, newsId;
   NewsDetailScreenCubit cubit;
   int commentId;
 
-  MyBottomSheet(
+  UpdateCommentBottomSheet(
       {required this.oldComment,
       required this.cubit,
       required this.commentId,
@@ -16,10 +19,11 @@ class MyBottomSheet extends StatefulWidget {
       super.key});
 
   @override
-  State<MyBottomSheet> createState() => _MyBottomSheetState();
+  State<UpdateCommentBottomSheet> createState() =>
+      _UpdateCommentBottomSheetState();
 }
 
-class _MyBottomSheetState extends State<MyBottomSheet> {
+class _UpdateCommentBottomSheetState extends State<UpdateCommentBottomSheet> {
   TextEditingController commentController = TextEditingController();
 
   @override
@@ -102,15 +106,15 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
                             commentController.text);
                         Navigator.pop(context);
                       },
-                      child: Text(
-                        "Update",
-                        style: TextStyle(color: Colors.white),
-                      ),
                       style: ButtonStyle(
                         backgroundColor:
                             WidgetStateProperty.resolveWith<Color>((states) {
                           return Colors.grey.shade700;
                         }),
+                      ),
+                      child: Text(
+                        "Update",
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ],
@@ -119,6 +123,167 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class DownloadBottomSheet extends StatelessWidget {
+  final VoidCallback onDownloadImage;
+  final VoidCallback onDownloadPDF;
+
+  // final VoidCallback onCancel;
+
+  const DownloadBottomSheet({
+    Key? key,
+    required this.onDownloadImage,
+    required this.onDownloadPDF,
+    // required this.onCancel,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      color: Colors.transparent,
+      padding: EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GestureDetector(
+            onTap: () {
+              onDownloadImage();
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+              ),
+              child: Center(child: Text('Download as Image')),
+            ),
+          ),
+          SizedBox(height: 8),
+          GestureDetector(
+            onTap: () {
+              onDownloadPDF();
+              Navigator.pop(context);
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+              ),
+              child: Center(child: Text('Download as PDF')),
+            ),
+          ),
+          SizedBox(height: 8),
+          GestureDetector(
+            onTap: () {
+              // onCancel();
+              Navigator.pop(context);
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+              ),
+              child: Center(
+                  child: DxTextBlack(
+                'Cancel',
+                mBold: true,
+              )),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ImagePreviewBottomSheet extends StatelessWidget {
+  final Uint8List image;
+  final VoidCallback onSaveImage;
+  final VoidCallback onCancel;
+
+  const ImagePreviewBottomSheet({
+    Key? key,
+    required this.image,
+    required this.onSaveImage,
+    required this.onCancel,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      color: Colors.transparent,
+      padding: EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.memory(image, height: 200, fit: BoxFit.cover),
+          SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: onCancel,
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 3,
+                        offset: Offset(0, 1),
+                      ),
+                    ],
+                    borderRadius: BorderRadius.all(Radius.circular(16)),
+                  ),
+                  child: Center(
+                      child: DxTextBlack(
+                    'Cancel',
+                    mBold: true,
+                  )),
+                ),
+              ),
+              SizedBox(width: 8),
+              GestureDetector(
+                onTap: onSaveImage,
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 3,
+                        offset: Offset(0, 1),
+                      ),
+                    ],
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.all(Radius.circular(16)),
+                  ),
+                  child: Center(
+                      child: DxTextWhite(
+                    'Save as Image',
+                    mBold: true,
+                  )),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
