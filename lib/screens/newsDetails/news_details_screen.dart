@@ -8,6 +8,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:xpresslite/Widget/customWidget/commentBarWidget.dart';
+import 'package:xpresslite/Widget/pdfviewer_pg.dart';
 import 'package:xpresslite/helper/app_utilities/size_reziser.dart';
 import 'package:xpresslite/helper/bottomsheet/bottomsheet.dart';
 import 'package:xpresslite/model/newsFeaturesModel.dart';
@@ -189,7 +190,13 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                         onDownloadImage: () {
                           takeScreenshot(context);
                         },
-                        onDownloadPDF: () {},
+                        onDownloadPDF: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PdfViewerScreen(
+                                      pdfUrl: detailsById?.pdfFileLink ?? '')));
+                        },
                       );
                     },
                   );
@@ -427,7 +434,6 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                               }),
                             ),
                           ),
-
                           Text(
                             detailsById!.newsHashtagsOnNews
                                     ?.map((e) => e.hashtag)
@@ -437,7 +443,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                           ),
                           Text(
                             detailsById?.description.toString() ?? '',
-                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
                           ),
                         ],
                       ),

@@ -342,7 +342,7 @@ class RatingBottomSheet extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   cubit?.postRating(newsId, catId, rating);
-                  Navigator.pop(context, rating); // Pass the rating back to the parent
+                  Navigator.pop(context, rating);
                 },
                 child: Text('Submit'),
               ),

@@ -76,6 +76,7 @@ dependencies:
   screenshot: ^3.0.0
   image_gallery_saver:
   path_provider:
+  pdf: ^3.11.0
 
 dev_dependencies:
   flutter_test:
