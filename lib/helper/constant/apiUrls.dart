@@ -55,6 +55,8 @@ class ApiUrls {
   static String postRating = baseUrl('NewsDetails/CreateNewsRating');
 
   static String repliesOnComment = baseUrl('NewsDetails/GetNewsCommentRepliesDetails');
+
+  static String allRating = baseUrl('NewsDetails/GetNewsRatedDetails');
 }
 
 class AppAuth {

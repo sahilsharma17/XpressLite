@@ -7,12 +7,12 @@ import '../../../model/searchModel.dart';
 import '../../../network_configs/networkRequest.dart';
 import '../../newsDetails/repo/news_details_repo.dart';
 
-abstract class EcploreScreenRepoAbstract {
+abstract class ExploreScreenRepoAbstract {
   Future<ApiResponse<List<SearchModel>>> searchNews(
       {required String searchText});
 }
 
-class ExploreScreenRepo implements EcploreScreenRepoAbstract {
+class ExploreScreenRepo implements ExploreScreenRepoAbstract {
   NetworkRequest networkRequest;
 
   ExploreScreenRepo({required this.networkRequest});

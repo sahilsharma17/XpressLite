@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:xpresslite/helper/app_utilities/size_reziser.dart';
 import 'package:xpresslite/helper/dxWidget/dx_text.dart';
 import 'package:xpresslite/model/newsDetailsByIdModel.dart';
+import 'package:xpresslite/screens/rating/rating_screen.dart';
 
 import '../../screens/newsDetails/cubit/news_detail_cubit.dart';
 
@@ -10,7 +11,7 @@ class UpdateCommentBottomSheet extends StatefulWidget {
   String oldComment, categoryId;
 
   NewsDetailScreenCubit cubit;
-  int commentId,newsId;
+  int commentId, newsId;
 
   UpdateCommentBottomSheet(
       {required this.oldComment,
@@ -348,7 +349,10 @@ class RatingBottomSheet extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pop(context); // Just close the bottom sheet
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RatingScreen(newsId: newsId)));
                 },
                 child: Text('View People'),
               ),
@@ -359,4 +363,3 @@ class RatingBottomSheet extends StatelessWidget {
     );
   }
 }
-
