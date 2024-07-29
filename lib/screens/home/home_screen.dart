@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => NewsDetailsScreen(
-                                          newsId: model.id.toString(),
+                                          newsId: model.id!,
                                           catId: model.categoryId.toString(),
                                         )));
                           },

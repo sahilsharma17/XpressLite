@@ -28,8 +28,9 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
   late ApiResponse updatedComment;
   late ApiResponse newsFavs;
   late ApiResponse replyComment;
+  late ApiResponse postRate;
 
-  Future<void> getIdWiseNewsDetails(String nId, String catId) async {
+  Future<void> getIdWiseNewsDetails(int nId, String catId) async {
     try {
       emit(DetailsScreenLoading());
       if (await MethodUtils.isInternetPresent()) {
@@ -47,7 +48,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
     }
   }
 
-  Future<void> getNewsFeatures(String nId, String catId) async {
+  Future<void> getNewsFeatures(int nId, String catId) async {
     try {
       emit(DetailsScreenLoading());
       if (await MethodUtils.isInternetPresent()) {
@@ -65,7 +66,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
     }
   }
 
-  Future<void> getNewsComments(String nId, String catId) async {
+  Future<void> getNewsComments(int nId, String catId) async {
     try {
       emit(DetailsScreenLoading());
       if (await MethodUtils.isInternetPresent()) {
@@ -90,7 +91,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
         relatedHappenings =
             await newsDetailsRepo.getRelatedNews(newsCatId: catId);
         if (newsComments.isSuccess) {
-          emit(NewsCommentsLoaded(
+          emit(NewsDetailsLoaded(
             msg: "Got data",
             newsCommentsModel: newsComments.resObject ?? [],
             newsDetailByIdModel: newsDetailById.resObject!,
@@ -108,7 +109,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
     }
   }
 
-  Future<void> postComment(String nId, String comment, String cId) async {
+  Future<void> postComment(int nId, String comment, String cId) async {
     try {
       emit(DetailsScreenLoading());
       if (await MethodUtils.isInternetPresent()) {
@@ -132,7 +133,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
                 modifiedDate: '',
                 ip: '',
               ));
-          emit(NewsCommentsLoaded(
+          emit(NewsDetailsLoaded(
             msg: "Got data",
             newsCommentsModel: newsComments.resObject ?? [],
             newsDetailByIdModel: newsDetailById.resObject!,
@@ -153,7 +154,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
   }
 
   Future<void> deleteComment(
-      String nId, String cId, int nComId, String ncrId) async {
+      int nId, String cId, int nComId, String ncrId) async {
     try {
       emit(DetailsScreenLoading());
       if (await MethodUtils.isInternetPresent()) {
@@ -162,7 +163,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
         if (deletedComment.isSuccess) {
           newsComments.resObject
               ?.removeWhere((item) => item.commentId == nComId);
-          emit(NewsCommentsLoaded(
+          emit(NewsDetailsLoaded(
             msg: "Got data",
             newsCommentsModel: newsComments.resObject ?? [],
             newsDetailByIdModel: newsDetailById.resObject!,
@@ -181,7 +182,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
   }
 
   Future<void> deleteReply(
-      String nId, String cId, int nComId, String ncrId) async {
+      int nId, String cId, int nComId, String ncrId) async {
     try {
       emit(DetailsScreenLoading());
       if (await MethodUtils.isInternetPresent()) {
@@ -192,7 +193,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
             comment.replies?.removeWhere((reply) => reply.commentReplyId.toString() == ncrId);
           });
 
-          emit(NewsCommentsLoaded(
+          emit(NewsDetailsLoaded(
             msg: "Got data",
             newsCommentsModel: newsComments.resObject ?? [],
             newsDetailByIdModel: newsDetailById.resObject!,
@@ -211,7 +212,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
   }
 
   Future<void> updateComment(
-      String nId, String cId, int nComId, String newComment) async {
+      int nId, String cId, int nComId, String newComment) async {
     try {
       emit(DetailsScreenLoading());
       if (await MethodUtils.isInternetPresent()) {
@@ -231,7 +232,7 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
   }
 
   Future<void> replyOnComment(
-      String nId, String cId, int nComId, String reply) async {
+      int nId, String cId, int nComId, String reply) async {
     try {
       emit(DetailsScreenLoading());
       if (await MethodUtils.isInternetPresent()) {
@@ -249,13 +250,13 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
     }
   }
 
-  void updateFavNews(int newsId, bool favValue) async {
+  Future<void> updateFavNews(int newsId, bool favValue) async {
     try {
       emit(DetailsScreenLoading());
       if (await MethodUtils.isInternetPresent()) {
         newsFavs = await newsDetailsRepo.newsFav(newsId, favValue);
         if (newsDetailById.isSuccess) {
-          emit(NewsCommentsLoaded(
+          emit(NewsDetailsLoaded(
             msg: "Updated Fav",
             newsCommentsModel: newsComments.resObject ?? [],
             newsDetailByIdModel: newsDetailById.resObject!,
@@ -264,6 +265,34 @@ class NewsDetailScreenCubit extends Cubit<NewsDetailScreenState> {
           ));
         } else {
           emit(DetailsScreenError(error: newsDetailById.errorCause));
+        }
+      } else {
+        emit(DetailsScreenError(error: AppMessages.getNoInternetMsg));
+      }
+    } catch (e) {
+      emit(DetailsScreenError(error: e.toString()));
+    }
+  }
+
+  Future<void> postRating(
+      int newsId, String cId, int rating) async {
+    try {
+      emit(DetailsScreenLoading());
+      if (await MethodUtils.isInternetPresent()) {
+        postRate = await newsDetailsRepo.postRating(
+            newsId: newsId, rate: rating);
+        if (postRate.isSuccess) {
+
+          emit(NewsDetailsLoaded(
+            msg: "Got data",
+            newsCommentsModel: newsComments.resObject ?? [],
+            newsDetailByIdModel: newsDetailById.resObject!,
+            newsFeaturesModel: newsFeatures.resObject!,
+            relatedHappeningModel: relatedHappenings.resObject ?? [],
+          ));
+          getIdWiseNewsDetails(newsId, cId);
+        } else {
+          emit(DetailsScreenError(error: deletedComment.errorCause));
         }
       } else {
         emit(DetailsScreenError(error: AppMessages.getNoInternetMsg));

@@ -108,7 +108,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => NewsDetailsScreen(
-                          newsId: searchedNews![index].id.toString(),
+                          newsId: searchedNews![index].id!,
                           catId: searchedNews![index].categoryId.toString(),
                         ),
                       ),

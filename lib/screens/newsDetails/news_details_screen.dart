@@ -28,7 +28,7 @@ import '../../model/newsDetailsByIdModel.dart';
 import '../view_image/view_image_screen.dart';
 
 class NewsDetailsScreen extends StatefulWidget {
-  String newsId;
+  int newsId;
   String catId;
 
   NewsDetailsScreen({super.key, required this.newsId, required this.catId});
@@ -113,7 +113,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<NewsDetailScreenCubit, NewsDetailScreenState>(
         builder: (BuildContext context, state) {
-      if (state is NewsCommentsLoaded) {
+      if (state is NewsDetailsLoaded) {
         detailsById = state.newsDetailByIdModel;
         newsComments = state.newsCommentsModel ?? [];
         newsFeaturesModel = state.newsFeaturesModel;
@@ -149,6 +149,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
 
   body() {
     double screenWidth = MediaQuery.of(context).size.width;
+    int rating = detailsById?.calculatedRating != null
+        ? int.parse(detailsById!.calculatedRating!.split('.').first)
+        : 0;
 
     return WillPopScope(
       onWillPop: () async {
@@ -182,6 +185,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                     isScrollControlled: true,
                     builder: (BuildContext context) {
                       return DownloadBottomSheet(
+                        newsModel: detailsById!,
                         onDownloadImage: () {
                           takeScreenshot(context);
                         },
@@ -392,26 +396,38 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                               ),
                             ],
                           ),
-                          Wrap(
-                            spacing: 0,
-                            children: List.generate(5, (index) {
-                              int n = detailsById?.calculatedRating != null
-                                  ? int.parse(detailsById!.calculatedRating!
-                                      .split('.')
-                                      .first)
-                                  : 0;
-                              final isGolden = index < n;
-                              return IconButton(
-                                padding: EdgeInsets.zero,
-                                constraints: BoxConstraints(),
-                                icon: Icon(
+                          GestureDetector(
+                            onTap: () async {
+                              final newRating = await showModalBottomSheet<int>(
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (BuildContext context) {
+                                  return RatingBottomSheet(
+                                    cubit: _cubit,
+                                    newsId: detailsById?.id ?? 0,
+                                    catId: widget.catId,
+                                  );
+                                },
+                              );
+
+                              if (newRating != null) {
+                                setState(() {
+                                  rating = newRating;
+                                });
+                              }
+                            },
+                            child: Wrap(
+                              spacing: 0,
+                              children: List.generate(5, (index) {
+                                final isGolden = index < rating;
+                                return Icon(
                                   Icons.star,
                                   color: isGolden ? Colors.amber : Colors.grey,
-                                ),
-                                onPressed: () {},
-                              );
-                            }),
+                                );
+                              }),
+                            ),
                           ),
+
                           Text(
                             detailsById!.newsHashtagsOnNews
                                     ?.map((e) => e.hashtag)
@@ -421,7 +437,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                           ),
                           Text(
                             detailsById?.description.toString() ?? '',
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
                           ),
                         ],
                       ),
@@ -748,12 +764,17 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                           SizedBox(
                                             width: 5,
                                           ),
-                                          Text(
-                                            newsComments![i]
-                                                    .replies?[j]
-                                                    .commentsReply
-                                                    ?.toString() ??
-                                                '',
+                                          SizedBox(
+                                            width: SizeConfig.screenWidth * 0.4,
+                                            child: Text(
+                                              newsComments![i]
+                                                      .replies?[j]
+                                                      .commentsReply
+                                                      ?.toString() ??
+                                                  '',
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                            ),
                                           ),
                                         ],
                                       ),

@@ -12,16 +12,6 @@ class DetailsScreenLoading extends NewsDetailScreenState {}
 
 class NewsDetailsLoaded extends NewsDetailScreenState {
   String msg;
-  NewsDetailsByIdModel? newsDetailByIdModel;
-
-  NewsDetailsLoaded({
-    required this.msg,
-    this.newsDetailByIdModel,
-  });
-}
-
-class NewsCommentsLoaded extends NewsDetailScreenState {
-  String msg;
   List<NewsCommentsModel>? newsCommentsModel;
   NewsDetailsByIdModel? newsDetailByIdModel;
   NewsFeaturesModel? newsFeaturesModel;
@@ -30,8 +20,9 @@ class NewsCommentsLoaded extends NewsDetailScreenState {
   List? delComment;
   List? updateComment;
   List? replyComment;
+  List? rating;
 
-  NewsCommentsLoaded(
+  NewsDetailsLoaded(
       {required this.msg,
       this.newsCommentsModel,
       this.newsDetailByIdModel,
@@ -41,7 +32,7 @@ class NewsCommentsLoaded extends NewsDetailScreenState {
       this.delComment,
       this.updateComment,
       this.replyComment,
-      });
+      this.rating});
 }
 
 class DetailsScreenError extends NewsDetailScreenState {

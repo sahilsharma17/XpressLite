@@ -36,7 +36,7 @@ class _CustomCardState extends State<CustomCard> {
           context,
           MaterialPageRoute(
             builder: (context) => NewsDetailsScreen(
-              newsId: widget.eventValue.id.toString(),
+              newsId: widget.eventValue.id!,
               catId: widget.eventValue.categoryId.toString(),
             ),
           ),

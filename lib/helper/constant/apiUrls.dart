@@ -52,6 +52,8 @@ class ApiUrls {
   // for posting a reply on COMMENT
   static String reply = baseUrl('NewsDetails/CommentsCommentReply');
 
+  static String postRating = baseUrl('NewsDetails/CreateNewsRating');
+
   static String repliesOnComment = baseUrl('NewsDetails/GetNewsCommentRepliesDetails');
 }
 

@@ -14,7 +14,7 @@ import '../newsDetails/cubit/news_detail_cubit.dart';
 
 class ReplyScreen extends StatefulWidget {
   int newsComId;
-  String newsId;
+  int newsId;
   String catId;
   NewsCommentsModel comment;
   NewsDetailScreenCubit newsDetailScreenCubit;
@@ -49,8 +49,9 @@ class _ReplyScreenState extends State<ReplyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
           elevation: 3,
+          shadowColor: Colors.grey,
+          backgroundColor: Colors.white,
           // leading: GestureDetector(
           //   onTap: () {
           //     Navigator.pop(context, true);
@@ -61,6 +62,7 @@ class _ReplyScreenState extends State<ReplyScreen> {
             'REPLIES',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
+
         ),
         bottomNavigationBar: Padding(
           padding: MediaQuery.of(context).viewInsets,

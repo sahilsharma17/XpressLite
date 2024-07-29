@@ -2,13 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:xpresslite/helper/app_utilities/size_reziser.dart';
 import 'package:xpresslite/helper/dxWidget/dx_text.dart';
+import 'package:xpresslite/model/newsDetailsByIdModel.dart';
 
 import '../../screens/newsDetails/cubit/news_detail_cubit.dart';
 
 class UpdateCommentBottomSheet extends StatefulWidget {
-  String oldComment, categoryId, newsId;
+  String oldComment, categoryId;
+
   NewsDetailScreenCubit cubit;
-  int commentId;
+  int commentId,newsId;
 
   UpdateCommentBottomSheet(
       {required this.oldComment,
@@ -129,13 +131,15 @@ class _UpdateCommentBottomSheetState extends State<UpdateCommentBottomSheet> {
 }
 
 class DownloadBottomSheet extends StatelessWidget {
+  NewsDetailsByIdModel? newsModel;
   final VoidCallback onDownloadImage;
   final VoidCallback onDownloadPDF;
 
   // final VoidCallback onCancel;
 
-  const DownloadBottomSheet({
+  DownloadBottomSheet({
     Key? key,
+    this.newsModel,
     required this.onDownloadImage,
     required this.onDownloadPDF,
     // required this.onCancel,
@@ -288,3 +292,71 @@ class ImagePreviewBottomSheet extends StatelessWidget {
     );
   }
 }
+
+class RatingBottomSheet extends StatelessWidget {
+  final int newsId;
+  final String catId;
+  final NewsDetailScreenCubit? cubit;
+
+  RatingBottomSheet({
+    Key? key,
+    required this.cubit,
+    required this.newsId,
+    required this.catId,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    int rating = 0;
+
+    return Container(
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          StatefulBuilder(
+            builder: (context, setState) {
+              return Wrap(
+                spacing: 0,
+                children: List.generate(5, (index) {
+                  final isGolden = index < rating;
+                  return IconButton(
+                    icon: Icon(
+                      Icons.star,
+                      color: isGolden ? Colors.orange : Colors.grey,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        rating = index + 1;
+                      });
+                    },
+                  );
+                }),
+              );
+            },
+          ),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  cubit?.postRating(newsId, catId, rating);
+                  Navigator.pop(context, rating); // Pass the rating back to the parent
+                },
+                child: Text('Submit'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context); // Just close the bottom sheet
+                },
+                child: Text('View People'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+

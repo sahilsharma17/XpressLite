@@ -12,13 +12,13 @@ import '../../../model/reposeCallBack.dart';
 
 abstract class NewsDetailScreenRepoAbstract {
   Future<ApiResponse<NewsDetailsByIdModel>> getNewsDetailsById(
-      {required String newsId});
+      {required int newsId});
 
   Future<ApiResponse<List<NewsCommentsModel>>> getNewsComments(
-      {required String newsId});
+      {required int newsId});
 
   Future<ApiResponse<NewsFeaturesModel>> getNewsFeatures(
-      {required String newsId});
+      {required int newsId});
 
   Future<ApiResponse<List<PaginatedNewsModel>>> getRelatedNews(
       {required String newsCatId});
@@ -35,8 +35,8 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
 
   @override
   Future<ApiResponse<NewsDetailsByIdModel>> getNewsDetailsById(
-      {required String newsId}) async {
-    Map<String, String> newsIdMap = {"NewsDetailsId": newsId};
+      {required int newsId}) async {
+    Map<String, dynamic> newsIdMap = {"NewsDetailsId": newsId};
 
     debugPrint("News Id Data Param is $newsIdMap");
 
@@ -67,8 +67,8 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
 
   @override
   Future<ApiResponse<NewsFeaturesModel>> getNewsFeatures(
-      {required String newsId}) async {
-    Map<String, String> newsIdMap = {
+      {required int newsId}) async {
+    Map<String, dynamic> newsIdMap = {
       "NewsDetailsId": newsId,
       "createdBy": "00500877",
       "createdDate": AppDateUtils.getFormattedDateWithTime().toString()
@@ -103,8 +103,8 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
 
   @override
   Future<ApiResponse<List<NewsCommentsModel>>> getNewsComments(
-      {required String newsId}) async {
-    Map<String, String> newsIdMap = {
+      {required int newsId}) async {
+    Map<String, dynamic> newsIdMap = {
       "NewsDetailsId": newsId,
       "createdBy": "00500877"
     };
@@ -175,8 +175,8 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
 
   @override
   Future<ApiResponse<List>> postComment(
-      {required String newsId, required String comment}) async {
-    Map<String, String> commentMap = {
+      {required int newsId, required String comment}) async {
+    Map<String, dynamic> commentMap = {
       "NewsDetailsId": newsId,
       "createdBy": "00500877",
       "createdDate": AppDateUtils.getFormattedDateWithTime().toString(),
@@ -350,6 +350,35 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
           isSuccess: resp['status'],
           errorCause: resp['message'],
           resObject: 'replied');
+    } else {
+      return ApiResponse(
+        isSuccess: resp['status'],
+        errorCause: resp['message'],
+        resObject: null,
+      );
+    }
+  }
+
+  @override
+  Future<ApiResponse> postRating(
+      {required int newsId, required int rate}) async {
+    Map<String, dynamic> rateMap = {
+      "newsDetailsId": newsId,
+      "createdBy": "00500877",
+      "createdDate": AppDateUtils.getFormattedDateWithTime().toString(),
+      "Rating": rate,
+    };
+
+    Map<String, dynamic> resp =
+    await networkRequest.networkCallPostMap2(ApiUrls.postRating, rateMap);
+
+    debugPrint(resp.toString());
+
+    if (resp["status"] == true) {
+      return ApiResponse(
+          isSuccess: resp['status'],
+          errorCause: resp['message'],
+          resObject: 'rated');
     } else {
       return ApiResponse(
         isSuccess: resp['status'],
