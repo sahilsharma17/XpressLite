@@ -7,6 +7,7 @@ import 'package:xpresslite/model/newsFeaturesModel.dart';
 import 'package:xpresslite/network_configs/networkRequest.dart';
 
 import '../../../helper/app_utilities/date_utils.dart';
+import '../../../helper/localStorage/preference_handler.dart';
 import '../../../model/PaginatedNewsModel.dart';
 import '../../../model/reposeCallBack.dart';
 
@@ -70,7 +71,7 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
       {required int newsId}) async {
     Map<String, dynamic> newsIdMap = {
       "NewsDetailsId": newsId,
-      "createdBy": "00500877",
+      "createdBy": await PreferenceHandler.getEmpId(),
       "createdDate": AppDateUtils.getFormattedDateWithTime().toString()
     };
 
@@ -106,7 +107,7 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
       {required int newsId}) async {
     Map<String, dynamic> newsIdMap = {
       "NewsDetailsId": newsId,
-      "createdBy": "00500877"
+      "createdBy": await PreferenceHandler.getEmpId(),
     };
 
     debugPrint("News Id Data Param is $newsIdMap");
@@ -145,7 +146,7 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
       "pageNumber": 1,
       "pageSize": 6,
       "categoryId": newsCatId,
-      "createdBy": "00500877"
+      "createdBy": await PreferenceHandler.getEmpId(),
     };
 
     Map<String, dynamic> resp = await networkRequest.networkCallPostMap2(
@@ -178,7 +179,7 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
       {required int newsId, required String comment}) async {
     Map<String, dynamic> commentMap = {
       "NewsDetailsId": newsId,
-      "createdBy": "00500877",
+      "createdBy": await PreferenceHandler.getEmpId(),
       "createdDate": AppDateUtils.getFormattedDateWithTime().toString(),
       "comment": comment
     };
@@ -299,7 +300,7 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
   Future<ApiResponse> newsFav(int newsId, bool favValue) async {
     Map<String, dynamic> favNewsMap = {
       "newsDetailsId": newsId,
-      "createdBy": "00500877",
+      "createdBy": await PreferenceHandler.getEmpId(),
       "createdDate": AppDateUtils.getFormattedDateWithTime().toString(),
       "IP": "",
       "isFavourite": favValue,
@@ -335,7 +336,7 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
       {required int comId, required String reply}) async {
     Map<String, dynamic> replyMap = {
       "NewsCommentsId": comId,
-      "createdBy": "00500877",
+      "createdBy": await PreferenceHandler.getEmpId(),
       "createdDate": AppDateUtils.getFormattedDateWithTime().toString(),
       "isFavourite": reply,
     };
@@ -364,7 +365,7 @@ class NewsDetailScreenRepo implements NewsDetailScreenRepoAbstract {
       {required int newsId, required int rate}) async {
     Map<String, dynamic> rateMap = {
       "newsDetailsId": newsId,
-      "createdBy": "00500877",
+      "createdBy": await PreferenceHandler.getEmpId(),
       "createdDate": AppDateUtils.getFormattedDateWithTime().toString(),
       "Rating": rate,
     };

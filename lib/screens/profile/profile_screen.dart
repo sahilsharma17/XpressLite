@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../helper/localStorage/preference_handler.dart';
+
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({super.key});
 
@@ -16,13 +18,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   TextEditingController designationController = TextEditingController();
 
+  String? profileImage;
+
   @override
   void initState() {
     // TODO: implement initState
-    nameController.text = "ABCDEF";
+    super.initState();
+    userDetails();
+  }
+
+  Future<void> userDetails() async {
+    nameController.text = await PreferenceHandler.getName() ?? '';
     phoneController.text = "1234567890";
-    emailController.text = "EMAIL HERE";
+    emailController.text = await PreferenceHandler.getEmail() ?? '';
     designationController.text = "DESIGNATION";
+    profileImage = await PreferenceHandler.getUserImage();
+    setState(() {});
   }
 
   @override
@@ -48,7 +59,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 CircleAvatar(
                   radius: 50,
-                  backgroundColor: Colors.purple,
+                  backgroundImage: NetworkImage(profileImage ??
+                      "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"),
                 ),
                 SizedBox(
                   height: 20,

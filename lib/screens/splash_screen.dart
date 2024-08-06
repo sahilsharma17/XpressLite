@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xpresslite/screens/auth/login_screen.dart';
 
+import '../helper/localStorage/preference_handler.dart';
 import '../helper/routeAndBlocManager/navigator.dart';
 import 'Dashboard/BottomNav/bottomNav.dart';
 
@@ -54,8 +55,7 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   navigateInside() async {
-    //TODO : CHANGE this after
-    if (1==1) {
+    if (await PreferenceHandler.isLogIn()) {
       openScreenAfterLogin(BottomNavigation(
         showValue: 2,
       ));

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../helper/app_utilities/date_utils.dart';
 import '../../../helper/constant/apiUrls.dart';
+import '../../../helper/localStorage/preference_handler.dart';
 import '../../../model/PaginatedNewsModel.dart';
 import '../../../model/reposeCallBack.dart';
 import '../../../network_configs/networkRequest.dart';
@@ -49,7 +50,7 @@ class FavsNewsScreenRepo implements FavsNewsScreenRepoAbstract {
     Map<String, dynamic> favNewsMap = {
 
       "newsDetailsId": newsId,
-      "createdBy": "00500877",
+      "createdBy": await PreferenceHandler.getEmpId(),
       "createdDate": AppDateUtils.getFormattedDateWithTime().toString(),
       "IP": "",
       "isFavourite": favValue,

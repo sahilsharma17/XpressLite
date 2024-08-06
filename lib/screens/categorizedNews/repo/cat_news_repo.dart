@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../helper/constant/apiUrls.dart';
+import '../../../helper/localStorage/preference_handler.dart';
 import '../../../model/PaginatedNewsModel.dart';
 import '../../../model/reposeCallBack.dart';
 import '../../../network_configs/networkRequest.dart';
@@ -22,7 +23,7 @@ class CatNewsScreenRepo implements CatNewsScreenRepoAbstract {
       "pageNumber": 1,
       "pageSize": 10,
       "categoryId": newsCatId,
-      "createdBy": "00500877"
+      "createdBy": await PreferenceHandler.getEmpId(),
     };
 
     Map<String, dynamic> resp = await networkRequest.networkCallPostMap2(

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:xpresslite/helper/localStorage/prefKeys.dart';
 import 'package:xpresslite/screens/Dashboard/BottomNav/bottomNav.dart';
 import 'package:xpresslite/screens/category/category_screen.dart';
 import 'package:xpresslite/screens/appNavBar.dart';
@@ -9,6 +10,7 @@ import '../../screens/profile/profile_screen.dart';
 import '../../screens/reports/reports_screen.dart';
 import '../app_utilities/app_images.dart';
 import '../custom_widgets/dailog/Logout.dart';
+import '../localStorage/preference_handler.dart';
 import '../routeAndBlocManager/navigator.dart';
 import 'dx_text.dart';
 
@@ -20,8 +22,21 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  String image =
-      "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D";
+
+  String? name;
+  String? profileImage;
+
+  Future<void> userDetails() async {
+    name = await PreferenceHandler.getName();
+    profileImage = await PreferenceHandler.getUserImage();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    userDetails();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +59,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 children: [
                   const SizedBox(height: 10),
                   CircleAvatar(
-                      backgroundImage: NetworkImage(image), radius: 40),
+                      backgroundImage: NetworkImage(profileImage ??
+                          "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"),
+                      radius: 40),
                   const SizedBox(height: 6),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -52,13 +69,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       DxTextBlack("Hello!"),
                       const SizedBox(width: 5),
                       DxTextBlack(
-                        "DashboardScreenState.name!",
+                        name ?? '',
                         mSize: 18,
                         mBold: true,
                       ),
                     ],
                   ),
-                  DxTextBlack("Role ", mSize: 18, mBold: true),
                 ],
               ),
               Container(

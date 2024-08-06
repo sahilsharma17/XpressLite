@@ -3,6 +3,7 @@ import 'package:xpresslite/network_configs/networkRequest.dart';
 
 import '../../../helper/app_utilities/date_utils.dart';
 import '../../../helper/constant/apiUrls.dart';
+import '../../../helper/localStorage/preference_handler.dart';
 import '../../../model/PaginatedNewsModel.dart';
 import '../../../model/UpcomingEventBannerModel.dart';
 import '../../../model/categorised_news_detail_model.dart';
@@ -88,7 +89,7 @@ class HomeRepo implements HomeRepoAbstract {
       "pageNumber": 1,
       "pageSize": 5,
       "categoryId": 5,
-      "createdBy": "00500877"
+      "createdBy": await PreferenceHandler.getEmpId(),
     };
 
     Map<String, dynamic> resp = await networkRequest.networkCallPostMap2(
@@ -122,7 +123,7 @@ class HomeRepo implements HomeRepoAbstract {
       "pageNumber": 1,
       "pageSize": 5,
       "categoryId": 5,
-      "createdBy": "00500877"
+      "createdBy": await PreferenceHandler.getEmpId(),
     };
 
     Map<String, dynamic> resp = await networkRequest.networkCallPostMap2(
@@ -155,7 +156,7 @@ class HomeRepo implements HomeRepoAbstract {
     Map<String, dynamic> favNewsMap = {
 
     "newsDetailsId": newsId,
-    "createdBy": "00500877",
+    "createdBy": await PreferenceHandler.getEmpId(),
     "createdDate": AppDateUtils.getFormattedDateWithTime().toString(),
     "IP": "",
     "isFavourite": favValue,

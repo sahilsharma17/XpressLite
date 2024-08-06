@@ -57,7 +57,6 @@ class LoginCubit extends Cubit<LoginState>{
           await PreferenceHandler.setUserImage(userDetails.resObject?.profileImage ?? "");
           await PreferenceHandler.setName(userDetails.resObject?.name ?? "");
           await PreferenceHandler.setEmpId(userDetails.resObject?.empId ?? "");
-          await PreferenceHandler.setLoginToken(userDetails.resObject?.profileImage ?? "");
           await PreferenceHandler.setLogIn(true);
 
           emit(LoginLoaded(

@@ -3,6 +3,7 @@ import '../../../../helper/constant/apiUrls.dart';
 import '../../../../model/reposeCallBack.dart';
 import '../../../../network_configs/networkRequest.dart';
 import '../../../helper/app_utilities/date_utils.dart';
+import '../../../helper/localStorage/preference_handler.dart';
 import '../../../model/replyModel.dart';
 
 abstract class ReplyCommentRepoAbstract {
@@ -22,7 +23,7 @@ class ReplyCommentRepo implements ReplyCommentRepoAbstract {
   Future<ApiResponse<List<ReplyCommentModel>>> getReplies(
       {required int nComId}) async {
     Map<String, dynamic> replyMap = {
-      "createdBy": "00500877",
+      "createdBy": await PreferenceHandler.getEmpId(),
       "NewsCommentsId": nComId
     };
 
@@ -57,7 +58,7 @@ class ReplyCommentRepo implements ReplyCommentRepoAbstract {
       {required int nComId, required String reply}) async {
     Map<String, dynamic> postReplyMap = {
       "createdDate": AppDateUtils.getFormattedDateWithTime().toString(),
-      "createdBy": "00500877",
+      "createdBy": await PreferenceHandler.getEmpId(),
       "NewsCommentsId": nComId,
       "CommentReply": reply
     };
