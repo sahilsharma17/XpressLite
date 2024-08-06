@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:xpresslite/helper/routeAndBlocManager/navigator.dart';
+import 'package:xpresslite/screens/auth/login_screen.dart';
 import '../../../main.dart';
 import '../../app_utilities/app_theme.dart';
 import '../../app_utilities/date_utils.dart';
@@ -47,6 +49,7 @@ class _LogoutDailogState extends State<LogoutDailog> {
                   child: InkWell(
                     onTap: () {
                       PreferenceHandler.logout(context);
+                      openScreenAsLeftToRight(LoginScreen());
                     },
                     child: Container(
                       alignment: Alignment.center,
