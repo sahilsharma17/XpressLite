@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:xpresslite/screens/Dashboard/BottomNav/bottomNav.dart';
 import 'package:xpresslite/screens/category/category_screen.dart';
 import 'package:xpresslite/screens/appNavBar.dart';
 import 'package:xpresslite/screens/home_controller.dart';
@@ -76,7 +77,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                               data.name,
                               mBold: true,
                             ),
-                            // onTap: () => print("data.name"),
                             onTap: () => navigateTo(data.name),
                           ),
                         ],
@@ -94,26 +94,24 @@ class _CustomDrawerState extends State<CustomDrawer> {
     if (name == "Logout") {
       showLogoutDialog();
     } else if (name == "Categories") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CategoryScreen()),
-      );
+      openScreenForDrawer(BottomNavigation(
+        showValue: 0,
+      ));
     } else if (name == "Favourites") {
+      openScreenForDrawer(BottomNavigation(
+        showValue: 3,
+      ));
     } else if (name == "Xpress Bulletin") {
+      openScreenForDrawer(BottomNavigation(
+        showValue: 4,
+      ));
     } else if (name == "Upcoming Events") {
       // openScreenAsBottomToTop(
       //    AuthenticationScreen());
     } else if (name == "Reports") {
-      // openScreenAsBottomToTop(
-      //    SyncScreen());
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ReportsScreen()),
-      );
+      openScreenForDrawer(ReportsScreen());
     } else if (name == "Profile") {
-      // Navigator.pop(context);
-      Get.to(() => AppNavBar());
-      HomeController().changeIndex(4);
+      openScreenForDrawer(ProfileScreen());
     } else {}
   }
 
@@ -133,7 +131,7 @@ List<DrawerModel> drawerList = [
         Icons.favorite,
         color: Colors.black,
       ),
-      name: "Favorites"),
+      name: "Favourites"),
   DrawerModel(
       icon: Icon(
         Icons.newspaper_outlined,

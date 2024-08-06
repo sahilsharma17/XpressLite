@@ -33,7 +33,8 @@ class _CustomCard2State extends State<CustomCard2> {
       },
       child: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Container(
+        child:
+        Container(
           width: screenWidth * 0.6,
           height: screenHeight * 0.65,
           decoration: BoxDecoration(

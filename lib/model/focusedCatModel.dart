@@ -2,7 +2,6 @@ class FocusedCategoryModel {
   int? id;
   String? topic;
   int? categoriesId;
-  
   String? createdDate;
   String? createdBy;
   String? modifiedDate;
@@ -30,13 +29,13 @@ class FocusedCategoryModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['topic'] = this.topic;
-    data['categoriesId'] = this.categoriesId;
-    data['createdDate'] = this.createdDate;
-    data['createdBy'] = this.createdBy;
-    data['modifiedDate'] = this.modifiedDate;
-    data['ip'] = this.ip;
+    data['id'] = id;
+    data['topic'] = topic;
+    data['categoriesId'] = categoriesId;
+    data['createdDate'] = createdDate;
+    data['createdBy'] = createdBy;
+    data['modifiedDate'] = modifiedDate;
+    data['ip'] = ip;
     return data;
   }
 }

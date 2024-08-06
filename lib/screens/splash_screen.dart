@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:xpresslite/screens/auth/login_screen.dart';
 
+import '../helper/routeAndBlocManager/navigator.dart';
+import 'Dashboard/BottomNav/bottomNav.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -46,14 +49,19 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Future.delayed(
-        const Duration(seconds: 3),
-        () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LoginScreen()),
-            ));
+    Future.delayed(const Duration(seconds: 4), () =>  navigateInside());
+  }
+
+  navigateInside() async {
+    //TODO : CHANGE this after
+    if (1==1) {
+      openScreenAfterLogin(BottomNavigation(
+        showValue: 2,
+      ));
+    } else {
+      openScreenAsBottomToTop(LoginScreen());
+    }
   }
 
   @override

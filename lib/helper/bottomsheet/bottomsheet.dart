@@ -349,6 +349,7 @@ class RatingBottomSheet extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
+                  Navigator.pop(context);
                   Navigator.push(
                       context,
                       MaterialPageRoute(

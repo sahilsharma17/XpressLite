@@ -25,7 +25,6 @@ class AllPdfModel {
       this.pdfFileNames,
       this.createdDate,
       this.createdBy,
-      this.modifiedDate,
       this.ip});
 
   AllPdfModel.fromJson(Map<String, dynamic> json) {
@@ -39,7 +38,6 @@ class AllPdfModel {
     pdfFileNames = json['pdfFileNames'];
     createdDate = json['createdDate'];
     createdBy = json['createdBy'];
-    modifiedDate = json['modifiedDate'];
     ip = json['ip'];
   }
 
@@ -55,7 +53,6 @@ class AllPdfModel {
     data['pdfFileNames'] = this.pdfFileNames;
     data['createdDate'] = this.createdDate;
     data['createdBy'] = this.createdBy;
-    data['modifiedDate'] = this.modifiedDate;
     data['ip'] = this.ip;
     return data;
   }

@@ -11,7 +11,9 @@ import 'package:xpresslite/Widget/customWidget/commentBarWidget.dart';
 import 'package:xpresslite/Widget/pdfviewer_pg.dart';
 import 'package:xpresslite/helper/app_utilities/size_reziser.dart';
 import 'package:xpresslite/helper/bottomsheet/bottomsheet.dart';
+import 'package:xpresslite/helper/routeAndBlocManager/navigator.dart';
 import 'package:xpresslite/model/newsFeaturesModel.dart';
+import 'package:xpresslite/screens/Dashboard/BottomNav/bottomNav.dart';
 import 'package:xpresslite/screens/appNavBar.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_cubit.dart';
 import 'package:xpresslite/screens/newsDetails/cubit/news_detail_state.dart';
@@ -81,7 +83,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
 
   Future<void> takeScreenshot(BuildContext context) async {
     final imageFile = await screenshotController.capture(
-        pixelRatio: MediaQuery.of(context).devicePixelRatio);
+        pixelRatio: MediaQuery
+            .of(context)
+            .devicePixelRatio);
     if (imageFile != null) {
       showModalBottomSheet(
         context: context,
@@ -114,32 +118,32 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<NewsDetailScreenCubit, NewsDetailScreenState>(
         builder: (BuildContext context, state) {
-      if (state is NewsDetailsLoaded) {
-        detailsById = state.newsDetailByIdModel;
-        newsComments = state.newsCommentsModel ?? [];
-        newsFeaturesModel = state.newsFeaturesModel;
-        relatedHappeningModel = state.relatedHappeningModel ?? [];
-        pc = state.pComment ?? [];
-        delCom = state.delComment ?? [];
-        newCom = state.updateComment ?? [];
-        replyCom = state.replyComment ?? [];
+          if (state is NewsDetailsLoaded) {
+            detailsById = state.newsDetailByIdModel;
+            newsComments = state.newsCommentsModel ?? [];
+            newsFeaturesModel = state.newsFeaturesModel;
+            relatedHappeningModel = state.relatedHappeningModel ?? [];
+            pc = state.pComment ?? [];
+            delCom = state.delComment ?? [];
+            newCom = state.updateComment ?? [];
+            replyCom = state.replyComment ?? [];
 
-        return body();
-      } else if (state is DetailsScreenInitial) {
-        return AppLoaderProgress();
-      } else if (state is DetailsScreenLoading) {
-        return Stack(
-          children: [AppLoaderProgress()],
-        );
-      } else if (state is DetailsScreenError) {
-        return body();
-      }
-      return AccessDeniedScreen(
-        onPressed: () {
-          _cubit.getIdWiseNewsDetails(widget.newsId, widget.catId);
-        },
-      );
-    }, listener: (BuildContext context, state) {
+            return body();
+          } else if (state is DetailsScreenInitial) {
+            return AppLoaderProgress();
+          } else if (state is DetailsScreenLoading) {
+            return Stack(
+              children: [AppLoaderProgress()],
+            );
+          } else if (state is DetailsScreenError) {
+            return body();
+          }
+          return AccessDeniedScreen(
+            onPressed: () {
+              _cubit.getIdWiseNewsDetails(widget.newsId, widget.catId);
+            },
+          );
+        }, listener: (BuildContext context, state) {
       if (state is DetailsScreenError) {
         if (state.error.isNotEmpty) {
           MethodUtils.toast(state.error);
@@ -149,15 +153,17 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   }
 
   body() {
-    double screenWidth = MediaQuery.of(context).size.width;
+    double screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
     int rating = detailsById?.calculatedRating != null
         ? int.parse(detailsById!.calculatedRating!.split('.').first)
         : 0;
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => AppNavBar()));
+        openScreenAsBottomToTop(BottomNavigation(showValue: 2,));
         return false;
       },
       child: Scaffold(
@@ -168,8 +174,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
           backgroundColor: Colors.white,
           leading: IconButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AppNavBar()));
+                openScreenAsBottomToTop(BottomNavigation(showValue: 2,));
               },
               icon: Icon(Icons.arrow_back)),
           title: Text(
@@ -194,8 +199,10 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => PdfViewerScreen(
-                                      pdfUrl: detailsById?.pdfFileLink ?? '')));
+                                  builder: (context) =>
+                                      PdfViewerScreen(
+                                          pdfUrl: detailsById?.pdfFileLink ??
+                                              '')));
                         },
                       );
                     },
@@ -232,7 +239,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                             children: [
                               CarouselSlider(
                                 items:
-                                    detailsById?.imageFileNames?.map((model) {
+                                detailsById?.imageFileNames?.map((model) {
                                   return Builder(
                                     builder: (BuildContext context) {
                                       return GestureDetector(
@@ -248,7 +255,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                         },
                                         child: ClipRRect(
                                           borderRadius:
-                                              BorderRadius.circular(20.0),
+                                          BorderRadius.circular(20.0),
                                           child: Stack(
                                             children: [
                                               Align(
@@ -259,28 +266,29 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                                   child: ClipRRect(
                                                     child: ImageFiltered(
                                                       imageFilter:
-                                                          ImageFilter.blur(
-                                                              sigmaX: 10,
-                                                              sigmaY: 10),
+                                                      ImageFilter.blur(
+                                                          sigmaX: 10,
+                                                          sigmaY: 10),
                                                       child: CachedNetworkImage(
                                                         imageUrl:
-                                                            model.toString(),
+                                                        model.toString(),
                                                         imageBuilder: (context,
-                                                                imageProvider) =>
+                                                            imageProvider) =>
                                                             Container(
-                                                          decoration:
+                                                              decoration:
                                                               BoxDecoration(
-                                                            image: DecorationImage(
-                                                                image:
+                                                                image: DecorationImage(
+                                                                    image:
                                                                     imageProvider,
-                                                                fit: BoxFit
-                                                                    .cover),
-                                                          ),
-                                                        ),
+                                                                    fit: BoxFit
+                                                                        .cover),
+                                                              ),
+                                                            ),
                                                         errorWidget: (context,
                                                             url, error) {
                                                           return Center(
-                                                              child: Image.asset(
+                                                              child: Image
+                                                                  .asset(
                                                                   'assets/no_image_found.jpg'));
                                                         },
                                                       ),
@@ -293,14 +301,15 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                                 child: CachedNetworkImage(
                                                   imageUrl: model.toString(),
                                                   imageBuilder: (context,
-                                                          imageProvider) =>
+                                                      imageProvider) =>
                                                       Container(
-                                                    decoration: BoxDecoration(
-                                                      image: DecorationImage(
-                                                          image: imageProvider,
-                                                          fit: BoxFit.contain),
-                                                    ),
-                                                  ),
+                                                        decoration: BoxDecoration(
+                                                          image: DecorationImage(
+                                                              image: imageProvider,
+                                                              fit: BoxFit
+                                                                  .contain),
+                                                        ),
+                                                      ),
                                                   errorWidget:
                                                       (context, url, error) {
                                                     return Center(
@@ -352,8 +361,8 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                               builder: (context) =>
                                                   YoutubePlayerScreen(
                                                       videoUrl: detailsById
-                                                              ?.youtubeVideoLink
-                                                              ?.toString() ??
+                                                          ?.youtubeVideoLink
+                                                          ?.toString() ??
                                                           '')));
                                     },
                                     child: Image.asset(
@@ -367,38 +376,38 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                   ),
                                   reading == false
                                       ? GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              reading = true;
-                                            });
-                                            debugPrint("Play");
-                                            speak(detailsById!.description
-                                                .toString());
-                                          },
-                                          child: Image.asset(
-                                            'assets/text_to_speech.png',
-                                            width:
-                                                35.0, // Set the width of the icon
-                                            height:
-                                                35.0, // Set the height of the icon
-                                          ),
-                                        )
+                                    onTap: () {
+                                      setState(() {
+                                        reading = true;
+                                      });
+                                      debugPrint("Play");
+                                      speak(
+                                          detailsById!.title.toString() +
+                                              detailsById!.description
+                                                  .toString());
+                                    },
+                                    child: Image.asset(
+                                      'assets/text_to_speech.png',
+                                      width: 35.0,
+                                      height: 35.0,
+                                    ),
+                                  )
                                       : GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              reading = false;
-                                            });
-                                            debugPrint("stop");
-                                            _tts.stop();
-                                          },
-                                          child: Image.asset(
-                                            'assets/stop_record.png',
-                                            width:
-                                                35.0, // Set the width of the icon
-                                            height:
-                                                35.0, // Set the height of the icon
-                                          ),
-                                        )
+                                    onTap: () {
+                                      setState(() {
+                                        reading = false;
+                                      });
+                                      debugPrint("stop");
+                                      _tts.stop();
+                                    },
+                                    child: Image.asset(
+                                      'assets/stop_record.png',
+                                      width:
+                                      35.0, // Set the width of the icon
+                                      height:
+                                      35.0, // Set the height of the icon
+                                    ),
+                                  )
                                 ],
                               ),
                             ],
@@ -436,8 +445,8 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                           ),
                           Text(
                             detailsById!.newsHashtagsOnNews
-                                    ?.map((e) => e.hashtag)
-                                    .join(' ') ??
+                                ?.map((e) => e.hashtag)
+                                .join(' ') ??
                                 '',
                             style: TextStyle(color: Colors.orange),
                           ),
@@ -459,7 +468,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
           ),
         ),
         bottomNavigationBar: Padding(
-          padding: MediaQuery.of(context).viewInsets,
+          padding: MediaQuery
+              .of(context)
+              .viewInsets,
           child: CommentBottomBar(
               controller: commentController,
               onSend: () {
@@ -518,7 +529,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                   Text(
                                     newsComments?[i].name?.toString() ?? '',
                                     style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     newsComments?[i].comment?.toString() ?? '',
@@ -553,12 +564,13 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ReplyScreen(
+                                          builder: (context) =>
+                                              ReplyScreen(
                                                 newsDetailScreenCubit: _cubit,
                                                 catId: widget.catId,
                                                 newsId: widget.newsId,
                                                 newsComId: newsComments?[i]
-                                                        .commentId ??
+                                                    .commentId ??
                                                     0,
                                                 comment: newsComments![i],
                                               )));
@@ -580,10 +592,10 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                     builder: (BuildContext context) {
                                       return UpdateCommentBottomSheet(
                                         oldComment:
-                                            newsComments![i].comment.toString(),
+                                        newsComments![i].comment.toString(),
                                         cubit: _cubit,
                                         commentId:
-                                            newsComments?[i].commentId ?? 0,
+                                        newsComments?[i].commentId ?? 0,
                                         categoryId: widget.catId,
                                         newsId: widget.newsId,
                                       );
@@ -607,37 +619,37 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                           decoration: BoxDecoration(
                                             color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10),
+                                            BorderRadius.circular(10),
                                           ),
                                           child: Center(
                                             child: Padding(
                                               padding: EdgeInsets.all(8.0),
                                               child: Column(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                                MainAxisAlignment
+                                                    .spaceBetween,
                                                 children: [
                                                   Text(
                                                     'XpressLite',
                                                     style: TextStyle(
                                                         fontWeight:
-                                                            FontWeight.bold),
+                                                        FontWeight.bold),
                                                   ),
                                                   Text(
                                                     'Are you Sure? You want to delete this comment.',
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                         fontWeight:
-                                                            FontWeight.normal),
+                                                        FontWeight.normal),
                                                   ),
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
+                                                    const EdgeInsets.all(
+                                                        8.0),
                                                     child: Row(
                                                       mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceAround,
+                                                      MainAxisAlignment
+                                                          .spaceAround,
                                                       children: [
                                                         GestureDetector(
                                                           onTap: () {
@@ -650,15 +662,15 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                                             child: Text(
                                                               'No',
                                                               textAlign:
-                                                                  TextAlign
-                                                                      .center,
+                                                              TextAlign
+                                                                  .center,
                                                               style: TextStyle(
                                                                 fontSize: 12,
                                                                 color: Colors
                                                                     .black87,
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
+                                                                FontWeight
+                                                                    .bold,
                                                               ),
                                                             ),
                                                           ),
@@ -672,7 +684,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                                               widget.newsId,
                                                               widget.catId,
                                                               newsComments?[i]
-                                                                      .commentId ??
+                                                                  .commentId ??
                                                                   0,
                                                               '',
                                                             );
@@ -683,15 +695,15 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                                             child: Text(
                                                               'Yes',
                                                               textAlign:
-                                                                  TextAlign
-                                                                      .center,
+                                                              TextAlign
+                                                                  .center,
                                                               style: TextStyle(
                                                                 fontSize: 12,
                                                                 color: Colors
                                                                     .orange,
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
+                                                                FontWeight
+                                                                    .bold,
                                                               ),
                                                             ),
                                                           ),
@@ -734,9 +746,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                             CircleAvatar(
                               radius: 18.0,
                               backgroundImage: NetworkImage(newsComments![i]
-                                      .replies?[j]
-                                      .profileImage
-                                      ?.toString() ??
+                                  .replies?[j]
+                                  .profileImage
+                                  ?.toString() ??
                                   ''),
                               backgroundColor: Colors.transparent,
                             ),
@@ -757,14 +769,14 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                           horizontal: 8.0),
                                       child: Row(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                         children: [
                                           Text(
                                             newsComments![i]
-                                                    .replies?[j]
-                                                    .name
-                                                    ?.toString() ??
+                                                .replies?[j]
+                                                .name
+                                                ?.toString() ??
                                                 '',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold),
@@ -776,9 +788,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                             width: SizeConfig.screenWidth * 0.4,
                                             child: Text(
                                               newsComments![i]
-                                                      .replies?[j]
-                                                      .commentsReply
-                                                      ?.toString() ??
+                                                  .replies?[j]
+                                                  .commentsReply
+                                                  ?.toString() ??
                                                   '',
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,

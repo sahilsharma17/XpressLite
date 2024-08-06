@@ -6,7 +6,6 @@ class NewsDetailsByIdModel {
   String? category;
   int? leadershipId;
   int? divisionsId;
-  
   int? categoryId;
   int? topicsTagId;
   String? topic;
@@ -20,7 +19,6 @@ class NewsDetailsByIdModel {
   String? scheduleHappeningDate;
   bool? downloadable;
   bool? shareable;
-  
   bool? sendNotification;
   bool? saveAsDraft;
   List<String>? imageFileNames;
@@ -28,11 +26,8 @@ class NewsDetailsByIdModel {
   String? calculatedRating;
   Null? rating;
   List<NewsHashtagsOnNews>? newsHashtagsOnNews;
-  
   String? createdDate;
   String? createdBy;
-  Null? modifiedDate;
-  
   String? ip;
 
   NewsDetailsByIdModel(
@@ -65,7 +60,6 @@ class NewsDetailsByIdModel {
         this.newsHashtagsOnNews,
         this.createdDate,
         this.createdBy,
-        this.modifiedDate,
         this.ip});
 
   NewsDetailsByIdModel.fromJson(Map<String, dynamic> json) {
@@ -103,7 +97,6 @@ class NewsDetailsByIdModel {
     }
     createdDate = json['createdDate'];
     createdBy = json['createdBy'];
-    modifiedDate = json['modifiedDate'];
     ip = json['ip'];
   }
 
@@ -141,7 +134,6 @@ class NewsDetailsByIdModel {
     }
     data['createdDate'] = this.createdDate;
     data['createdBy'] = this.createdBy;
-    data['modifiedDate'] = this.modifiedDate;
     data['ip'] = this.ip;
     return data;
   }

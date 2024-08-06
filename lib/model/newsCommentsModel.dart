@@ -77,11 +77,8 @@ class Replies {
   String? commentsReply;
   int? totalCommentReplyLikes;
   String? replyLikeType;
-  
   String? createdDate;
   String? createdBy;
-  String? modifiedDate;
-  
   String? ip;
 
   Replies(
@@ -93,7 +90,6 @@ class Replies {
         this.replyLikeType,
         this.createdDate,
         this.createdBy,
-        this.modifiedDate,
         this.ip});
 
   Replies.fromJson(Map<String, dynamic> json) {
@@ -105,7 +101,6 @@ class Replies {
     replyLikeType = json['replyLikeType'];
     createdDate = json['createdDate'];
     createdBy = json['createdBy'];
-    modifiedDate = json['modifiedDate'];
     ip = json['ip'];
   }
 
@@ -119,7 +114,6 @@ class Replies {
     data['replyLikeType'] = this.replyLikeType;
     data['createdDate'] = this.createdDate;
     data['createdBy'] = this.createdBy;
-    data['modifiedDate'] = this.modifiedDate;
     data['ip'] = this.ip;
     return data;
   }

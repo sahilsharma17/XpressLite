@@ -6,7 +6,6 @@ class BulletinPdfModel {
   String? insertDate;
   String? createdDate;
   String? createdBy;
-
   String? ip;
 
   BulletinPdfModel(

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:xpresslite/helper/app_utilities/size_reziser.dart';
 import 'package:xpresslite/helper/routeAndBlocManager/blocProvider.dart';
 import 'package:xpresslite/screens/appNavBar.dart';
+import 'package:xpresslite/screens/splash_screen.dart';
 
 Future<void> main() async {
    WidgetsFlutterBinding.ensureInitialized();
@@ -28,14 +29,14 @@ class MyApp extends StatelessWidget {
         builder: (BuildContext context, Widget? child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(
-              textScaler: TextScaler.linear(1.0),
+              textScaler: const TextScaler.linear(1.0),
             ),
             child: child!,
           );
         },
         debugShowCheckedModeBanner: false,
         
-        home: AppNavBar(),
+        home: SplashScreen()
       ),
     );
   }

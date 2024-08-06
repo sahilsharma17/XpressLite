@@ -5,24 +5,20 @@ class DirectorCatModel {
   String? directorName;
   String? directorType;
   String? directorImage;
-  
   String? createdDate;
   String? createdBy;
-  Null? modifiedDate;
-  
   String? ip;
 
   DirectorCatModel(
       {this.id,
-        this.categoryId,
-        this.hierarchy,
-        this.directorName,
-        this.directorType,
-        this.directorImage,
-        this.createdDate,
-        this.createdBy,
-        this.modifiedDate,
-        this.ip});
+      this.categoryId,
+      this.hierarchy,
+      this.directorName,
+      this.directorType,
+      this.directorImage,
+      this.createdDate,
+      this.createdBy,
+      this.ip});
 
   DirectorCatModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -33,7 +29,6 @@ class DirectorCatModel {
     directorImage = json['directorImage'];
     createdDate = json['createdDate'];
     createdBy = json['createdBy'];
-    modifiedDate = json['modifiedDate'];
     ip = json['ip'];
   }
 
@@ -47,7 +42,6 @@ class DirectorCatModel {
     data['directorImage'] = this.directorImage;
     data['createdDate'] = this.createdDate;
     data['createdBy'] = this.createdBy;
-    data['modifiedDate'] = this.modifiedDate;
     data['ip'] = this.ip;
     return data;
   }

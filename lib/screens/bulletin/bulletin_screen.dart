@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:xpresslite/Widget/pdfviewer_pg.dart';
+import 'package:xpresslite/helper/app_utilities/size_reziser.dart';
 import 'package:xpresslite/model/BulletinPdfModel.dart';
 
 import '../../helper/app_utilities/method_utils.dart';
@@ -252,6 +253,7 @@ class _BulletinScreenState extends State<BulletinScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Container(
+        // height: SizeConfig.screenHeight * 0.5,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -273,7 +275,7 @@ class _BulletinScreenState extends State<BulletinScreen> {
           ),
           availableGestures: AvailableGestures.all,
           firstDay: DateTime.utc(2024, 3, 1),
-          lastDay: DateTime.utc(2024, 7, 30),
+          lastDay: DateTime.utc(2024, 12, 31),
           focusedDay: focusedDay,
           selectedDayPredicate: (day) => isSameDay(day, today),
           onDaySelected: _onDaySelected,

@@ -33,43 +33,50 @@ class _RatingScreenState extends State<RatingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey.shade200,
-      appBar: AppBar(
-        title: Text(
-          'RATING',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 25,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context);
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade200,
+        appBar: AppBar(
+          title: Text(
+            'RATING',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 25,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
           ),
+          elevation: 3,
+          shadowColor: Colors.grey,
+          backgroundColor: Colors.white,
         ),
-        elevation: 3,
-        shadowColor: Colors.grey,
-        backgroundColor: Colors.white,
-      ),
-      body: BlocConsumer<AllRatingsCubit, AllRatingsState>(
-        builder: (BuildContext context, state) {
-          if (state is AllRatingsLoaded) {
-            allRaters = state.allRaters ?? [];
-            return body();
-          } else if (state is AllRatingsInitial || state is AllRatingsLoading) {
-            return AppLoaderProgress();
-          } else if (state is AllRatingsError) {
-            return body();
-          }
-          return AccessDeniedScreen(
-            onPressed: () {
-              // Handle access denied case
-            },
-          );
-        },
-        listener: (BuildContext context, state) {
-          if (state is AllRatingsError && state.error.isNotEmpty) {
-            MethodUtils.toast(state.error);
-          }
-        },
+        body: BlocConsumer<AllRatingsCubit, AllRatingsState>(
+          builder: (BuildContext context, state) {
+            if (state is AllRatingsLoaded) {
+              allRaters = state.allRaters ?? [];
+              return body();
+            } else if (state is AllRatingsInitial ||
+                state is AllRatingsLoading) {
+              return AppLoaderProgress();
+            } else if (state is AllRatingsError) {
+              return body();
+            }
+            return AccessDeniedScreen(
+              onPressed: () {
+                // Handle access denied case
+              },
+            );
+          },
+          listener: (BuildContext context, state) {
+            if (state is AllRatingsError && state.error.isNotEmpty) {
+              MethodUtils.toast(state.error);
+            }
+          },
+        ),
       ),
     );
   }
@@ -116,7 +123,9 @@ class _RatingScreenState extends State<RatingScreen> {
                         return Icon(
                           Icons.star,
                           size: 16,
-                          color: isRated ? Colors.grey.shade700 : Colors.grey.shade400,
+                          color: isRated
+                              ? Colors.grey.shade700
+                              : Colors.grey.shade400,
                         );
                       }),
                     ),
