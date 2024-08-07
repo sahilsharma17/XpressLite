@@ -21,6 +21,14 @@ class PreferenceHandler {
     await AppPrefrence.setString(PrefKeys.userId, userId);
   }
 
+  static Future<void> setFCMToken(String fcmToken) async {
+    await AppPrefrence.setString(PrefKeys.fcmToken, fcmToken);
+  }
+
+  static Future<String?> getFCMToken() async {
+    return await AppPrefrence.getString(PrefKeys.fcmToken);
+  }
+
   static Future<String?> getUserId() async {
     return AppPrefrence.getString(PrefKeys.userId);
   }

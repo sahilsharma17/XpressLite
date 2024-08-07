@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "483414089095",
+    "project_id": "xpress-lite",
+    "storage_bucket": "xpress-lite.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:483414089095:android:d0a71ca50f2a04c0fe0722",
+        "android_client_info": {
+          "package_name": "com.example.xpresslite"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzN9IwdBrIGcOTFI0O_kf_HF4fGyV-czI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

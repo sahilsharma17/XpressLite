@@ -3,6 +3,8 @@ class PrefKeys {
 
   static String get localPin => '_localPin';
 
+  static String get fcmToken => '_fcmToken';
+
   static String get isDownloaded => '_isDownloaded';
 
   static String get userType => '_userType';
@@ -35,8 +37,6 @@ class PrefKeys {
   static String get cartLink => '_cart';
 
   static String get fbLink => '_fb';
-
-  static String get fcmToken => '_fcmToken';
 
   static String get instaLink => '_insta';
 
